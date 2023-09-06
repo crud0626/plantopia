@@ -2,30 +2,26 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import useDiaryData from '@/hooks/useDiaryData';
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
-import { DiaryProps } from '@/@types/diary.type';
 import SectionEditPhoto from './SectionEditPhoto';
 import SectionEditBoard from './SectionEditBoard';
 import { errorNoti, successNoti } from '@/utils/alarmUtil';
 import './diaryEditPage.scss';
+import { modifyDiaryData } from '@/api/userDiary';
+import { Timestamp } from 'firebase/firestore';
 
 const DiaryEditPage = () => {
   const { docId } = useParams();
-  if (!docId) {
-    return;
-  }
-  const { diaryData, updateDiaryData, isLoading, setIsLoading, plantTag } =
-    useDiaryData();
-  const navigate = useNavigate();
-
-  const diaryToUpdate = diaryData.find(
-    (diary: DiaryProps) => diary.id === docId,
-  );
+  const { user, diaryData, isLoading, setIsLoading, plantTag } = useDiaryData();
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [chosenPlants, setChosenPlants] = useState<string[]>([]);
   const [imgUrls, setImgUrls] = useState<string[]>([]);
   const [isVisible, setIsVisible] = useState(false);
+
+  const navigate = useNavigate();
+
+  const diaryToUpdate = diaryData.find(diary => diary.id === docId);
 
   useEffect(() => {
     if (!diaryToUpdate) {
@@ -57,6 +53,8 @@ const DiaryEditPage = () => {
   };
 
   const handleSaveClick = async () => {
+    if (!user?.email || !docId) return;
+
     if (!title || chosenPlants.length === 0 || !content) {
       errorNoti(
         !title
@@ -70,8 +68,12 @@ const DiaryEditPage = () => {
 
     setIsLoading(true);
 
-    await updateDiaryData(docId, {
+    await modifyDiaryData({
+      id: docId,
+      userEmail: user?.email || '',
       content: content,
+      // 임시
+      postedAt: Timestamp.fromDate(new Date()),
       tags: chosenPlants,
       title: title,
       imgUrls: imgUrls,
@@ -81,6 +83,10 @@ const DiaryEditPage = () => {
     successNoti('수정이 완료되었어요!');
     navigate('/diary');
   };
+
+  if (!docId) {
+    return;
+  }
 
   return (
     <div className="layout">

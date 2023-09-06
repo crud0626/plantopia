@@ -8,11 +8,12 @@ import SectionPhoto from './SectionPhoto';
 import SectionBoard from './SectionBoard';
 import { errorNoti, successNoti } from '@/utils/alarmUtil';
 import './diaryWritePage.scss';
+import { saveDiaryData } from '@/api/userDiary';
 
 const DiaryWritePage = () => {
   const user = useAuth();
   const userEmail = user?.email || '';
-  const { saveDiaryData, plantTag } = useDiaryData();
+  const { plantTag } = useDiaryData();
   const navigate = useNavigate();
 
   const [state, setState] = useState({
@@ -60,16 +61,16 @@ const DiaryWritePage = () => {
     await saveDiaryData({
       userEmail,
       content,
-      postedAt: Timestamp.now(),
+      postedAt: Timestamp.fromDate(new Date()),
       tags: chosenPlants,
       title,
       imgUrls,
     });
 
     setState({ title: '', content: '', saving: false, isVisible: false });
-    successNoti('저장이 완료되었어요!');
     setChosenPlants([]);
 
+    successNoti('저장이 완료되었어요!');
     navigate('/diary');
   };
 

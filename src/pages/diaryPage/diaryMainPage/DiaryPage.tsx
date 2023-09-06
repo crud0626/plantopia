@@ -41,8 +41,9 @@ const DiaryPage = () => {
   ];
 
   const redirectToPage = async () => {
-    const plantExists = await checkPlantExistence();
-    if (!plantExists) {
+    const isEmptyPlant = await checkPlantExistence();
+
+    if (isEmptyPlant) {
       showAlert(
         '등록된 식물이 없습니다.',
         '내 식물을 등록하시겠습니까?',
