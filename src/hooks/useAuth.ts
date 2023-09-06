@@ -9,8 +9,12 @@ const useAuth = () => {
 
   useEffect(() => {
     auth.onAuthStateChanged(user => {
-      user ?? navigate('/login');
-      user && setUser(user);
+      if (!user) {
+        navigate('/login');
+        return;
+      }
+
+      setUser(user);
     });
   }, []);
 

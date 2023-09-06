@@ -1,14 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  GoogleAuthProvider,
-  browserSessionPersistence,
-  setPersistence,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-} from 'firebase/auth';
-import { auth } from '../../firebaseApp';
+import { loginWithEmail, loginWithSocial } from '@/api/auth';
 import { errorNoti } from '@/utils/alarmUtil';
+
 import './loginPage.scss';
 
 const LoginPage = () => {
@@ -46,23 +40,19 @@ const LoginPage = () => {
     }
 
     try {
-      isChecked || (await setPersistence(auth, browserSessionPersistence));
-      await signInWithEmailAndPassword(auth, email, password);
+      await loginWithEmail(email, password, isChecked);
       navigate('/');
-    } catch {
+    } catch (error) {
       errorNoti('이메일 또는 비밀번호가 일치하지 않습니다.');
     }
   };
 
   const handleClick = async () => {
     try {
-      const provider = new GoogleAuthProvider();
-      isChecked || (await setPersistence(auth, browserSessionPersistence));
-      await signInWithPopup(auth, provider);
+      await loginWithSocial(isChecked);
       navigate('/');
-    } catch {
-      errorNoti('구글 로그인에 실패했습니다.');
-      navigate('/login');
+    } catch (error) {
+      errorNoti('로그인에 실패하였습니다.');
     }
   };
 
