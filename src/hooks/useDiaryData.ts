@@ -1,19 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { db } from '@/firebaseApp.ts';
-import {
-  getDocs,
-  query,
-  where,
-  collection,
-  deleteDoc,
-  doc,
-  addDoc,
-  updateDoc,
-} from 'firebase/firestore';
 import { useAuth } from '@/hooks';
 import { DiaryProps, Plant } from '@/@types/diary.type';
-import { successNoti } from '@/utils/alarmUtil';
+import { errorNoti, successNoti } from '@/utils/alarmUtil';
 import {
   deleteDiary,
   existPlant,
@@ -29,15 +18,6 @@ const useDiaryData = () => {
   const [plantTag, setPlantTag] = useState<Plant[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // const q = query(
-  //   collection(db, 'diary'),
-  //   where('userEmail', '==', user?.email),
-  // );
-  // const querySnapshot = await getDocs(q);
-  // const data: DiaryProps[] = [];
-  // querySnapshot.forEach(doc => {
-  //   data.push({ id: doc.id, ...doc.data() } as DiaryProps);
-  // });
   /* 다이어리 메인 데이터 불러오기 */
   useEffect(() => {
     const fetchData = async () => {
@@ -57,16 +37,6 @@ const useDiaryData = () => {
     fetchData();
   }, [user]);
 
-  // if (user) {
-  //   const plantQuery = query(
-  //     collection(db, 'plant'),
-  //     where('userEmail', '==', user?.email),
-  //   );
-  //   const plantSnapshot = await getDocs(plantQuery);
-  //   const plantDataExist = !plantSnapshot.empty;
-  //   return plantDataExist;
-  // }
-  // return false;
   /* 등록한 식물이 있는지 확인하기 => 없을 경우 등록페이지로 */
   const checkPlantExistence = async () => {
     if (!user?.email) return false;
@@ -83,16 +53,18 @@ const useDiaryData = () => {
   const saveDiaryData = async (dataToSave: Omit<DiaryProps, 'id'>) => {
     if (!user?.email) return;
 
-    console.log(dataToSave);
-    setIsLoading(true);
-    await saveDiaryData(dataToSave);
-    setIsLoading(false);
-
-    // await addDoc(collection(db, 'diary'), dataToSave);
+    try {
+      setIsLoading(true);
+      await saveDiaryData(dataToSave);
+    } catch (error) {
+      errorNoti('저장에 실패하였습니다.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   /* 수정하기 */
-  const updateDiaryData = async (diaryId: string, updatedData: DiaryProps) => {
+  const updateDiaryData = async (updatedData: DiaryProps) => {
     if (!user?.email) return;
 
     try {
@@ -101,12 +73,7 @@ const useDiaryData = () => {
       await modifyDiaryData(updatedData);
       const newDiaryData = await getUserDiary(user.email);
       setDiaryData(newDiaryData);
-
-      // const diaryRef = doc(db, 'diary', diaryId);
-      // await updateDoc(diaryRef, updatedData);
-      // setIsLoading(false);
     } catch (error) {
-      // setIsLoading(false);
       return;
     } finally {
       setIsLoading(false);
@@ -144,17 +111,6 @@ const useDiaryData = () => {
 
       setPlantTag(plantsTag);
     })();
-
-    // const getPlantsFromFirestore = async () => {
-    //   const plantRef = collection(db, 'plant');
-    //   const q = query(plantRef, where('userEmail', '==', user?.email));
-    //   const querySnapshot = await getDocs(q);
-    //   const plants: Plant[] = querySnapshot.docs.map(
-    //     doc => doc.data() as Plant,
-    //   );
-    //   setPlantTag(plants);
-    // };
-    // getPlantsFromFirestore();
   }, [user]);
 
   return {
