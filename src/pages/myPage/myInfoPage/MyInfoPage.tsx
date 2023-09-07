@@ -4,10 +4,11 @@ import { useAuth } from '@/hooks';
 import { nicknameRe } from '@/constants/regEx';
 import { errorNoti, successNoti } from '@/utils/alarmUtil';
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
-import PROFILE from '@/assets/images/icons/default_profile.png';
-import './myInfoPage.scss';
 import { updateUserInfo } from '@/api/auth';
-import { updateUserProfileImg } from '@/api/storage';
+import { uploadImg } from '@/api/storage';
+import './myInfoPage.scss';
+
+import PROFILE from '@/assets/images/icons/default_profile.png';
 
 const MyInfo = () => {
   const user = useAuth();
@@ -27,12 +28,12 @@ const MyInfo = () => {
     reader.onloadend = () => {
       setUploadedImg(String(reader.result));
     };
-    uploadImg(file);
+    uploadProfileImg(file);
   };
 
-  const uploadImg = async (file: File) => {
+  const uploadProfileImg = async (file: File) => {
     try {
-      const imgPath = await updateUserProfileImg(file);
+      const imgPath = await uploadImg(file, 'profile');
 
       setImgUrl(imgPath);
     } catch (error) {

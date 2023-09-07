@@ -6,7 +6,7 @@ import SectionEditPhoto from './SectionEditPhoto';
 import SectionEditBoard from './SectionEditBoard';
 import { errorNoti, successNoti } from '@/utils/alarmUtil';
 import './diaryEditPage.scss';
-import { modifyDiaryData } from '@/api/userDiary';
+import { updateDiary } from '@/api/userDiary';
 import { Timestamp } from 'firebase/firestore';
 
 const DiaryEditPage = () => {
@@ -68,7 +68,7 @@ const DiaryEditPage = () => {
 
     setIsLoading(true);
 
-    await modifyDiaryData({
+    await updateDiary({
       id: docId,
       userEmail: user?.email || '',
       content: content,

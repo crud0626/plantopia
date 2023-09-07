@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks';
+import { getUserPlantList } from '@/api/userPlant';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 import Progress from '@/components/progress/Progress';
@@ -13,7 +14,6 @@ import plusIcon from '@/assets/images/icons/ph_plus-light.png';
 import editIcon from '@/assets/images/icons/my_plant_detail_edit_icon.png';
 import samplePlant from '@/assets/images/icons/sample_plant1.png';
 import mainPlantTrueIcon from '@/assets/images/icons/main_plant_true_icon.png';
-import { getPlantList } from '@/api/userPlant';
 
 const MyPlantMainPage = () => {
   const user = useAuth();
@@ -34,7 +34,7 @@ const MyPlantMainPage = () => {
       if (!user?.email) return;
 
       try {
-        const userPlants = await getPlantList(user.email);
+        const userPlants = await getUserPlantList(user.email);
         const mainPlant =
           userPlants.find(plant => plant.isMain) || userPlants[0];
         setMyMainPlant(mainPlant);

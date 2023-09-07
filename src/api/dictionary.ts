@@ -13,20 +13,10 @@ import {
 import { PlantType } from '@/@types/dictionary.type';
 import { getRandomIndex } from '@/utils/arrayUtil';
 
-export const getPlantInfo = async (plantName: string) => {
-  const plantRef = collection(db, 'dictionary');
-  const q = query(plantRef, where('name', '==', plantName));
-
-  const querySnapshot = await getDocs(q);
-  const result = querySnapshot.docs.map(doc => doc.data() as PlantType);
-
-  return result;
-};
-
 export const getPlantSearchResults = (fieldName: string, keyword: string) => {
-  const dictRef = collection(db, 'dictionary');
+  const ref = collection(db, 'dictionary');
   const q = query(
-    dictRef,
+    ref,
     orderBy(fieldName),
     startAt(`${keyword}`),
     endAt(`${keyword}\uf8ff`),
@@ -39,10 +29,19 @@ export const getPlantSearchResults = (fieldName: string, keyword: string) => {
   );
 };
 
+export const getPlantInfo = (plantName: string) => {
+  const ref = collection(db, 'dictionary');
+  const q = query(ref, where('name', '==', plantName));
+
+  return getDocs(q).then(snapshot =>
+    snapshot.docs.map(doc => doc.data() as PlantType),
+  );
+};
+
 export const getPlantInfoList = (target: keyof typeof targetQuery) => {
-  const dictRef = collection(db, 'dictionary');
+  const ref = collection(db, 'dictionary');
   const q = query(
-    dictRef,
+    ref,
     where(targetQuery[target][0], '==', targetQuery[target][1]),
     orderBy(
       Object.values(targetQuery)[getRandomIndex(4)][0],
@@ -52,8 +51,6 @@ export const getPlantInfoList = (target: keyof typeof targetQuery) => {
   );
 
   return getDocs(q).then(snapshot =>
-    snapshot.docs.map(doc => {
-      return doc.data() as PlantType;
-    }),
+    snapshot.docs.map(doc => doc.data() as PlantType),
   );
 };

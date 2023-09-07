@@ -6,9 +6,9 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import useDiaryData from '@/hooks/useDiaryData';
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
+import { getUserDiary } from '@/api/userDiary';
 
 import './diaryDetailPage.scss';
-import { getSpeicifyDiary } from '@/api/userDiary';
 
 const DiaryDetailPage = () => {
   const { docId } = useParams();
@@ -37,7 +37,7 @@ const DiaryDetailPage = () => {
       if (!docId) return;
 
       try {
-        const diaryData = await getSpeicifyDiary(docId);
+        const diaryData = await getUserDiary(docId);
         if (diaryData) {
           setDiaryDetailData(diaryData);
         }

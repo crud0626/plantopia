@@ -6,10 +6,10 @@ import { errorNoti, successNoti } from '@/utils/alarmUtil';
 import {
   deleteDiary,
   existPlant,
-  getUserDiary,
-  modifyDiaryData,
+  getUserDiaryList,
+  updateDiary,
 } from '@/api/userDiary';
-import { getPlantList } from '@/api/userPlant';
+import { getUserPlantList } from '@/api/userPlant';
 
 const useDiaryData = () => {
   const user = useAuth();
@@ -23,15 +23,22 @@ const useDiaryData = () => {
     const fetchData = async () => {
       if (!user?.email) return;
 
-      setIsLoading(true);
+      try {
+        setIsLoading(true);
 
-      const data = await getUserDiary(user.email);
-      const sortedData = data.sort(
-        (a, b) => b.postedAt.toDate().getTime() - a.postedAt.toDate().getTime(),
-      );
+        const data = await getUserDiaryList(user.email);
 
-      setDiaryData(sortedData);
-      setIsLoading(false);
+        const sortedData = data.sort(
+          (a, b) =>
+            b.postedAt.toDate().getTime() - a.postedAt.toDate().getTime(),
+        );
+
+        setDiaryData(sortedData);
+      } catch (error) {
+        errorNoti('다이어리 목록을 가져오는 도중 에러가 발생했습니다.');
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchData();
@@ -70,8 +77,8 @@ const useDiaryData = () => {
     try {
       setIsLoading(true);
 
-      await modifyDiaryData(updatedData);
-      const newDiaryData = await getUserDiary(user.email);
+      await updateDiary(updatedData);
+      const newDiaryData = await getUserDiaryList(user.email);
       setDiaryData(newDiaryData);
     } catch (error) {
       return;
@@ -86,7 +93,7 @@ const useDiaryData = () => {
 
     try {
       await deleteDiary(diaryId);
-      const newDiaryData = await getUserDiary(user.email);
+      const newDiaryData = await getUserDiaryList(user.email);
 
       setDiaryData(newDiaryData);
       successNoti('삭제가 완료되었어요!');
@@ -102,7 +109,7 @@ const useDiaryData = () => {
       if (!user?.email) return;
 
       const userEmail = user.email;
-      const userPlantList = await getPlantList(userEmail);
+      const userPlantList = await getUserPlantList(userEmail);
       // 추후 수정
       const plantsTag: Plant[] = userPlantList.map(({ nickname }) => ({
         nickname,

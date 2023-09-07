@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserPlant } from '@/@types/plant.type';
 import { errorNoti, successNoti } from '@/utils/alarmUtil';
-import { getPlantList, updatePlantInfo } from '@/api/userPlant';
+import { getUserPlantList, updateUserPlant } from '@/api/userPlant';
 import Toast from '@/components/notification/ToastContainer';
 
 import './mainPagePlantList.scss';
@@ -39,7 +39,7 @@ const MainPagePlantList = ({
 
   const getUserPlantsSorted = async () => {
     try {
-      const plantData = await getPlantList(userEmail);
+      const plantData = await getUserPlantList(userEmail);
       if (plantData.length == 0) return;
       plantData.sort(compare);
       setMyPlantData(plantData);
@@ -66,10 +66,10 @@ const MainPagePlantList = ({
         isMain: false,
       };
       try {
-        await updatePlantInfo(updatedTrueFields);
-        await updatePlantInfo(updatedFalseFields);
+        await updateUserPlant(updatedTrueFields);
+        await updateUserPlant(updatedFalseFields);
 
-        const userPlants = await getPlantList(userEmail);
+        const userPlants = await getUserPlantList(userEmail);
         const mainPlant =
           userPlants.find(plant => plant.isMain) || userPlants[0];
         setMyMainPlant(mainPlant);

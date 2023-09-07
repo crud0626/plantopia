@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks';
 import { customerService } from '@/constants/myPage';
 import { errorNoti } from '@/utils/alarmUtil';
+import { logout } from '@/api/auth';
 import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
 import Progress from '@/components/progress/Progress';
-import PROFILE from '@/assets/images/icons/default_profile.png';
 import './myPage.scss';
-import { logout } from '@/api/auth';
+
+import PROFILE from '@/assets/images/icons/default_profile.png';
 
 const MyPage = () => {
   const user = useAuth();

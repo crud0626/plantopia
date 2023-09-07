@@ -7,8 +7,8 @@ import HeaderBefore from '@/components/headerBefore/HeaderBefore';
 import SectionPhoto from './SectionPhoto';
 import SectionBoard from './SectionBoard';
 import { errorNoti, successNoti } from '@/utils/alarmUtil';
+import { saveDiary } from '@/api/userDiary';
 import './diaryWritePage.scss';
-import { saveDiaryData } from '@/api/userDiary';
 
 const DiaryWritePage = () => {
   const user = useAuth();
@@ -58,7 +58,7 @@ const DiaryWritePage = () => {
 
     setState(prev => ({ ...prev, saving: true }));
 
-    await saveDiaryData({
+    await saveDiary({
       userEmail,
       content,
       postedAt: Timestamp.fromDate(new Date()),

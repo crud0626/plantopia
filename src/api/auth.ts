@@ -1,3 +1,4 @@
+import { Mutable } from '@/@types';
 import { auth } from '@/firebaseApp';
 import {
   GoogleAuthProvider,
@@ -9,10 +10,6 @@ import {
   signOut,
   updateProfile,
 } from 'firebase/auth';
-
-type Writable<T> = {
-  -readonly [K in keyof T]: T[K];
-};
 
 export const loginWithEmail = async (
   email: string,
@@ -40,8 +37,6 @@ export const logout = () => {
   return signOut(auth);
 };
 
-// 유저 정보 수정 로직 추가
-// 테스트 계정으로하면 안 바뀌나?
 export const updateUserInfo = async (
   pw: string,
   nickname: string,
@@ -50,12 +45,12 @@ export const updateUserInfo = async (
   const user = auth.currentUser;
   if (!user?.email) return;
 
-  const updatedUserInfo: Writable<Partial<User>> = {
+  const updatedUserInfo: Mutable<Partial<User>> = {
     displayName: nickname,
   };
 
   if (imgUrl) updatedUserInfo.photoURL = imgUrl;
-  // 테스트 계정인 경우
+
   if (!user.emailVerified) {
     await signInWithEmailAndPassword(auth, user?.email, pw);
   }

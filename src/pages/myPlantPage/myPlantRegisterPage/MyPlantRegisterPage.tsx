@@ -10,8 +10,8 @@ import './myPlantRegisterPage.scss';
 import samplePlant1 from '@/assets/images/icons/sample_plant1.png';
 import myPlantImgEditIcon from '@/assets/images/icons/solar_pen-bold.png';
 import inputGlass from '@/assets/images/icons/my_plant_input_glass.png';
-import { createPlant, getPlantList } from '@/api/userPlant';
-import { uploadPlantImg } from '@/api/storage';
+import { addUserPlant, getUserPlantList } from '@/api/userPlant';
+import { uploadImg } from '@/api/storage';
 
 const MyPlantRegisterPage = () => {
   const user = useAuth();
@@ -79,7 +79,7 @@ const MyPlantRegisterPage = () => {
       const previewUrl = await readFileAsDataURL(file);
       setPreviewImg(previewUrl);
 
-      const url = await uploadPlantImg(file);
+      const url = await uploadImg(file, 'plant');
       setImgUrl(url);
     } catch (error) {
       console.error('파일 업로드 에러:', error);
@@ -112,7 +112,7 @@ const MyPlantRegisterPage = () => {
       return;
     }
 
-    const userPlantList = await getPlantList(user.email);
+    const userPlantList = await getUserPlantList(user.email);
     const isEmpty = userPlantList.length === 0;
 
     const newPlantData = {
@@ -125,7 +125,7 @@ const MyPlantRegisterPage = () => {
       userEmail: user.email,
       wateredDays: wateredDays ? [dateToTimestamp(wateredDays)] : [],
     };
-    await createPlant(newPlantData);
+    await addUserPlant(newPlantData);
     successNoti('새 식물 등록에 성공하였습니다');
     navigate('/myplant');
   };

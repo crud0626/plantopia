@@ -5,8 +5,8 @@ import Progress from '@/components/progress/Progress';
 import { secondsToDate, dateToTimestamp, maxDate } from '@/utils/dateUtil';
 import { errorNoti, successNoti } from '@/utils/alarmUtil';
 import { UserPlant } from '@/@types/plant.type';
-import { uploadPlantImg } from '@/api/storage';
-import { getPlant, updatePlantInfo } from '@/api/userPlant';
+import { uploadImg } from '@/api/storage';
+import { getUserPlant, updateUserPlant } from '@/api/userPlant';
 import './myPlantEditPage.scss';
 
 import myPlantImgEditIcon from '@/assets/images/icons/solar_pen-bold.png';
@@ -93,7 +93,7 @@ const MyPlantEditPage = () => {
       const previewUrl = await readFileAsDataURL(file);
       setPreviewImg(previewUrl);
 
-      const url = await uploadPlantImg(file);
+      const url = await uploadImg(file, 'plant');
       setImgUrl(url);
     } catch (error) {
       return;
@@ -123,7 +123,7 @@ const MyPlantEditPage = () => {
     };
 
     try {
-      await updatePlantInfo(updatedFields);
+      await updateUserPlant(updatedFields);
       successNoti('식물 정보를 수정하였습니다!');
       navigate('/myplant');
     } catch (error) {
@@ -136,7 +136,7 @@ const MyPlantEditPage = () => {
       if (!docId) return;
 
       try {
-        const plantInfo = await getPlant(docId);
+        const plantInfo = await getUserPlant(docId);
 
         if (!plantInfo) {
           throw new Error('식물이 존재하지 않습니다.');

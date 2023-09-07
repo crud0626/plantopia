@@ -8,19 +8,19 @@ import { errorNoti, showAlert, successNoti } from '@/utils/alarmUtil';
 import { PlantType } from '@/@types/dictionary.type';
 import { UserPlant } from '@/@types/plant.type';
 import './myPlantDetailPage.scss';
+import {
+  getUserPlant,
+  getUserPlantList,
+  deleteUserPlant,
+  updateUserPlant,
+} from '@/api/userPlant';
+import { getPlantInfo } from '@/api/dictionary';
 
 import editIcon from '@/assets/images/icons/my_plant_detail_edit_icon.png';
 import sunOn from '@/assets/images/icons/sun_on_icon.png';
 import sunOff from '@/assets/images/icons/sun_off_icon.png';
 import waterOn from '@/assets/images/icons/water_on_icon.png';
 import waterOff from '@/assets/images/icons/water_off_icon.png';
-import {
-  getPlant,
-  getPlantList,
-  removePlant,
-  updatePlantInfo,
-} from '@/api/userPlant';
-import { getPlantInfo } from '@/api/dictionary';
 
 const MyPlantDetailPage = () => {
   const user = useAuth();
@@ -53,9 +53,9 @@ const MyPlantDetailPage = () => {
     if (!docId || !plantDetail || !user?.email) return;
 
     try {
-      await removePlant(docId);
+      await deleteUserPlant(docId);
 
-      const userPlants = await getPlantList(user.email);
+      const userPlants = await getUserPlantList(user.email);
       if (userPlants.length === 0) {
         successNoti('내 식물이 삭제 되었습니다.');
         navigate('/myplant');
@@ -66,7 +66,7 @@ const MyPlantDetailPage = () => {
       if (!hasMainPlant) {
         const nextMainPlant = userPlants[0];
         nextMainPlant.isMain = true;
-        await updatePlantInfo(nextMainPlant);
+        await updateUserPlant(nextMainPlant);
       }
 
       successNoti('내 식물이 삭제 되었습니다.');
@@ -81,7 +81,7 @@ const MyPlantDetailPage = () => {
       if (!docId) return;
 
       try {
-        const plantInfo = await getPlant(docId);
+        const plantInfo = await getUserPlant(docId);
         if (!plantInfo) return;
         setPlantDetail(plantInfo);
 
