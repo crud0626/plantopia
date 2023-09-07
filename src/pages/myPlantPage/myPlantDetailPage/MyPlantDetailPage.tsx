@@ -1,29 +1,26 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks';
-import { db } from '@/firebaseApp';
-import {
-  doc,
-  getDoc,
-  getDocs,
-  collection,
-  where,
-  query,
-  deleteDoc,
-  updateDoc,
-} from 'firebase/firestore';
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
 import Progress from '@/components/progress/Progress';
+import { monthDifference, secondsToDate } from '@/utils/dateUtil';
+import { errorNoti, showAlert, successNoti } from '@/utils/alarmUtil';
+import { PlantType } from '@/@types/dictionary.type';
+import { UserPlant } from '@/@types/plant.type';
 import './myPlantDetailPage.scss';
+import {
+  getUserPlant,
+  getUserPlantList,
+  deleteUserPlant,
+  updateUserPlant,
+} from '@/api/userPlant';
+import { getPlantInfo } from '@/api/dictionary';
+
 import editIcon from '@/assets/images/icons/my_plant_detail_edit_icon.png';
 import sunOn from '@/assets/images/icons/sun_on_icon.png';
 import sunOff from '@/assets/images/icons/sun_off_icon.png';
 import waterOn from '@/assets/images/icons/water_on_icon.png';
 import waterOff from '@/assets/images/icons/water_off_icon.png';
-import { monthDifference, secondsToDate } from '@/utils/dateUtil';
-import { showAlert, successNoti } from '@/utils/alarmUtil';
-import { PlantType } from '@/@types/dictionary.type';
-import { UserPlant } from '@/@types/plant.type';
 
 const MyPlantDetailPage = () => {
   const user = useAuth();
@@ -53,66 +50,49 @@ const MyPlantDetailPage = () => {
   };
 
   const deletePlant = async () => {
-    if (plantDetail) {
-      if (!docId) return;
-      const docRef = doc(db, 'plant', docId);
-      const documentSnapshot = await getDoc(docRef);
-      const dataBeforeDeletion = documentSnapshot.data();
-      const q = query(
-        collection(db, 'plant'),
-        where('userEmail', '==', user?.email),
-      );
-      const querySnapshot = await getDocs(q);
-      if (querySnapshot.size == 1) {
-        await deleteDoc(docRef);
-        navigate('/myplant');
+    if (!docId || !plantDetail || !user?.email) return;
+
+    try {
+      await deleteUserPlant(docId);
+
+      const userPlants = await getUserPlantList(user.email);
+      if (userPlants.length === 0) {
         successNoti('내 식물이 삭제 되었습니다.');
-        return;
-      }
-      if (dataBeforeDeletion?.isMain) {
-        await deleteDoc(docRef);
-        const firstDocumentid = querySnapshot.docs[0].id;
-        const documentRef = doc(db, 'plant', firstDocumentid);
-        const updatedFields = {
-          isMain: true,
-        };
-        await updateDoc(documentRef, updatedFields);
         navigate('/myplant');
-        successNoti('내 식물을 삭제 하였습니다.');
         return;
-      } else {
-        try {
-          await deleteDoc(docRef);
-          navigate('/myplant');
-          successNoti('내 식물이 삭제 되었습니다.');
-        } catch (error) {
-          return;
-        }
       }
+
+      const hasMainPlant = userPlants.find(plant => plant.isMain);
+      if (!hasMainPlant) {
+        const nextMainPlant = userPlants[0];
+        nextMainPlant.isMain = true;
+        await updateUserPlant(nextMainPlant);
+      }
+
+      successNoti('내 식물이 삭제 되었습니다.');
+      navigate('/myplant');
+    } catch (error) {
+      errorNoti('에러가 발생했습니다.');
     }
   };
 
   useEffect(() => {
-    const getData = async () => {
+    (async () => {
       if (!docId) return;
-      const docRef = doc(db, 'plant', docId);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setPlantDetail(docSnap.data() as UserPlant);
-        const q = query(
-          collection(db, 'dictionary'),
-          where('name', '==', docSnap.data().plantName),
-        );
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach(doc => {
-          setPlantDictDetail(doc.data() as PlantType);
-        });
-      } else {
-        return;
+
+      try {
+        const plantInfo = await getUserPlant(docId);
+        if (!plantInfo) return;
+        setPlantDetail(plantInfo);
+
+        const plantInfos = await getPlantInfo(plantInfo.plantName);
+        setPlantDictDetail(plantInfos[0]);
+      } catch (error) {
+        errorNoti('식물 정보를 가져오는 도중 에러가 발생했습니다.');
+      } finally {
+        setIsLoading(false);
       }
-    };
-    getData();
-    setIsLoading(false);
+    })();
   }, [docId]);
 
   return (

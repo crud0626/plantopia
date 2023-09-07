@@ -1,15 +1,15 @@
 import { useState, useEffect, Children } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks';
-import { signOut } from 'firebase/auth';
-import { auth } from '@/firebaseApp';
 import { customerService } from '@/constants/myPage';
 import { errorNoti } from '@/utils/alarmUtil';
+import { logout } from '@/api/auth';
 import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
 import Progress from '@/components/progress/Progress';
-import PROFILE from '@/assets/images/icons/default_profile.png';
 import './myPage.scss';
+
+import PROFILE from '@/assets/images/icons/default_profile.png';
 
 const MyPage = () => {
   const user = useAuth();
@@ -19,13 +19,12 @@ const MyPage = () => {
     user && setIsLoading(false);
   }, [user]);
 
-  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    try {
-      await signOut(auth);
-    } catch {
+
+    logout().catch(() => {
       errorNoti('로그아웃에 실패했습니다.');
-    }
+    });
   };
 
   return (

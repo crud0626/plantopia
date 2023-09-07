@@ -1,20 +1,14 @@
 import { useState, useRef, useEffect, Children } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { db } from '@/firebaseApp';
 import { PlantType } from '@/@types/dictionary.type';
 import { koreanRe } from '@/constants/regEx';
-import {
-  collection,
-  getDocs,
-  query,
-  startAt,
-  endAt,
-  orderBy,
-} from 'firebase/firestore';
 import Progress from '@/components/progress/Progress';
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
-import SEARCH_ICON from '@/assets/images/icons/dict_search.png';
+import { getPlantSearchResults } from '@/api/dictionary';
+import { errorNoti } from '@/utils/alarmUtil';
 import './dictSearchPage.scss';
+
+import SEARCH_ICON from '@/assets/images/icons/dict_search.png';
 
 const DictSearchPage = () => {
   const location = useLocation();
@@ -30,8 +24,6 @@ const DictSearchPage = () => {
   };
 
   const getDouments = async (plantName: string) => {
-    setPlant([]);
-    setIsLoading(true);
     let fieldName = 'name';
     if (!koreanRe.test(plantName)) {
       fieldName = 'scientificName';
@@ -39,21 +31,17 @@ const DictSearchPage = () => {
         plantName[0] &&
         plantName.replace(plantName[0], plantName[0].toUpperCase());
     }
-    const dictRef = collection(db, 'dictionary');
-    const q = query(
-      dictRef,
-      orderBy(fieldName),
-      startAt(`${plantName}`),
-      endAt(`${plantName}\uf8ff`),
-    );
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach(doc => {
-      setPlant(prev => {
-        const data = doc.data();
-        return [...prev, data] as PlantType[];
-      });
-    });
-    setIsLoading(false);
+
+    try {
+      setIsLoading(true);
+
+      const results = await getPlantSearchResults(fieldName, plantName);
+      setPlant(results);
+    } catch (error) {
+      errorNoti('검색 도중 에러가 발생하였습니다!');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {

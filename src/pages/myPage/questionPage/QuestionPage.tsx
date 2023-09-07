@@ -1,9 +1,10 @@
 import { Children, useState } from 'react';
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
 import Footer from '@/components/footer/Footer';
+import './questionPage.scss';
+
 import BTN_DOWN from '@/assets/images/icons/button_down.png';
 import BTN_UP from '@/assets/images/icons/button_up.png';
-import './questionPage.scss';
 
 const QuestionPage = () => {
   const [isDroppedQ1, setIsDroppedQ1] = useState(false);

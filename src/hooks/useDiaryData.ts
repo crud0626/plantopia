@@ -1,19 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { db } from '@/firebaseApp.ts';
-import {
-  getDocs,
-  query,
-  where,
-  collection,
-  deleteDoc,
-  doc,
-  addDoc,
-  updateDoc,
-} from 'firebase/firestore';
 import { useAuth } from '@/hooks';
 import { DiaryProps, Plant } from '@/@types/diary.type';
-import { successNoti } from '@/utils/alarmUtil';
+import { errorNoti, successNoti } from '@/utils/alarmUtil';
+import {
+  deleteDiary,
+  existPlant,
+  getUserDiaryList,
+  updateDiary,
+} from '@/api/userDiary';
+import { getUserPlantList } from '@/api/userPlant';
 
 const useDiaryData = () => {
   const user = useAuth();
@@ -25,23 +21,22 @@ const useDiaryData = () => {
   /* 다이어리 메인 데이터 불러오기 */
   useEffect(() => {
     const fetchData = async () => {
-      if (user) {
+      if (!user?.email) return;
+
+      try {
         setIsLoading(true);
-        const q = query(
-          collection(db, 'diary'),
-          where('userEmail', '==', user?.email),
-        );
-        const querySnapshot = await getDocs(q);
-        const data: DiaryProps[] = [];
-        querySnapshot.forEach(doc => {
-          data.push({ id: doc.id, ...doc.data() } as DiaryProps);
-        });
+
+        const data = await getUserDiaryList(user.email);
 
         const sortedData = data.sort(
           (a, b) =>
             b.postedAt.toDate().getTime() - a.postedAt.toDate().getTime(),
         );
+
         setDiaryData(sortedData);
+      } catch (error) {
+        errorNoti('다이어리 목록을 가져오는 도중 에러가 발생했습니다.');
+      } finally {
         setIsLoading(false);
       }
     };
@@ -51,55 +46,56 @@ const useDiaryData = () => {
 
   /* 등록한 식물이 있는지 확인하기 => 없을 경우 등록페이지로 */
   const checkPlantExistence = async () => {
-    if (user) {
-      const plantQuery = query(
-        collection(db, 'plant'),
-        where('userEmail', '==', user?.email),
-      );
-      const plantSnapshot = await getDocs(plantQuery);
-      const plantDataExist = !plantSnapshot.empty;
-      return plantDataExist;
+    if (!user?.email) return false;
+
+    try {
+      const result = await existPlant(user.email);
+      return result;
+    } catch (error) {
+      return false;
     }
-    return false;
   };
 
   /* 저장하기 */
-  const saveDiaryData = async (dataToSave: Partial<DiaryProps>) => {
-    if (user) {
+  const saveDiaryData = async (dataToSave: Omit<DiaryProps, 'id'>) => {
+    if (!user?.email) return;
+
+    try {
       setIsLoading(true);
-      await addDoc(collection(db, 'diary'), dataToSave);
+      await saveDiaryData(dataToSave);
+    } catch (error) {
+      errorNoti('저장에 실패하였습니다.');
+    } finally {
       setIsLoading(false);
     }
   };
 
   /* 수정하기 */
-  const updateDiaryData = async (
-    diaryId: string,
-    updatedData: Partial<DiaryProps>,
-  ) => {
+  const updateDiaryData = async (updatedData: DiaryProps) => {
+    if (!user?.email) return;
+
     try {
-      const diaryRef = doc(db, 'diary', diaryId);
       setIsLoading(true);
-      await updateDoc(diaryRef, updatedData);
-      setIsLoading(false);
-      setDiaryData(prevData =>
-        prevData.map(item =>
-          item.id === diaryId ? { ...item, ...updatedData } : item,
-        ),
-      );
+
+      await updateDiary(updatedData);
+      const newDiaryData = await getUserDiaryList(user.email);
+      setDiaryData(newDiaryData);
     } catch (error) {
-      setIsLoading(false);
       return;
+    } finally {
+      setIsLoading(false);
     }
   };
 
   /* 삭제하기 */
   const handleDelete = async (diaryId: string) => {
-    try {
-      await deleteDoc(doc(db, 'diary', diaryId));
+    if (!user?.email) return;
 
-      const updatedDiaryData = diaryData.filter(diary => diary.id !== diaryId);
-      setDiaryData(updatedDiaryData);
+    try {
+      await deleteDiary(diaryId);
+      const newDiaryData = await getUserDiaryList(user.email);
+
+      setDiaryData(newDiaryData);
       successNoti('삭제가 완료되었어요!');
       navigate('/diary');
     } catch (error) {
@@ -109,21 +105,23 @@ const useDiaryData = () => {
 
   /* 내 식물 목록 불러오기 */
   useEffect(() => {
-    if (!user) return;
+    (async () => {
+      if (!user?.email) return;
 
-    const getPlantsFromFirestore = async () => {
-      const plantRef = collection(db, 'plant');
-      const q = query(plantRef, where('userEmail', '==', user?.email));
-      const querySnapshot = await getDocs(q);
-      const plants: Plant[] = querySnapshot.docs.map(
-        doc => doc.data() as Plant,
-      );
-      setPlantTag(plants);
-    };
-    getPlantsFromFirestore();
+      const userEmail = user.email;
+      const userPlantList = await getUserPlantList(userEmail);
+      // 추후 수정
+      const plantsTag: Plant[] = userPlantList.map(({ nickname }) => ({
+        nickname,
+        userEmail,
+      }));
+
+      setPlantTag(plantsTag);
+    })();
   }, [user]);
 
   return {
+    user,
     diaryData,
     handleDelete,
     checkPlantExistence,

@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks';
-import { db } from '@/firebaseApp';
-import { getDocs, collection, where, query } from 'firebase/firestore';
-import './myPlantMainPage.scss';
+import { getUserPlantList } from '@/api/userPlant';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 import Progress from '@/components/progress/Progress';
-import plusIcon from '@/assets/images/icons/ph_plus-light.png';
 import MainPagePlantList from '@/pages/myPlantPage/MainPagePlantList';
+import { errorNoti, infoNoti } from '@/utils/alarmUtil';
+import { UserPlant } from '@/@types/plant.type';
+import './myPlantMainPage.scss';
+
+import plusIcon from '@/assets/images/icons/ph_plus-light.png';
 import editIcon from '@/assets/images/icons/my_plant_detail_edit_icon.png';
 import samplePlant from '@/assets/images/icons/sample_plant1.png';
 import mainPlantTrueIcon from '@/assets/images/icons/main_plant_true_icon.png';
-import { infoNoti } from '@/utils/alarmUtil';
-import { UserPlant } from '@/@types/plant.type';
 
 const MyPlantMainPage = () => {
   const user = useAuth();
@@ -30,26 +30,27 @@ const MyPlantMainPage = () => {
   };
 
   useEffect(() => {
-    const getQuerySnapshot = async () => {
-      if (user?.email) {
-        const q = query(
-          collection(db, 'plant'),
-          where('userEmail', '==', user?.email),
-          where('isMain', '==', true),
-        );
-        const mainData = (await getDocs(q)).docs[0]?.data();
-        setMyMainPlant(mainData as UserPlant);
+    (async () => {
+      if (!user?.email) return;
+
+      try {
+        const userPlants = await getUserPlantList(user.email);
+        const mainPlant =
+          userPlants.find(plant => plant.isMain) || userPlants[0];
+        setMyMainPlant(mainPlant);
+      } catch (error) {
+        errorNoti('유저의 식물 정보를 가져오는 도중 에러가 발생했습니다.');
       }
-    };
-    getQuerySnapshot();
+    })();
   }, [user]);
+
   return (
     <div className="layout">
       <Header />
       <main className="my_plant_wrapper">
         <h2 className="my_plant_info_message">
-          <span className="username">{user?.displayName}</span>님의 식물을
-          한 눈에 보기!
+          <span className="username">{user?.displayName}</span>님의 식물을 한
+          눈에 보기!
         </h2>
         <div className="main_plant_info_box inner">
           {myMainPlant ? (

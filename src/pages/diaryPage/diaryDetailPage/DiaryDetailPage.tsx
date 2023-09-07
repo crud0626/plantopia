@@ -1,21 +1,18 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { DiaryProps } from '@/@types/diary.type';
-import { showAlert } from '@/utils/alarmUtil';
+import { errorNoti, showAlert } from '@/utils/alarmUtil';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
-import { db } from '@/firebaseApp';
-import { doc, getDoc } from 'firebase/firestore';
 import useDiaryData from '@/hooks/useDiaryData';
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
+import { getUserDiary } from '@/api/userDiary';
 
 import './diaryDetailPage.scss';
 
 const DiaryDetailPage = () => {
   const { docId } = useParams();
-  if (!docId) {
-    return null;
-  }
+  const navigate = useNavigate();
   const { handleDelete } = useDiaryData();
 
   const slideSectionPrevBtn = useRef<HTMLDivElement>(null);
@@ -35,18 +32,20 @@ const DiaryDetailPage = () => {
     closeModal();
   };
 
-  const navigate = useNavigate();
-
   useEffect(() => {
-    const fetchDiaryDetailData = async () => {
-      const docRef = doc(db, 'diary', docId);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setDiaryDetailData(docSnap.data() as DiaryProps);
-      }
-    };
+    (async () => {
+      if (!docId) return;
 
-    fetchDiaryDetailData();
+      try {
+        const diaryData = await getUserDiary(docId);
+        if (diaryData) {
+          setDiaryDetailData(diaryData);
+        }
+      } catch (error) {
+        errorNoti('잘못된 접근입니다');
+        navigate('/diary');
+      }
+    })();
   }, [docId]);
 
   useEffect(() => {
@@ -64,6 +63,8 @@ const DiaryDetailPage = () => {
       document.removeEventListener('click', handleOutsideClick);
     };
   }, [isModalOpen]);
+
+  if (!docId) return null;
 
   return (
     <div className="diary_detail_wrap layout">

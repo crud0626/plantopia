@@ -5,7 +5,7 @@ export interface DiaryProps {
   id: string;
   userEmail: string;
   content: string;
-  postedAt: Timestamp;
+  postedAt: InstanceType<typeof Timestamp>;
   tags: string[];
   title: string;
   imgUrls: string[];

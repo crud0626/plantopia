@@ -7,12 +7,13 @@ import HeaderBefore from '@/components/headerBefore/HeaderBefore';
 import SectionPhoto from './SectionPhoto';
 import SectionBoard from './SectionBoard';
 import { errorNoti, successNoti } from '@/utils/alarmUtil';
+import { saveDiary } from '@/api/userDiary';
 import './diaryWritePage.scss';
 
 const DiaryWritePage = () => {
   const user = useAuth();
   const userEmail = user?.email || '';
-  const { saveDiaryData, plantTag } = useDiaryData();
+  const { plantTag } = useDiaryData();
   const navigate = useNavigate();
 
   const [state, setState] = useState({
@@ -57,19 +58,19 @@ const DiaryWritePage = () => {
 
     setState(prev => ({ ...prev, saving: true }));
 
-    await saveDiaryData({
+    await saveDiary({
       userEmail,
       content,
-      postedAt: Timestamp.now(),
+      postedAt: Timestamp.fromDate(new Date()),
       tags: chosenPlants,
       title,
       imgUrls,
     });
 
     setState({ title: '', content: '', saving: false, isVisible: false });
-    successNoti('저장이 완료되었어요!');
     setChosenPlants([]);
 
+    successNoti('저장이 완료되었어요!');
     navigate('/diary');
   };
 

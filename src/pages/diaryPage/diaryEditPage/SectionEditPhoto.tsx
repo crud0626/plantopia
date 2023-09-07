@@ -1,11 +1,5 @@
 import { useState, useEffect } from 'react';
-import { storage } from '@/firebaseApp';
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  deleteObject,
-} from 'firebase/storage';
+import { deleteImg, uploadImg } from '@/api/storage';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 
@@ -43,10 +37,7 @@ const SectionEditPhoto: React.FC<EditPhotoProps> = ({
     try {
       setCurrentCount(currentCount + 1);
 
-      const storagePath = `diary_images/${cleanFileName(file.name)}`;
-      const imageRef = ref(storage, storagePath);
-      const snapshot = await uploadBytes(imageRef, file);
-      const url = await getDownloadURL(snapshot.ref);
+      const url = await uploadImg(file, 'diary');
 
       setImgUrls(prevImgUrls => [...prevImgUrls, url]);
     } catch (error) {
@@ -69,14 +60,13 @@ const SectionEditPhoto: React.FC<EditPhotoProps> = ({
     setIsLoading(true);
     const imageUrlToDelete = imgUrls[index];
     const fileName = getImageFileName(imageUrlToDelete);
-    const imageRef = ref(storage, fileName);
 
     try {
       const updatedPreviewImgs = previewImgs.filter((_, i) => i !== index);
       setPreviewImgs(updatedPreviewImgs);
       setCurrentCount(currentCount - 1);
 
-      await deleteObject(imageRef);
+      await deleteImg(fileName);
 
       setImgUrls(prevImgUrls => prevImgUrls.filter((_, i) => i !== index));
     } catch (error) {

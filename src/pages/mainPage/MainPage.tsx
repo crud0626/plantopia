@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { nanoid } from 'nanoid';
 import { useAuth } from '@/hooks';
 import { UserPlant } from '@/@types/plant.type';
-import { getPlantList, updatePlantInfo } from '@/api/userPlant';
+import { getUserPlantList, updateUserPlant } from '@/api/userPlant';
 import { errorNoti, successNoti } from '@/utils/alarmUtil';
 import { Timestamp } from 'firebase/firestore';
 
@@ -58,8 +58,8 @@ const MainPage = () => {
     try {
       setIsLoading(true);
 
-      await updatePlantInfo(newData);
-      const userPlantList = await getPlantList(user.email);
+      await updateUserPlant(newData);
+      const userPlantList = await getUserPlantList(user.email);
       const mainVisiblePlant = userPlantList.find(
         ({ id }) => focusPlant.id === id,
       );
@@ -81,7 +81,7 @@ const MainPage = () => {
       setIsLoading(true);
 
       try {
-        const userPlantList = await getPlantList(user.email);
+        const userPlantList = await getUserPlantList(user.email);
         const mainVisiblePlant = userPlantList.find(({ isMain }) => isMain);
 
         setFocusPlant(mainVisiblePlant || userPlantList[0]);

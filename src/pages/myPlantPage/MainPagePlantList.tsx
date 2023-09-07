@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import '@/pages/myPlantPage/mainPagePlantList.scss';
+import { UserPlant } from '@/@types/plant.type';
+import { errorNoti, successNoti } from '@/utils/alarmUtil';
+import { getUserPlantList, updateUserPlant } from '@/api/userPlant';
+import Toast from '@/components/notification/ToastContainer';
+
+import './mainPagePlantList.scss';
+import 'react-toastify/dist/ReactToastify.css';
 import mainPlantTrueIcon from '@/assets/images/icons/main_plant_true_icon.png';
 import mainPlantFalseIcon from '@/assets/images/icons/main_plant_false_icon.png';
 import myPlantEditIcon from '@/assets/images/icons/my_plants_edit_icon.png';
-import { UserPlant } from '@/@types/plant.type';
-import Toast from '@/components/notification/ToastContainer';
-import 'react-toastify/dist/ReactToastify.css';
-import { errorNoti, successNoti } from '@/utils/alarmUtil';
-import { doc, updateDoc, getDoc } from 'firebase/firestore';
-import { db } from '@/firebaseApp';
-import { getPlantList } from '@/api/userPlant';
 
 interface MainPagePlantListProps {
   userEmail: string;
@@ -40,7 +39,7 @@ const MainPagePlantList = ({
 
   const getUserPlantsSorted = async () => {
     try {
-      const plantData = await getPlantList(userEmail);
+      const plantData = await getUserPlantList(userEmail);
       if (plantData.length == 0) return;
       plantData.sort(compare);
       setMyPlantData(plantData);
@@ -53,23 +52,27 @@ const MainPagePlantList = ({
   const handleClickIsMain = async (clickedPlant: UserPlant) => {
     if (clickedPlant.isMain === false) {
       const previousMain = myPlantData.find(item => (item.isMain = true));
+
       if (!previousMain) {
         return;
       }
-      const documentTrueRef = doc(db, 'plant', clickedPlant.id);
-      const documentFalseRef = doc(db, 'plant', previousMain.id);
+
       const updatedTrueFields = {
+        id: clickedPlant.id,
         isMain: true,
       };
       const updatedFalseFields = {
+        id: previousMain.id,
         isMain: false,
       };
       try {
-        await updateDoc(documentTrueRef, updatedTrueFields);
-        await updateDoc(documentFalseRef, updatedFalseFields);
-        const updatedDocSnapshot = await getDoc(documentTrueRef);
-        const updatedData = updatedDocSnapshot.data();
-        setMyMainPlant(updatedData as UserPlant);
+        await updateUserPlant(updatedTrueFields);
+        await updateUserPlant(updatedFalseFields);
+
+        const userPlants = await getUserPlantList(userEmail);
+        const mainPlant =
+          userPlants.find(plant => plant.isMain) || userPlants[0];
+        setMyMainPlant(mainPlant);
         await getUserPlantsSorted();
         successNoti('메인 식물을 변경하였습니다.');
       } catch (error) {

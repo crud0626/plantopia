@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks';
-import { storage, db } from '@/firebaseApp';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { collection, addDoc, query, getDocs, where } from 'firebase/firestore';
-import './myPlantRegisterPage.scss';
-import samplePlant1 from '@/assets/images/icons/sample_plant1.png';
-import myPlantImgEditIcon from '@/assets/images/icons/solar_pen-bold.png';
-import inputGlass from '@/assets/images/icons/my_plant_input_glass.png';
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
 import { errorNoti, successNoti } from '@/utils/alarmUtil';
 import { waterCodeToNumber } from '@/utils/convertDataUtil';
 import { dateToTimestamp, maxDate } from '@/utils/dateUtil';
+
+import './myPlantRegisterPage.scss';
+import samplePlant1 from '@/assets/images/icons/sample_plant1.png';
+import myPlantImgEditIcon from '@/assets/images/icons/solar_pen-bold.png';
+import inputGlass from '@/assets/images/icons/my_plant_input_glass.png';
+import { addUserPlant, getUserPlantList } from '@/api/userPlant';
+import { uploadImg } from '@/api/storage';
 
 const MyPlantRegisterPage = () => {
   const user = useAuth();
@@ -54,7 +54,7 @@ const MyPlantRegisterPage = () => {
     setWateredDays(e.target.value);
   };
 
-  // 이미지 저장 로직
+  // 이미지에 불필요한 이름 정리
   const cleanFileName = (fileName: string) => {
     const cleanedName = fileName.replace(/[^\w\s.-]/gi, '');
     return cleanedName;
@@ -78,10 +78,8 @@ const MyPlantRegisterPage = () => {
     try {
       const previewUrl = await readFileAsDataURL(file);
       setPreviewImg(previewUrl);
-      const storagePath = `myplant_imgs/${cleanFileName(file.name)}`;
-      const imageRef = ref(storage, storagePath);
-      const snapshot = await uploadBytes(imageRef, file);
-      const url = await getDownloadURL(snapshot.ref);
+
+      const url = await uploadImg(file, 'plant');
       setImgUrl(url);
     } catch (error) {
       console.error('파일 업로드 에러:', error);
@@ -93,6 +91,9 @@ const MyPlantRegisterPage = () => {
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!user?.email) return;
+
     setSaving(true);
     if (!searchInputValue) {
       errorNoti('식물을 지정해주세요.');
@@ -111,26 +112,24 @@ const MyPlantRegisterPage = () => {
       return;
     }
 
-    const q = query(
-      collection(db, 'plant'),
-      where('userEmail', '==', user?.email),
-    );
-    const querySnapshot = await getDocs(q);
-    const isEmpty = querySnapshot.empty;
+    const userPlantList = await getUserPlantList(user.email);
+    const isEmpty = userPlantList.length === 0;
+
     const newPlantData = {
-      frequency: waterCodeToNumber(waterCode),
+      frequency: waterCodeToNumber(waterCode) || 7, // 임시
       imgUrl: imgUrl || image,
       isMain: isEmpty ? true : false,
       nickname: plantName,
       plantName: searchInputValue,
       purchasedDay: dateToTimestamp(purchasedDay),
-      userEmail: user?.email,
+      userEmail: user.email,
       wateredDays: wateredDays ? [dateToTimestamp(wateredDays)] : [],
     };
-    await addDoc(collection(db, 'plant'), newPlantData);
+    await addUserPlant(newPlantData);
     successNoti('새 식물 등록에 성공하였습니다');
     navigate('/myplant');
   };
+
   return (
     <div className="layout">
       <HeaderBefore ex={true} title="식물 등록" />

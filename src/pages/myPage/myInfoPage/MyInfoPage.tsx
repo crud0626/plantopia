@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { useAuth } from '@/hooks';
-import { auth, storage } from '@/firebaseApp';
 import { nicknameRe } from '@/constants/regEx';
 import { errorNoti, successNoti } from '@/utils/alarmUtil';
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
-import PROFILE from '@/assets/images/icons/default_profile.png';
+import { updateUserInfo } from '@/api/auth';
+import { uploadImg } from '@/api/storage';
 import './myInfoPage.scss';
+
+import PROFILE from '@/assets/images/icons/default_profile.png';
 
 const MyInfo = () => {
   const user = useAuth();
@@ -21,20 +21,24 @@ const MyInfo = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files === null) return;
+
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
       setUploadedImg(String(reader.result));
     };
-    uploadImg(file);
+    uploadProfileImg(file);
   };
 
-  const uploadImg = async (file: File) => {
-    const storagePath = `profile_images/${file.name}`;
-    const storageRef = ref(storage, storagePath);
-    const stoageSnapshot = await uploadBytes(storageRef, file);
-    setImgUrl(await getDownloadURL(stoageSnapshot.ref));
+  const uploadProfileImg = async (file: File) => {
+    try {
+      const imgPath = await uploadImg(file, 'profile');
+
+      setImgUrl(imgPath);
+    } catch (error) {
+      errorNoti('이미지 등록에 실패하였습니다.');
+    }
   };
 
   const nicknameValidation = (nickname: string | null | undefined) => {
@@ -48,22 +52,27 @@ const MyInfo = () => {
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setIsBtnActive(false);
+
+    if (!nickname) {
+      errorNoti('닉네임이 비어있습니다.');
+      return;
+    }
     if (!nicknameValidation(nickname)) return;
+
     try {
-      if (!user?.email || !auth.currentUser) throw Error();
-      user.emailVerified ||
-        (await signInWithEmailAndPassword(auth, user.email, password));
-      await updateProfile(auth.currentUser, {
-        displayName: nickname?.trim(),
-        photoURL: imgUrl,
-      });
+      setIsBtnActive(false);
+
+      if (!user?.email) throw Error();
+
+      await updateUserInfo(password, nickname?.trim(), imgUrl);
+
       successNoti('회원정보 수정에 성공했습니다.');
       navigate('/mypage');
-    } catch {
+    } catch (error) {
       errorNoti('회원정보 수정에 실패했습니다.');
+    } finally {
+      setIsBtnActive(true);
     }
-    setIsBtnActive(true);
   };
 
   return (
