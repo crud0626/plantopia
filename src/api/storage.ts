@@ -1,5 +1,10 @@
 import { storage } from '@/firebaseApp';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes,
+} from 'firebase/storage';
 
 const path = {
   profile: 'profile_images',
@@ -14,4 +19,9 @@ export const uploadImg = (file: File, type: keyof typeof path) => {
   return uploadBytes(imgRef, file).then(snapshot => {
     return getDownloadURL(snapshot.ref);
   });
+};
+
+export const deleteImg = (fileName: string) => {
+  const imgRef = ref(storage, fileName);
+  return deleteObject(imgRef);
 };
