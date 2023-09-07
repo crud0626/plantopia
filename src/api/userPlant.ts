@@ -1,8 +1,11 @@
 import { UserPlant } from '@/@types/plant.type';
 import { db } from '@/firebaseApp';
 import {
+  addDoc,
   collection,
+  deleteDoc,
   doc,
+  getDoc,
   getDocs,
   query,
   updateDoc,
@@ -29,9 +32,31 @@ export const getPlantList = async (userEmail: string): Promise<UserPlant[]> => {
   return plantList;
 };
 
-export const updatePlantInfo = (plant: UserPlant) => {
+export const getPlant = async (docId: string) => {
+  const plantRef = doc(db, 'plant', docId);
+  const docSnap = await getDoc(plantRef);
+
+  if (docSnap.exists()) {
+    const plantInfo = docSnap.data() as UserPlant;
+    return plantInfo;
+  }
+};
+
+// ID만 필수, 그 외는 Partial
+export const updatePlantInfo = (plant: Partial<UserPlant>) => {
+  if (!plant?.id) return;
+
   const { id, ...newData } = plant;
   const plantRef = doc(db, 'plant', id);
 
   return updateDoc(plantRef, newData);
+};
+
+export const createPlant = (newPlant: Omit<UserPlant, 'id'>) => {
+  return addDoc(collection(db, 'plant'), newPlant);
+};
+
+export const removePlant = (plantId: string) => {
+  const plantRef = doc(db, 'plant', plantId);
+  return deleteDoc(plantRef);
 };

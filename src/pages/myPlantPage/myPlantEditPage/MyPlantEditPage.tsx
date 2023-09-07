@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage, db } from '@/firebaseApp';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import './myPlantEditPage.scss';
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
 import Progress from '@/components/progress/Progress';
-import myPlantImgEditIcon from '@/assets/images/icons/solar_pen-bold.png';
 import { secondsToDate, dateToTimestamp, maxDate } from '@/utils/dateUtil';
-import { successNoti } from '@/utils/alarmUtil';
+import { errorNoti, successNoti } from '@/utils/alarmUtil';
 import { UserPlant } from '@/@types/plant.type';
+import { uploadPlantImg } from '@/api/storage';
+import { getPlant, updatePlantInfo } from '@/api/userPlant';
+import './myPlantEditPage.scss';
+
+import myPlantImgEditIcon from '@/assets/images/icons/solar_pen-bold.png';
 
 const MyPlantEditPage = () => {
   const navigate = useNavigate();
@@ -92,10 +92,8 @@ const MyPlantEditPage = () => {
     try {
       const previewUrl = await readFileAsDataURL(file);
       setPreviewImg(previewUrl);
-      const storagePath = `myplant_imgs/${cleanFileName(file.name)}`;
-      const imageRef = ref(storage, storagePath);
-      const snapshot = await uploadBytes(imageRef, file);
-      const url = await getDownloadURL(snapshot.ref);
+
+      const url = await uploadPlantImg(file);
       setImgUrl(url);
     } catch (error) {
       return;
@@ -114,8 +112,9 @@ const MyPlantEditPage = () => {
       myPlantData?.wateredDays.push(dateToTimestamp(wateredDay));
     }
 
-    const documentRef = doc(db, 'plant', docId);
+    // const documentRef = doc(db, 'plant', docId);
     const updatedFields = {
+      id: docId,
       imgUrl: imgUrl,
       nickname: plantNickname,
       purchasedDay: dateToTimestamp(purchasedDay),
@@ -124,7 +123,7 @@ const MyPlantEditPage = () => {
     };
 
     try {
-      await updateDoc(documentRef, updatedFields);
+      await updatePlantInfo(updatedFields);
       successNoti('식물 정보를 수정하였습니다!');
       navigate('/myplant');
     } catch (error) {
@@ -133,27 +132,25 @@ const MyPlantEditPage = () => {
   };
 
   useEffect(() => {
-    const getMyPlantData = async () => {
+    (async () => {
+      if (!docId) return;
+
       try {
-        if (!docId) return;
-        const docRef = doc(db, 'plant', docId);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const plantData = docSnap.data();
-          setMyPlantData(plantData as UserPlant);
-        } else {
-          throw new Error('문서가 존재하지 않습니다.');
+        const plantInfo = await getPlant(docId);
+
+        if (!plantInfo) {
+          throw new Error('식물이 존재하지 않습니다.');
         }
+
+        setMyPlantData(plantInfo);
+        setPlantName(plantInfo.plantName);
+        setPlantNickname(plantInfo.nickname);
       } catch (error) {
-        return;
+        errorNoti('식물 정보를 가져올 수 없습니다.');
+      } finally {
+        setIsLoading(false);
       }
-    };
-    getMyPlantData();
-    if (myPlantData) {
-      setPlantName(myPlantData?.plantName);
-      setPlantNickname(myPlantData?.nickname);
-    }
-    setIsLoading(false);
+    })();
   }, []);
 
   return (
