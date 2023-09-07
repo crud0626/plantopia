@@ -1,5 +1,6 @@
 import { OrderByDirection } from 'firebase/firestore';
 import { CodeToImg } from '@/components/codeToImg/CodeToImg';
+
 import SUN_ON_ICON from '@/assets/images/icons/dict_sun_on.png';
 import SUN_OFF_ICON from '@/assets/images/icons/dict_sun_off.png';
 import WATER_ON_ICON from '@/assets/images/icons/water_on_icon.png';

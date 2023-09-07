@@ -6,8 +6,9 @@ import Recommend from './Recommend';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 import Progress from '@/components/progress/Progress';
-import SEARCH_ICON from '@/assets/images/icons/dict_search.png';
 import './dictPage.scss';
+
+import SEARCH_ICON from '@/assets/images/icons/dict_search.png';
 
 const DictPage = () => {
   const user = useAuth();
