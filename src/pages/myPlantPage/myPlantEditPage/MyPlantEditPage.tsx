@@ -44,8 +44,12 @@ const MyPlantEditPage = () => {
       purchasedDayFromDetail?.seconds || purchasedDayFromList?.seconds,
     ),
   );
-  const [wateredDay, setWateredDay] = useState<string>(
-    secondsToDate(wateredDayFromDetail?.seconds || wateredDayFromList?.seconds),
+  const [wateredDay, setWateredDay] = useState<string | number>(
+    wateredDayFromDetail || wateredDayFromList
+      ? secondsToDate(
+          wateredDayFromDetail?.seconds || wateredDayFromList?.seconds,
+        )
+      : 0,
   );
   const [frequency, setFrequency] = useState<number>(
     frequencyFromDetail || frequencyFromList,
