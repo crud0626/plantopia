@@ -187,13 +187,13 @@ const MyPlantEditPage = () => {
                   onChange={handleFileSelect}
                 />
               </div>
-              <div className="my_plant_input_box">
-                <input
-                  className="my_plant_edit_input"
-                  value={plantName}
-                  disabled
-                />
-              </div>
+            </div>
+            <div className="my_plant_input_box">
+              <input
+                className="my_plant_edit_input"
+                value={plantName}
+                disabled
+              />
             </div>
           </div>
 
