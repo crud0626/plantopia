@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { format } from 'date-fns';
 import { useAuth } from '@/hooks';
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
 import Progress from '@/components/progress/Progress';
@@ -95,6 +96,9 @@ const MyPlantDetailPage = () => {
     })();
   }, [docId]);
 
+  const lastWateringDate =
+    (plantDetail?.wateredDays.at(-1)?.seconds || 0) * 1000;
+
   return (
     <div className="layout">
       <HeaderBefore ex={false} title="내 식물 상세" />
@@ -146,9 +150,9 @@ const MyPlantDetailPage = () => {
               <div className="last_watering_info">
                 <span>마지막 물준 날</span>
                 <span>
-                  {secondsToDate(
-                    plantDetail?.wateredDays?.at(-1)?.seconds || 0,
-                  )}
+                  {lastWateringDate
+                    ? format(lastWateringDate, 'yyyy-MM-dd')
+                    : '-'}
                 </span>
               </div>
               <div className="first_day_info">
