@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { DiaryProps } from '@/@types/diary.type';
+import { DiaryContentTypes } from '@/@types/diary.type';
 import { errorNoti, showAlert, successNoti } from '@/utils/alarmUtil';
 import { deleteDiary, getUserDiary } from '@/api/userDiary';
 import { useAuth } from '@/hooks';
@@ -16,9 +16,8 @@ const DiaryDetailPage = () => {
   const { docId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [diaryDetailData, setDiaryDetailData] = useState<DiaryProps | null>(
-    null,
-  );
+  const [diaryDetailData, setDiaryDetailData] =
+    useState<DiaryContentTypes | null>(null);
 
   const handleDelete = async (diaryId: string) => {
     if (!user?.email) return;

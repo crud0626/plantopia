@@ -10,7 +10,7 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
-import { DiaryProps } from '@/@types/diary.type';
+import { DiaryContentTypes } from '@/@types/diary.type';
 
 const getUserDiaryList = (userEmail: string) => {
   const ref = collection(db, 'diary');
@@ -19,7 +19,7 @@ const getUserDiaryList = (userEmail: string) => {
   return getDocs(q).then(snapshot =>
     snapshot.docs.map(doc => ({
       id: doc.id,
-      ...(doc.data() as Omit<DiaryProps, 'id'>),
+      ...(doc.data() as Omit<DiaryContentTypes, 'id'>),
     })),
   );
 };
@@ -29,7 +29,7 @@ const getUserDiary = async (diaryId: string) => {
   const snapshot = await getDoc(ref);
 
   if (snapshot.exists()) {
-    const result = snapshot.data() as DiaryProps;
+    const result = snapshot.data() as DiaryContentTypes;
     return result;
   }
 };
@@ -43,12 +43,12 @@ const existPlant = async (userEmail: string) => {
   return !snapshot.empty;
 };
 
-const saveDiary = (diaryData: Omit<DiaryProps, 'id'>) => {
+const saveDiary = (diaryData: Omit<DiaryContentTypes, 'id'>) => {
   const ref = collection(db, 'diary');
   return addDoc(ref, diaryData);
 };
 
-const updateDiary = (diaryData: DiaryProps) => {
+const updateDiary = (diaryData: DiaryContentTypes) => {
   const { id, ...newData } = diaryData;
   const diaryRef = doc(db, 'diary', id);
 

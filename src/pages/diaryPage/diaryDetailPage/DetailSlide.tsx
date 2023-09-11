@@ -1,11 +1,8 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
+import { DiaryContentTypes } from '@/@types/diary.type';
 
-interface DetailSlideProps {
-  imgUrls: string[];
-}
-
-const DetailSlide = ({ imgUrls }: DetailSlideProps) => {
+const DetailSlide = ({ imgUrls }: Pick<DiaryContentTypes, 'imgUrls'>) => {
   return (
     <section className="slide_section">
       <Swiper

@@ -1,15 +1,23 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { DiaryProps, ListViewProps } from '@/@types/diary.type';
-import NoContent from './NoContent';
+import { DiaryContentTypes } from '@/@types/diary.type';
 import { showAlert } from '@/utils/alarmUtil';
+
+import NoContent from './NoContent';
 import './listView.scss';
+
+interface ListViewProps {
+  diaryData: DiaryContentTypes[] | null;
+  handleDelete: (diaryId: string) => void;
+}
 
 const ListView = ({ diaryData, handleDelete }: ListViewProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedDiary, setSelectedDiary] = useState<DiaryProps | null>(null);
+  const [selectedDiary, setSelectedDiary] = useState<DiaryContentTypes | null>(
+    null,
+  );
 
-  const toggleModal = (diary: DiaryProps) => {
+  const toggleModal = (diary: DiaryContentTypes) => {
     setSelectedDiary(diary);
     setIsModalOpen(!isModalOpen);
   };
@@ -19,7 +27,7 @@ const ListView = ({ diaryData, handleDelete }: ListViewProps) => {
     setIsModalOpen(false);
   };
 
-  const navigateToEdit = (diary: DiaryProps) => {
+  const navigateToEdit = (diary: DiaryContentTypes) => {
     navigate(`/diary/${diary.id}/edit`);
     closeModal();
   };

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { errorNoti, successNoti } from '@/utils/alarmUtil';
-import { DiaryProps, Plant } from '@/@types/diary.type';
+import { DiaryContentTypes, Plant } from '@/@types/diary.type';
 import { getUserPlantList } from '@/api/userPlant';
 import { getUserDiaryList, updateDiary } from '@/api/userDiary';
 import { Timestamp } from 'firebase/firestore';
@@ -17,7 +17,7 @@ const DiaryEditPage = () => {
   const { docId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [plantTag, setPlantTag] = useState<Plant[]>([]);
-  const [diaryData, setDiaryData] = useState<DiaryProps[]>([]);
+  const [diaryData, setDiaryData] = useState<DiaryContentTypes[]>([]);
 
   const [chosenPlants, setChosenPlants] = useState<string[]>([]);
   const [imgUrls, setImgUrls] = useState<string[]>([]);
