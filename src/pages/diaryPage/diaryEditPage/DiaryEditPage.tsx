@@ -9,7 +9,7 @@ import { useAuth } from '@/hooks';
 
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
 import SectionPhoto from '../SectionPhoto';
-import SectionEditBoard from './SectionEditBoard';
+import SectionBoard from '../SectionBoard';
 import './diaryEditPage.scss';
 
 const DiaryEditPage = () => {
@@ -19,11 +19,14 @@ const DiaryEditPage = () => {
   const [plantTag, setPlantTag] = useState<Plant[]>([]);
   const [diaryData, setDiaryData] = useState<DiaryProps[]>([]);
 
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
   const [chosenPlants, setChosenPlants] = useState<string[]>([]);
   const [imgUrls, setImgUrls] = useState<string[]>([]);
-  const [isVisible, setIsVisible] = useState(false);
+  const [state, setState] = useState({
+    title: '',
+    content: '',
+    saving: false,
+    isVisible: false,
+  });
 
   const navigate = useNavigate();
 
@@ -34,14 +37,22 @@ const DiaryEditPage = () => {
       return;
     }
 
-    setTitle(diaryToUpdate.title);
-    setContent(diaryToUpdate.content);
+    const { title, content } = diaryToUpdate;
+
+    setState(prevState => ({
+      ...prevState,
+      title,
+      content,
+    }));
     setChosenPlants(diaryToUpdate.tags);
     setImgUrls(diaryToUpdate.imgUrls);
   }, [diaryToUpdate]);
 
   const toggleSelect = () => {
-    setIsVisible(prevVisible => !prevVisible);
+    setState(({ isVisible, ...restState }) => ({
+      ...restState,
+      isVisible: !isVisible,
+    }));
   };
 
   const handleChosenPlantClick = (plant: string) => {
@@ -61,9 +72,9 @@ const DiaryEditPage = () => {
   const handleSaveClick = async () => {
     if (!user?.email || !docId) return;
 
-    if (!title || chosenPlants.length === 0 || !content) {
+    if (!state.title || chosenPlants.length === 0 || !state.content) {
       errorNoti(
-        !title
+        !state.title
           ? '제목을 작성해주세요.'
           : chosenPlants.length === 0
           ? '관련 식물을 1가지 이상 선택해주세요.'
@@ -77,11 +88,11 @@ const DiaryEditPage = () => {
     await updateDiary({
       id: docId,
       userEmail: user?.email || '',
-      content: content,
+      content: state.content,
       // 임시
       postedAt: Timestamp.fromDate(new Date()),
       tags: chosenPlants,
-      title: title,
+      title: state.title,
       imgUrls: imgUrls,
     });
 
@@ -97,9 +108,12 @@ const DiaryEditPage = () => {
       const userEmail = user.email;
       try {
         setIsLoading(true);
-        // 추후 수정
-        const diaryList = await getUserDiaryList(userEmail);
-        const plantList = await getUserPlantList(userEmail);
+
+        const [diaryList, plantList] = await Promise.all([
+          getUserDiaryList(userEmail),
+          getUserPlantList(userEmail),
+        ]);
+
         const plantsTag: Plant[] = plantList.map(({ nickname }) => ({
           nickname,
           userEmail,
@@ -124,15 +138,12 @@ const DiaryEditPage = () => {
       <HeaderBefore ex={true} title="수정하기" />
       <main className="diary_write_wrap">
         <SectionPhoto imgUrls={imgUrls} setImgUrls={setImgUrls} />
-        <SectionEditBoard
-          title={title}
-          setTitle={setTitle}
-          content={content}
-          setContent={setContent}
+        <SectionBoard
+          state={state}
+          setState={setState}
           chosenPlants={chosenPlants}
           handleChosenPlantClick={handleChosenPlantClick}
           handlePlantSelection={handlePlantSelection}
-          isVisible={isVisible}
           toggleSelect={toggleSelect}
           plantTag={plantTag}
         />

@@ -9,7 +9,7 @@ import { Plant } from '@/@types/diary.type';
 
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
 import SectionPhoto from '../SectionPhoto';
-import SectionBoard from './SectionBoard';
+import SectionBoard from '../SectionBoard';
 import './diaryWritePage.scss';
 
 const DiaryWritePage = () => {
