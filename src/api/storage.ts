@@ -12,6 +12,12 @@ const path = {
   diary: 'diary_images',
 };
 
+const filterFileName = (src: string) => {
+  const urlParts = src.split('/');
+  const fileName = urlParts[urlParts.length - 1].split('?')[0];
+  return decodeURIComponent(fileName);
+};
+
 export const uploadImg = (file: File, type: keyof typeof path) => {
   const imgPath = path[type];
   const imgRef = ref(storage, `${imgPath}/${file.name}`);
@@ -21,7 +27,8 @@ export const uploadImg = (file: File, type: keyof typeof path) => {
   });
 };
 
-export const deleteImg = (fileName: string) => {
+export const deleteImg = (src: string) => {
+  const fileName = filterFileName(src);
   const imgRef = ref(storage, fileName);
   return deleteObject(imgRef);
 };

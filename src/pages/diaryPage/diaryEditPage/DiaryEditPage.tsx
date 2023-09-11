@@ -8,7 +8,7 @@ import { Timestamp } from 'firebase/firestore';
 import { useAuth } from '@/hooks';
 
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
-import SectionEditPhoto from './SectionEditPhoto';
+import SectionPhoto from '../SectionPhoto';
 import SectionEditBoard from './SectionEditBoard';
 import './diaryEditPage.scss';
 
@@ -113,7 +113,7 @@ const DiaryEditPage = () => {
         setIsLoading(false);
       }
     })();
-  }, []);
+  }, [user?.email]);
 
   if (!docId) {
     return;
@@ -123,12 +123,7 @@ const DiaryEditPage = () => {
     <div className="layout">
       <HeaderBefore ex={true} title="수정하기" />
       <main className="diary_write_wrap">
-        <SectionEditPhoto
-          imgUrls={imgUrls}
-          setImgUrls={setImgUrls}
-          isLoading={isLoading}
-          setIsLoading={setIsLoading}
-        />
+        <SectionPhoto imgUrls={imgUrls} setImgUrls={setImgUrls} />
         <SectionEditBoard
           title={title}
           setTitle={setTitle}

@@ -8,7 +8,7 @@ import { getUserPlantList } from '@/api/userPlant';
 import { Plant } from '@/@types/diary.type';
 
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
-import SectionPhoto from './SectionPhoto';
+import SectionPhoto from '../SectionPhoto';
 import SectionBoard from './SectionBoard';
 import './diaryWritePage.scss';
 
@@ -116,11 +116,7 @@ const DiaryWritePage = () => {
       {user?.email && (
         <>
           <main className="diary_main">
-            <SectionPhoto
-              userEmail={user.email}
-              imgUrls={imgUrls}
-              setImgUrls={setImgUrls}
-            />
+            <SectionPhoto imgUrls={imgUrls} setImgUrls={setImgUrls} />
             <SectionBoard
               state={state}
               setState={setState}
