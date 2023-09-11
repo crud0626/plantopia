@@ -1,19 +1,20 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { DiaryProps } from '@/@types/diary.type';
-import { errorNoti, showAlert } from '@/utils/alarmUtil';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
-import useDiaryData from '@/hooks/useDiaryData';
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
-import { getUserDiary } from '@/api/userDiary';
+import { DiaryProps } from '@/@types/diary.type';
+import { errorNoti, showAlert, successNoti } from '@/utils/alarmUtil';
+import { deleteDiary, getUserDiary } from '@/api/userDiary';
+import { useAuth } from '@/hooks';
 
+import HeaderBefore from '@/components/headerBefore/HeaderBefore';
 import './diaryDetailPage.scss';
 
 const DiaryDetailPage = () => {
+  const user = useAuth();
   const { docId } = useParams();
   const navigate = useNavigate();
-  const { handleDelete } = useDiaryData();
+  const [isLoading, setIsLoading] = useState(false);
 
   const slideSectionPrevBtn = useRef<HTMLDivElement>(null);
   const slideSectionNextBtn = useRef<HTMLDivElement>(null);
@@ -30,6 +31,23 @@ const DiaryDetailPage = () => {
   const navigateToEdit = () => {
     navigate(`/diary/${docId}/edit`);
     closeModal();
+  };
+
+  const handleDelete = async (diaryId: string) => {
+    if (!user?.email) return;
+
+    setIsLoading(true);
+
+    try {
+      await deleteDiary(diaryId);
+
+      successNoti('삭제가 완료되었어요!');
+      navigate('/diary');
+    } catch (error) {
+      errorNoti('다이어리 삭제 도중 에러가 발생했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {

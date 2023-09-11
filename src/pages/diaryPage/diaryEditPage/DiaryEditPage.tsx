@@ -1,17 +1,23 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import useDiaryData from '@/hooks/useDiaryData';
+import { errorNoti, successNoti } from '@/utils/alarmUtil';
+import { DiaryProps, Plant } from '@/@types/diary.type';
+import { getUserPlantList } from '@/api/userPlant';
+import { getUserDiaryList, updateDiary } from '@/api/userDiary';
+import { Timestamp } from 'firebase/firestore';
+import { useAuth } from '@/hooks';
+
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
 import SectionEditPhoto from './SectionEditPhoto';
 import SectionEditBoard from './SectionEditBoard';
-import { errorNoti, successNoti } from '@/utils/alarmUtil';
 import './diaryEditPage.scss';
-import { updateDiary } from '@/api/userDiary';
-import { Timestamp } from 'firebase/firestore';
 
 const DiaryEditPage = () => {
+  const user = useAuth();
   const { docId } = useParams();
-  const { user, diaryData, isLoading, setIsLoading, plantTag } = useDiaryData();
+  const [isLoading, setIsLoading] = useState(false);
+  const [plantTag, setPlantTag] = useState<Plant[]>([]);
+  const [diaryData, setDiaryData] = useState<DiaryProps[]>([]);
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -83,6 +89,31 @@ const DiaryEditPage = () => {
     successNoti('수정이 완료되었어요!');
     navigate('/diary');
   };
+
+  useEffect(() => {
+    (async () => {
+      if (!user?.email) return;
+
+      const userEmail = user.email;
+      try {
+        setIsLoading(true);
+        // 추후 수정
+        const diaryList = await getUserDiaryList(userEmail);
+        const plantList = await getUserPlantList(userEmail);
+        const plantsTag: Plant[] = plantList.map(({ nickname }) => ({
+          nickname,
+          userEmail,
+        }));
+
+        setDiaryData(diaryList);
+        setPlantTag(plantsTag);
+      } catch (error) {
+        errorNoti('유저 데이터를 가져오던 도중 에러가 발생했습니다.');
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, []);
 
   if (!docId) {
     return;

@@ -40,7 +40,8 @@ const existPlant = async (userEmail: string) => {
   const q = query(ref, where('userEmail', '==', userEmail));
 
   const snapshot = await getDocs(q);
-  return snapshot.empty;
+  console.dir(snapshot);
+  return !snapshot.empty;
 };
 
 const saveDiary = (diaryData: Omit<DiaryProps, 'id'>) => {

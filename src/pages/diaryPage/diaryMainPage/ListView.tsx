@@ -5,7 +5,7 @@ import NoContent from './NoContent';
 import { showAlert } from '@/utils/alarmUtil';
 import './listView.scss';
 
-const ListView: React.FC<ListViewProps> = ({ diaryData, handleDelete }) => {
+const ListView = ({ diaryData, handleDelete }: ListViewProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDiary, setSelectedDiary] = useState<DiaryProps | null>(null);
 
@@ -43,7 +43,7 @@ const ListView: React.FC<ListViewProps> = ({ diaryData, handleDelete }) => {
 
   return (
     <div className="list_view">
-      {diaryData.length === 0 ? (
+      {!diaryData || diaryData?.length === 0 ? (
         <NoContent />
       ) : (
         <ul className="diary_list_wrap">

@@ -13,7 +13,7 @@ export interface DiaryProps {
 
 /* 다이어리 메인 페이지 */
 export interface ListViewProps {
-  diaryData: DiaryProps[];
+  diaryData: DiaryProps[] | null;
   handleDelete: (diaryId: string) => void;
 }
 

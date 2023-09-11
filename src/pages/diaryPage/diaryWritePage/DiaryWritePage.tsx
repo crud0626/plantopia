@@ -2,18 +2,19 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Timestamp } from 'firebase/firestore';
 import { useAuth } from '@/hooks';
-import useDiaryData from '@/hooks/useDiaryData';
+import { errorNoti, successNoti } from '@/utils/alarmUtil';
+import { saveDiary } from '@/api/userDiary';
+import { getUserPlantList } from '@/api/userPlant';
+import { Plant } from '@/@types/diary.type';
+
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
 import SectionPhoto from './SectionPhoto';
 import SectionBoard from './SectionBoard';
-import { errorNoti, successNoti } from '@/utils/alarmUtil';
-import { saveDiary } from '@/api/userDiary';
 import './diaryWritePage.scss';
 
 const DiaryWritePage = () => {
   const user = useAuth();
-  const userEmail = user?.email || '';
-  const { plantTag } = useDiaryData();
+  const [plantTag, setPlantTag] = useState<Plant[]>([]);
   const navigate = useNavigate();
 
   const [state, setState] = useState({
@@ -43,6 +44,8 @@ const DiaryWritePage = () => {
   };
 
   const handleSaveClick = async () => {
+    if (!user?.email) return;
+
     const { title, content } = state;
 
     if (!title || chosenPlants.length === 0 || !content) {
@@ -59,7 +62,7 @@ const DiaryWritePage = () => {
     setState(prev => ({ ...prev, saving: true }));
 
     await saveDiary({
-      userEmail,
+      userEmail: user.email,
       content,
       postedAt: Timestamp.fromDate(new Date()),
       tags: chosenPlants,
@@ -73,6 +76,25 @@ const DiaryWritePage = () => {
     successNoti('저장이 완료되었어요!');
     navigate('/diary');
   };
+
+  useEffect(() => {
+    (async () => {
+      if (!user?.email) return;
+
+      const userEmail = user.email;
+      try {
+        const plantList = await getUserPlantList(userEmail);
+        const plantsTag: Plant[] = plantList.map(({ nickname }) => ({
+          nickname,
+          userEmail,
+        }));
+
+        setPlantTag(plantsTag);
+      } catch (error) {
+        errorNoti('유저 데이터를 가져오던 도중 에러가 발생했습니다.');
+      }
+    })();
+  }, [user?.email]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -91,29 +113,33 @@ const DiaryWritePage = () => {
   return (
     <div className="layout">
       <HeaderBefore ex={true} title="글쓰기" />
-      <main className="diary_main">
-        <SectionPhoto
-          userEmail={userEmail}
-          imgUrls={imgUrls}
-          setImgUrls={setImgUrls}
-        />
-        <SectionBoard
-          state={state}
-          setState={setState}
-          chosenPlants={chosenPlants}
-          toggleSelect={toggleSelect}
-          handleChosenPlantClick={handleChosenPlantClick}
-          handlePlantSelection={handlePlantSelection}
-          plantTag={plantTag}
-        />
-      </main>
-      <button
-        className="save_button"
-        onClick={handleSaveClick}
-        disabled={state.saving}
-      >
-        {state.saving ? '저장 중...' : '저장하기'}
-      </button>
+      {user?.email && (
+        <>
+          <main className="diary_main">
+            <SectionPhoto
+              userEmail={user.email}
+              imgUrls={imgUrls}
+              setImgUrls={setImgUrls}
+            />
+            <SectionBoard
+              state={state}
+              setState={setState}
+              chosenPlants={chosenPlants}
+              toggleSelect={toggleSelect}
+              handleChosenPlantClick={handleChosenPlantClick}
+              handlePlantSelection={handlePlantSelection}
+              plantTag={plantTag}
+            />
+          </main>
+          <button
+            className="save_button"
+            onClick={handleSaveClick}
+            disabled={state.saving}
+          >
+            {state.saving ? '저장 중...' : '저장하기'}
+          </button>
+        </>
+      )}
     </div>
   );
 };

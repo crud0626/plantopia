@@ -5,10 +5,10 @@ import NoContent from './NoContent';
 import './galleryView.scss';
 
 interface GalleryViewProps {
-  diaryData: DiaryProps[];
+  diaryData: DiaryProps[] | null;
 }
 
-const GalleryView: React.FC<GalleryViewProps> = ({ diaryData }) => {
+const GalleryView = ({ diaryData }: GalleryViewProps) => {
   const cardRefs = useRef<HTMLDivElement[]>([]);
 
   const getMainImage = (imgUrls: string[]) => {
@@ -17,7 +17,8 @@ const GalleryView: React.FC<GalleryViewProps> = ({ diaryData }) => {
 
   return (
     <>
-      {diaryData.length === 0 ||
+      {!diaryData ||
+      diaryData.length === 0 ||
       diaryData.every(diary => diary.imgUrls.length === 0) ? (
         <NoContent />
       ) : (
