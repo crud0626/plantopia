@@ -68,7 +68,10 @@ const SectionBoard = ({
                   <div
                     key={tagName}
                     className="chosen_plant"
-                    onClick={() => handleTags(tagName)}
+                    onClick={e => {
+                      e.stopPropagation();
+                      handleTags(tagName);
+                    }}
                   >
                     {tagName}
                     <span className="cancel"></span>
