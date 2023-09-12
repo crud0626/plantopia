@@ -4,6 +4,7 @@ import { DiaryImages } from '@/constants/diary';
 import { useAuth } from '@/hooks';
 import { errorNoti, showAlert, successNoti } from '@/utils/alarmUtil';
 import { deleteDiary, existPlant, getUserDiaryList } from '@/api/userDiary';
+import { DiaryContentTypes } from '@/@types/diary.type';
 
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
@@ -11,19 +12,28 @@ import Progress from '@/components/progress/Progress';
 import ListView from './ListView';
 import GalleryView from './GalleryView';
 
-import './diaryPage.scss';
-import { DiaryProps } from '@/@types/diary.type';
+import './diaryMainPage.scss';
+import ADD_BTN from '@/assets/images/icons/diary_add.png';
 
-const tabData = [
+type DiaryViewTypes = 'List' | 'Gallery';
+
+interface TabProps {
+  label: DiaryViewTypes;
+  styleName: string;
+  onImage: string;
+  offImage: string;
+}
+
+const tabData: TabProps[] = [
   {
-    name: 'list_tab',
     label: 'List',
+    styleName: 'list_tab',
     onImage: DiaryImages.LISTON,
     offImage: DiaryImages.LISTOFF,
   },
   {
-    name: 'gallery_tab',
     label: 'Gallery',
+    styleName: 'gallery_tab',
     onImage: DiaryImages.GALLERYON,
     offImage: DiaryImages.GALLERYOFF,
   },
@@ -32,17 +42,17 @@ const tabData = [
 const DiaryPage = () => {
   const user = useAuth();
   const navigate = useNavigate();
-  const [diaryData, setDiaryData] = useState<DiaryProps[] | null>(null);
+  const [diaryData, setDiaryData] = useState<DiaryContentTypes[] | null>(null);
   const [hasPlantsUser, setHasPlantsUser] = useState(false);
-  const [currentTab, setCurrentTab] = useState('list_tab');
+  const [currentTab, setCurrentTab] = useState<DiaryViewTypes>('List');
   const [isLoading, setIsLoading] = useState(true);
 
   const handleDelete = async (diaryId: string) => {
     if (!user?.email) return;
 
-    setIsLoading(true);
-
     try {
+      setIsLoading(true);
+
       await deleteDiary(diaryId);
       const newDiaryData = await getUserDiaryList(user.email);
 
@@ -56,7 +66,7 @@ const DiaryPage = () => {
     }
   };
 
-  const handleTabChange = (tab: string) => {
+  const handleTabChange = (tab: DiaryViewTypes) => {
     if (tab !== currentTab) {
       setCurrentTab(tab);
     }
@@ -99,39 +109,39 @@ const DiaryPage = () => {
       <main className="diary_page">
         <div className="diary_container">
           <h2 className="title inner">
-            <span>{user?.displayName ?? '사용자'}</span>님, 식물의 성장 기록을
+            <span>{user?.displayName ?? '회원'}</span>님, 식물의 성장 기록을
             남겨보세요.
-            <span className="plant_icon"></span>
           </h2>
           <section className="tab_section">
-            {tabData.map((tab, index) => (
+            {tabData.map(({ label, styleName, onImage, offImage }, i) => (
               <div
-                key={index}
-                className={`view_tab ${tab.name} ${
-                  currentTab === tab.name ? 'on' : ''
+                key={i}
+                className={`view_tab ${styleName} ${
+                  currentTab === label ? 'on' : ''
                 }`}
-                onClick={() => handleTabChange(tab.name)}
+                onClick={() => handleTabChange(label)}
               >
                 <img
-                  src={currentTab === tab.name ? tab.onImage : tab.offImage}
+                  src={currentTab === label ? onImage : offImage}
                   className="tab_img"
-                  alt={`Tab ${tab.label}`}
+                  alt={`${label}_btn`}
                 />
               </div>
             ))}
           </section>
           <section className="content_section">
-            {currentTab === 'list_tab' ? (
+            {currentTab === 'List' ? (
               <ListView diaryData={diaryData} handleDelete={handleDelete} />
             ) : (
               <GalleryView diaryData={diaryData} />
             )}
           </section>
-          <div className="top_btn"></div>
         </div>
-        <button onClick={handleAddBtn} className="write_btn_wrap">
-          <div className="write_btn"></div>
-        </button>
+        <div className="write_btn_wrap">
+          <button className="write_btn" onClick={handleAddBtn}>
+            <img src={ADD_BTN} alt="add" />
+          </button>
+        </div>
       </main>
       <Footer />
       {isLoading && <Progress />}
