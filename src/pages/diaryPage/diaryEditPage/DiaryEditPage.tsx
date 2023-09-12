@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { errorNoti, successNoti } from '@/utils/alarmUtil';
-import { DiaryContentTypes, Plant } from '@/@types/diary.type';
+import { DiaryContentTypes } from '@/@types/diary.type';
 import { getUserPlantList } from '@/api/userPlant';
-import { getUserDiaryList, updateDiary } from '@/api/userDiary';
-import { Timestamp } from 'firebase/firestore';
+import { getUserDiary, updateDiary } from '@/api/userDiary';
 import { useAuth } from '@/hooks';
 
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
@@ -14,113 +13,99 @@ import './diaryEditPage.scss';
 
 const DiaryEditPage = () => {
   const user = useAuth();
+  const navigate = useNavigate();
   const { docId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
-  const [plantTag, setPlantTag] = useState<Plant[]>([]);
-  const [diaryData, setDiaryData] = useState<DiaryContentTypes[]>([]);
+  const [plantNames, setPlantNames] = useState<string[]>([]);
+  const [contents, setContents] = useState<DiaryContentTypes | null>(null);
 
-  const [chosenPlants, setChosenPlants] = useState<string[]>([]);
-  const [imgUrls, setImgUrls] = useState<string[]>([]);
-  const [state, setState] = useState({
-    title: '',
-    content: '',
-    saving: false,
-    isVisible: false,
-  });
+  const handleTags = (targetTag: string) => {
+    if (!contents) return;
 
-  const navigate = useNavigate();
+    const prevTags = [...contents.tags];
+    const hasTarget = prevTags.includes(targetTag);
 
-  const diaryToUpdate = diaryData.find(diary => diary.id === docId);
+    const newTags = hasTarget
+      ? prevTags.filter(name => name === targetTag)
+      : [...prevTags, targetTag];
 
-  useEffect(() => {
-    if (!diaryToUpdate) {
-      return;
-    }
-
-    const { title, content } = diaryToUpdate;
-
-    setState(prevState => ({
-      ...prevState,
-      title,
-      content,
-    }));
-    setChosenPlants(diaryToUpdate.tags);
-    setImgUrls(diaryToUpdate.imgUrls);
-  }, [diaryToUpdate]);
-
-  const toggleSelect = () => {
-    setState(({ isVisible, ...restState }) => ({
-      ...restState,
-      isVisible: !isVisible,
-    }));
+    setContents({
+      ...contents,
+      tags: newTags,
+    });
   };
 
-  const handleChosenPlantClick = (plant: string) => {
-    setChosenPlants(prev => prev.filter(p => p !== plant));
-  };
+  const validateInput = () => {
+    if (!contents) return false;
 
-  const handlePlantSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedPlant = event.target.value;
+    const { title, tags, content } = contents;
 
-    setChosenPlants(prev =>
-      prev.includes(selectedPlant)
-        ? prev.filter(p => p !== selectedPlant)
-        : [...prev, selectedPlant],
-    );
-  };
-
-  const handleSaveClick = async () => {
-    if (!user?.email || !docId) return;
-
-    if (!state.title || chosenPlants.length === 0 || !state.content) {
+    if (!title || tags.length === 0 || !content) {
       errorNoti(
-        !state.title
+        !title
           ? '제목을 작성해주세요.'
-          : chosenPlants.length === 0
+          : tags.length === 0
           ? '관련 식물을 1가지 이상 선택해주세요.'
           : '내용을 작성해주세요.',
       );
-      return;
+      return false;
     }
 
-    setIsLoading(true);
+    return true;
+  };
 
-    await updateDiary({
-      id: docId,
-      userEmail: user?.email || '',
-      content: state.content,
-      // 임시
-      postedAt: Timestamp.fromDate(new Date()),
-      tags: chosenPlants,
-      title: state.title,
-      imgUrls: imgUrls,
+  const handleSaveClick = async () => {
+    const isInvalid = !user?.email || !docId || !contents;
+    const isValidContent = validateInput();
+
+    if (isInvalid || !isValidContent) return;
+
+    try {
+      setIsLoading(true);
+
+      await updateDiary({ ...contents });
+
+      successNoti('수정이 완료되었어요!');
+      navigate('/diary');
+    } catch (error) {
+      errorNoti('수정하는 도중 에러가 발생했습니다!');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleContents = (
+    key: keyof DiaryContentTypes,
+    value: DiaryContentTypes[typeof key],
+  ) => {
+    if (!contents) return;
+
+    setContents({
+      ...contents,
+      [key]: value,
     });
-
-    setIsLoading(false);
-    successNoti('수정이 완료되었어요!');
-    navigate('/diary');
   };
 
   useEffect(() => {
     (async () => {
-      if (!user?.email) return;
+      if (!user?.email || !docId) return;
 
       const userEmail = user.email;
+
       try {
         setIsLoading(true);
 
-        const [diaryList, plantList] = await Promise.all([
-          getUserDiaryList(userEmail),
+        const [plantList, diaryData] = await Promise.all([
           getUserPlantList(userEmail),
+          getUserDiary(docId),
         ]);
 
-        const plantsTag: Plant[] = plantList.map(({ nickname }) => ({
-          nickname,
-          userEmail,
-        }));
+        if (!diaryData) throw Error();
 
-        setDiaryData(diaryList);
-        setPlantTag(plantsTag);
+        const userPlantNames = plantList.map(({ nickname }) => nickname);
+
+        setContents(diaryData);
+        setPlantNames(userPlantNames);
       } catch (error) {
         errorNoti('유저 데이터를 가져오던 도중 에러가 발생했습니다.');
       } finally {
@@ -129,31 +114,28 @@ const DiaryEditPage = () => {
     })();
   }, [user?.email]);
 
-  if (!docId) {
-    return;
-  }
-
   return (
     <div className="layout">
       <HeaderBefore ex={true} title="수정하기" />
       <main className="diary_write_wrap">
-        <SectionPhoto imgUrls={imgUrls} setImgUrls={setImgUrls} />
-        <SectionBoard
-          state={state}
-          setState={setState}
-          chosenPlants={chosenPlants}
-          handleChosenPlantClick={handleChosenPlantClick}
-          handlePlantSelection={handlePlantSelection}
-          toggleSelect={toggleSelect}
-          plantTag={plantTag}
-        />
-        <button
-          className="save_button"
-          onClick={handleSaveClick}
-          disabled={isLoading}
-        >
-          {isLoading ? '수정 중...' : '수정하기'}
-        </button>
+        {contents && docId && (
+          <>
+            <SectionPhoto contents={contents} handleContents={handleContents} />
+            <SectionBoard
+              contents={contents}
+              handleContents={handleContents}
+              plantNames={plantNames}
+              handleTags={handleTags}
+            />
+            <button
+              className="save_button"
+              onClick={handleSaveClick}
+              disabled={isLoading}
+            >
+              {isLoading ? '수정 중...' : '수정하기'}
+            </button>
+          </>
+        )}
       </main>
     </div>
   );

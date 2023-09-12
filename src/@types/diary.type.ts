@@ -1,6 +1,4 @@
 import { Timestamp } from 'firebase/firestore';
-
-/* 다이어리 공통 */
 export interface DiaryContentTypes {
   id: string;
   userEmail: string;
@@ -9,9 +7,4 @@ export interface DiaryContentTypes {
   tags: string[];
   title: string;
   imgUrls: string[];
-}
-
-export interface Plant {
-  nickname: string;
-  userEmail: string;
 }
