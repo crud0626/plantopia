@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { DiaryContentTypes } from '@/@types/diary.type';
-import { errorNoti, showAlert, successNoti } from '@/utils/alarmUtil';
 import { deleteDiary, getUserDiary } from '@/api/userDiary';
 import { useAuth } from '@/hooks';
+import { useOutsideClick } from '@/hooks/useOutsideClick';
+import { errorNoti, showAlert, successNoti } from '@/utils/alarmUtil';
+import { DiaryContentTypes } from '@/@types/diary.type';
 
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
 import Progress from '@/components/progress/Progress';
@@ -36,6 +37,16 @@ const DiaryDetailPage = () => {
     }
   };
 
+  const handleOutsideClick = ({ target }: MouseEvent) => {
+    if (!(target instanceof HTMLElement)) return;
+
+    if (!target.closest('.more_btn_wrap')) {
+      setIsModalOpen(false);
+    }
+  };
+
+  useOutsideClick(handleOutsideClick);
+
   useEffect(() => {
     (async () => {
       if (!docId) {
@@ -58,22 +69,6 @@ const DiaryDetailPage = () => {
       }
     })();
   }, [docId]);
-
-  useEffect(() => {
-    const handleOutsideClick = ({ target }: MouseEvent) => {
-      if (!target || !(target instanceof HTMLElement)) return;
-
-      if (isModalOpen && !target.closest('.more_btn_wrap')) {
-        setIsModalOpen(false);
-      }
-    };
-
-    document.body.addEventListener('click', handleOutsideClick);
-
-    return () => {
-      document.body.removeEventListener('click', handleOutsideClick);
-    };
-  }, []);
 
   if (!docId || !diaryDetailData) return null;
 

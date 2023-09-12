@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { DiaryContentTypes } from '@/@types/diary.type';
+import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { showAlert } from '@/utils/alarmUtil';
+import { DiaryContentTypes } from '@/@types/diary.type';
 
 import NoContent from './NoContent';
 import './listView.scss';
@@ -23,21 +24,15 @@ const ListView = ({ diaryData, handleDelete }: ListViewProps) => {
     setIsOpenModal(!isOpenModal);
   };
 
-  useEffect(() => {
-    const handleClickOutside = ({ target }: MouseEvent) => {
-      if (!(target instanceof HTMLElement)) return;
+  const handleClickOutside = ({ target }: MouseEvent) => {
+    if (!(target instanceof HTMLElement)) return;
 
-      if (!target.closest('.more_modal')) {
-        setIsOpenModal(false);
-      }
-    };
+    if (!target.closest('.more_modal')) {
+      setIsOpenModal(false);
+    }
+  };
 
-    document.body.addEventListener('click', handleClickOutside);
-
-    return () => {
-      document.body.removeEventListener('click', handleClickOutside);
-    };
-  }, []);
+  useOutsideClick(handleClickOutside);
 
   const isEmpty = !diaryData || diaryData.length === 0;
 

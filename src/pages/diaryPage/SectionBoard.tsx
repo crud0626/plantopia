@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ArrowImages } from '@/constants/diary';
+import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { InitialDiaryContent } from '@/@types/diary.type';
 import { valueof } from '@/@types';
 
@@ -23,19 +24,15 @@ const SectionBoard = ({
 }: SectionBoardProps) => {
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
 
-  useEffect(() => {
-    const handleClickOutside = ({ target }: MouseEvent) => {
-      if (!(target instanceof HTMLElement)) return;
+  const handleClickOutside = ({ target }: MouseEvent) => {
+    if (!(target instanceof HTMLElement)) return;
 
-      if (!target.closest('.plant_select_wrapper')) {
-        setIsOpenDropdown(false);
-      }
-    };
+    if (!target.closest('.plant_select_wrapper')) {
+      setIsOpenDropdown(false);
+    }
+  };
 
-    document.body.addEventListener('click', handleClickOutside);
-
-    return () => document.body.removeEventListener('click', handleClickOutside);
-  }, []);
+  useOutsideClick(handleClickOutside);
 
   const { title, tags, content } = contents;
 
