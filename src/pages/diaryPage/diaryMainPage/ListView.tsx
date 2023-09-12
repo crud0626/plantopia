@@ -12,46 +12,38 @@ interface ListViewProps {
 }
 
 const ListView = ({ diaryData, handleDelete }: ListViewProps) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const [isOpenModal, setIsOpenModal] = useState(false);
   const [selectedDiary, setSelectedDiary] = useState<DiaryContentTypes | null>(
     null,
   );
 
   const toggleModal = (diary: DiaryContentTypes) => {
     setSelectedDiary(diary);
-    setIsModalOpen(!isModalOpen);
+    setIsOpenModal(!isOpenModal);
   };
-
-  const closeModal = () => {
-    setSelectedDiary(null);
-    setIsModalOpen(false);
-  };
-
-  const navigateToEdit = (diary: DiaryContentTypes) => {
-    navigate(`/diary/${diary.id}/edit`);
-    closeModal();
-  };
-
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
+    const handleClickOutside = ({ target }: MouseEvent) => {
+      if (!(target instanceof HTMLElement)) return;
+
       if (!target.closest('.more_modal')) {
-        setIsModalOpen(false);
+        setIsOpenModal(false);
       }
     };
 
-    document.addEventListener('click', handleClickOutside);
+    document.body.addEventListener('click', handleClickOutside);
 
     return () => {
-      document.removeEventListener('click', handleClickOutside);
+      document.body.removeEventListener('click', handleClickOutside);
     };
   }, []);
 
+  const isEmpty = !diaryData || diaryData.length === 0;
+
   return (
     <div className="list_view">
-      {!diaryData || diaryData?.length === 0 ? (
+      {isEmpty ? (
         <NoContent />
       ) : (
         <ul className="diary_list_wrap">
@@ -67,16 +59,13 @@ const ListView = ({ diaryData, handleDelete }: ListViewProps) => {
                 </div>
                 <div
                   className={`main_img ${
-                    diary.imgUrls.length > 1 ? 'many' : ''
+                    diary.imgUrls.length > 1 ? 'multiple' : ''
                   }`}
-                  style={{
-                    backgroundImage: `url('${
-                      diary.imgUrls && diary.imgUrls.length > 0
-                        ? diary.imgUrls[0]
-                        : ''
-                    }')`,
-                  }}
-                ></div>
+                >
+                  {diary.imgUrls.length > 0 && (
+                    <img src={diary.imgUrls[0]} alt="" />
+                  )}
+                </div>
               </Link>
               <button
                 className="more"
@@ -85,11 +74,11 @@ const ListView = ({ diaryData, handleDelete }: ListViewProps) => {
                   toggleModal(diary);
                 }}
               ></button>
-              {isModalOpen && selectedDiary === diary && (
+              {isOpenModal && selectedDiary === diary && (
                 <div className="more_modal">
                   <div
                     className="btn modify"
-                    onClick={() => navigateToEdit(diary)}
+                    onClick={() => navigate(`/diary/${diary.id}/edit`)}
                   >
                     게시글 수정
                   </div>
@@ -98,7 +87,6 @@ const ListView = ({ diaryData, handleDelete }: ListViewProps) => {
                     onClick={() => {
                       showAlert('글을 삭제하시겠습니까?', '', () => {
                         handleDelete(diary.id);
-                        closeModal();
                       });
                     }}
                   >

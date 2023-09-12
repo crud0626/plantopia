@@ -112,7 +112,10 @@ const DiaryWritePage = () => {
       {user?.email && (
         <>
           <main className="diary_main">
-            <SectionPhoto contents={contents} handleContents={handleContents} />
+            <SectionPhoto
+              imgUrls={contents.imgUrls}
+              handleContents={handleContents}
+            />
             <SectionBoard
               contents={contents}
               handleContents={handleContents}

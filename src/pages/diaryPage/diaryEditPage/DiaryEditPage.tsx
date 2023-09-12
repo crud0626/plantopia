@@ -120,7 +120,10 @@ const DiaryEditPage = () => {
       <main className="diary_write_wrap">
         {contents && docId && (
           <>
-            <SectionPhoto contents={contents} handleContents={handleContents} />
+            <SectionPhoto
+              imgUrls={contents.imgUrls}
+              handleContents={handleContents}
+            />
             <SectionBoard
               contents={contents}
               handleContents={handleContents}

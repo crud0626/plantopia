@@ -1,45 +1,32 @@
-import { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { DiaryProps } from '@/@types/diary.type';
+import { DiaryContentTypes } from '@/@types/diary.type';
+
 import NoContent from './NoContent';
 import './galleryView.scss';
 
 interface GalleryViewProps {
-  diaryData: DiaryProps[] | null;
+  diaryData: DiaryContentTypes[] | null;
 }
 
 const GalleryView = ({ diaryData }: GalleryViewProps) => {
-  const cardRefs = useRef<HTMLDivElement[]>([]);
+  const filteredDiary = diaryData?.filter(({ imgUrls }) => imgUrls.length > 0);
 
-  const getMainImage = (imgUrls: string[]) => {
-    return `url(${imgUrls[0]})`;
-  };
+  const isEmpty = !filteredDiary || filteredDiary.length === 0;
+
+  if (isEmpty) return <NoContent />;
 
   return (
-    <>
-      {!diaryData ||
-      diaryData.length === 0 ||
-      diaryData.every(diary => diary.imgUrls.length === 0) ? (
-        <NoContent />
-      ) : (
-        <div className="gallery_view">
-          {diaryData.map((diary, index) => (
-            <Link
-              to={`/diary/${diary.id}`}
-              key={index}
-              style={{ backgroundImage: getMainImage(diary.imgUrls) }}
-              className={`card ${
-                diary.imgUrls.length === 0 ? 'hide' : 'show'
-              } ${diary.imgUrls.length > 1 ? 'many' : ''}`}
-            >
-              <div
-                ref={cardElement => (cardRefs.current[index] = cardElement!)}
-              ></div>
-            </Link>
-          ))}
-        </div>
-      )}
-    </>
+    <div className="gallery_view">
+      {filteredDiary.map(({ id, imgUrls }) => (
+        <Link
+          to={`/diary/${id}`}
+          key={id}
+          className={`card ${imgUrls.length > 1 ? 'multiple' : ''}`}
+        >
+          <img src={imgUrls[0]} alt="thumbnail" />
+        </Link>
+      ))}
+    </div>
   );
 };
 

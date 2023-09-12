@@ -1,39 +1,46 @@
+import { useEffect, useState } from 'react';
 import { ArrowImages } from '@/constants/diary';
-import { Plant } from '@/@types/diary.type';
+import { InitialDiaryContent } from '@/@types/diary.type';
+import { valueof } from '@/@types';
 
 import './sectionBoard.scss';
 
 interface SectionBoardProps {
-  state: {
-    title: string;
-    content: string;
-    saving: boolean;
-    isVisible: boolean;
-  };
-  setState: React.Dispatch<
-    React.SetStateAction<{
-      title: string;
-      content: string;
-      saving: boolean;
-      isVisible: boolean;
-    }>
-  >;
-  chosenPlants: string[];
-  toggleSelect(): void;
-  handleChosenPlantClick(plant: string): void;
-  handlePlantSelection(event: React.ChangeEvent<HTMLInputElement>): void;
-  plantTag: Plant[];
+  contents: InitialDiaryContent;
+  plantNames: string[];
+  handleContents: (
+    key: keyof InitialDiaryContent,
+    value: valueof<InitialDiaryContent>,
+  ) => void;
+  handleTags: (targetTag: string) => void;
 }
 
 const SectionBoard = ({
-  state,
-  setState,
-  chosenPlants,
-  toggleSelect,
-  handleChosenPlantClick,
-  handlePlantSelection,
-  plantTag,
+  contents,
+  handleContents,
+  plantNames,
+  handleTags,
 }: SectionBoardProps) => {
+  const [isOpenDropdown, setIsOpenDropdown] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = ({ target }: MouseEvent) => {
+      if (!(target instanceof HTMLElement)) return;
+
+      if (!target.closest('.plant_select_wrapper')) {
+        setIsOpenDropdown(false);
+      }
+    };
+
+    document.body.addEventListener('click', handleClickOutside);
+
+    return () => document.body.removeEventListener('click', handleClickOutside);
+  }, []);
+
+  const { title, tags, content } = contents;
+
+  const isEmptyTag = tags.length === 0;
+
   return (
     <div className="section_board">
       <section className="board">
@@ -42,84 +49,78 @@ const SectionBoard = ({
             type="text"
             placeholder="제목을 작성하세요."
             className="title"
-            value={state.title}
-            onChange={e =>
-              setState(prev => ({ ...prev, title: e.target.value }))
-            }
+            value={title}
+            onChange={({ target }) => handleContents('title', target.value)}
           />
         </div>
         <div className="plant_select_wrapper">
           <div className="plant_select">
-            {chosenPlants.length === 0 && (
+            {isEmptyTag ? (
               <div
-                className={`choose_text ${
-                  chosenPlants.length === 0 ? '' : 'hide'
-                }`}
-                onClick={toggleSelect}
+                className="choose_text"
+                onClick={() => setIsOpenDropdown(prev => !prev)}
               >
                 식물을 선택하세요.
               </div>
-            )}
-
-            {chosenPlants.length > 0 && (
+            ) : (
               <div className="chosen_wrap">
-                {chosenPlants.map(plant => (
+                {tags.map(tagName => (
                   <div
-                    key={plant}
+                    key={tagName}
                     className="chosen_plant"
-                    onClick={() => handleChosenPlantClick(plant)}
+                    onClick={() => handleTags(tagName)}
                   >
-                    {plant}
+                    {tagName}
                     <span className="cancel"></span>
                   </div>
                 ))}
               </div>
             )}
-            <div className="arrow_icon" onClick={toggleSelect}>
+            <div
+              className="arrow_icon"
+              onClick={() => setIsOpenDropdown(prev => !prev)}
+            >
               <img
                 src={
-                  state.isVisible
-                    ? ArrowImages.ARROW_UP
-                    : ArrowImages.ARROW_DOWN
+                  isOpenDropdown ? ArrowImages.ARROW_UP : ArrowImages.ARROW_DOWN
                 }
-                alt={state.isVisible ? 'Up' : 'Down'}
+                alt={isOpenDropdown ? 'Up' : 'Down'}
               />
             </div>
           </div>
-
-          {state.isVisible && (
+          {isOpenDropdown && (
             <>
               <div className="plant_list">
                 <ul>
-                  {(plantTag || []).map(plant => (
-                    <li key={plant.nickname}>
+                  {plantNames.map(plantName => (
+                    <li key={plantName}>
                       <input
                         type="checkbox"
-                        name={plant.nickname}
-                        id={plant.nickname}
-                        value={plant.nickname}
-                        onChange={handlePlantSelection}
-                        checked={chosenPlants.includes(plant.nickname)}
+                        id={plantName}
+                        name={plantName}
+                        value={plantName}
+                        onChange={() => handleTags(plantName)}
+                        checked={tags.includes(plantName)}
                       />
-                      <label htmlFor={plant.nickname}>{plant.nickname}</label>
+                      <label htmlFor={plantName}>{plantName}</label>
                     </li>
                   ))}
                 </ul>
-                <button className="choose_complete" onClick={toggleSelect}>
+                <button
+                  className="choose_complete"
+                  onClick={() => setIsOpenDropdown(prev => !prev)}
+                >
                   선택 완료
                 </button>
               </div>
             </>
           )}
         </div>
-
         <textarea
-          placeholder="내용을 작성하세요."
-          value={state.content}
-          onChange={e =>
-            setState(prev => ({ ...prev, content: e.target.value }))
-          }
+          value={content}
           className="content"
+          placeholder="내용을 작성하세요."
+          onChange={({ target }) => handleContents('content', target.value)}
         />
       </section>
     </div>

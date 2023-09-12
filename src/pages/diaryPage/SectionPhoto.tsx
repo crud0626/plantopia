@@ -1,16 +1,22 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import { deleteImg, uploadImg } from '@/api/storage';
+import { InitialDiaryContent } from '@/@types/diary.type';
 import { errorNoti } from '@/utils/alarmUtil';
 
 import './sectionPhoto.scss';
 
 interface SectionPhotoProps {
   imgUrls: string[];
-  setImgUrls: React.Dispatch<React.SetStateAction<string[]>>;
+  handleContents: (
+    key: keyof InitialDiaryContent,
+    value: InitialDiaryContent[typeof key],
+  ) => void;
 }
 
-const SectionPhoto = ({ imgUrls, setImgUrls }: SectionPhotoProps) => {
+const imgLimit = 4;
+
+const SectionPhoto = ({ imgUrls, handleContents }: SectionPhotoProps) => {
   const handleAdd = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
 
@@ -20,7 +26,7 @@ const SectionPhoto = ({ imgUrls, setImgUrls }: SectionPhotoProps) => {
       const url = await uploadImg(file, 'diary');
       const updatedImgs = [...imgUrls, url];
 
-      setImgUrls(updatedImgs);
+      handleContents('imgUrls', updatedImgs);
     } catch {
       errorNoti('이미지 업로드 도중 에러가 발생했습니다!');
     } finally {
@@ -28,20 +34,13 @@ const SectionPhoto = ({ imgUrls, setImgUrls }: SectionPhotoProps) => {
     }
   };
 
-  //   const cleanFileName = (fileName: string) => {
-  //     const cleanedName = fileName.replace(/[^\w\s.-]/gi, '');
-  //     return cleanedName;
-  //   };
-
-  const handleDelete = async (index: number) => {
-    const targetImg = imgUrls[index];
-
+  const handleDelete = async (targetSrc: string) => {
     try {
-      await deleteImg(targetImg);
+      await deleteImg(targetSrc);
 
-      const updatedImgs = imgUrls.filter((_, i) => i !== index);
+      const updatedImgs = imgUrls.filter(url => url !== targetSrc);
 
-      setImgUrls(updatedImgs);
+      handleContents('imgUrls', updatedImgs);
     } catch (error) {
       errorNoti('이미지 삭제 도중 에러가 발생했습니다!');
     }
@@ -51,7 +50,7 @@ const SectionPhoto = ({ imgUrls, setImgUrls }: SectionPhotoProps) => {
 
   return (
     <section className="photo_section inner">
-      {imgCount < 4 && (
+      {imgCount < imgLimit && (
         <div className="upload_button_wrapper">
           <button className="upload_button">
             <label htmlFor="photoInput" className="photo_label">
@@ -72,7 +71,9 @@ const SectionPhoto = ({ imgUrls, setImgUrls }: SectionPhotoProps) => {
         </div>
       )}
       <Swiper
-        className={`photo_select_swiper ${imgCount === 4 ? 'full_photo' : ''}`}
+        className={`photo_select_swiper ${
+          imgCount === imgLimit ? 'full_photo' : ''
+        }`}
         modules={[Navigation]}
         slidesPerView={2.5}
       >
@@ -84,7 +85,7 @@ const SectionPhoto = ({ imgUrls, setImgUrls }: SectionPhotoProps) => {
             </div>
             <button
               className="photo_delete_btn"
-              onClick={() => handleDelete(index)}
+              onClick={() => handleDelete(url)}
             ></button>
           </SwiperSlide>
         ))}

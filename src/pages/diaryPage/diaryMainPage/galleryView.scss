@@ -1,18 +1,3 @@
-@mixin diary-stack-icon($top: 0.2rem, $right: 0.2rem, $size: 1rem) {
-  &.many::before {
-    content: '';
-    display: block;
-    background: url('@/assets/images/icons/diary_stack.png') no-repeat center /
-      contain;
-    position: absolute;
-    right: $right;
-    top: $top;
-    width: $size;
-    height: $size;
-    opacity: 0.9;
-  }
-}
-
 .gallery_view {
   width: 100%;
   display: grid;
@@ -22,21 +7,31 @@
   grid-row-gap: 0.6rem;
   padding: 2rem 2rem 4rem 2rem;
 
-  > a {
-    width: 100%;
-    min-height: 10.267rem;
-    border-radius: 0.3rem;
-
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-  }
   > .card {
     position: relative;
-    @include diary-stack-icon(0.5rem, 0.5rem, 1.5rem);
+    width: 10.3rem;
+    height: 10.3rem;
+    border-radius: 0.3rem;
 
-    &.hide {
-      display: none;
+    > img {
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      object-fit: cover;
     }
   }
+}
+
+/* 사진이 여러장인 경우 */
+.multiple::before {
+  content: '';
+  position: absolute;
+  display: inline-block;
+  background: url('@/assets/images/icons/diary_stack.png') no-repeat center /
+    contain;
+  right: 0.5rem;
+  top: 0.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  opacity: 0.9;
 }

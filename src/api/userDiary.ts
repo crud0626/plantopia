@@ -35,7 +35,6 @@ const getUserDiary = async (diaryId: string) => {
   }
 };
 
-/* 필요한지 확인하고 필요없다면 추후 삭제하기 */
 const existPlant = async (userEmail: string) => {
   const ref = collection(db, 'plant');
   const q = query(ref, where('userEmail', '==', userEmail));
