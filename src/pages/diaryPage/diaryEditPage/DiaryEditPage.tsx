@@ -26,7 +26,7 @@ const DiaryEditPage = () => {
     const hasTarget = prevTags.includes(targetTag);
 
     const newTags = hasTarget
-      ? prevTags.filter(name => name === targetTag)
+      ? prevTags.filter(name => name !== targetTag)
       : [...prevTags, targetTag];
 
     setContents({
