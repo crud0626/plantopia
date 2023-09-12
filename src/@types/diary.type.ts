@@ -1,10 +1,13 @@
 import { Timestamp } from 'firebase/firestore';
-export interface DiaryContentTypes {
-  id: string;
+
+export interface InitialDiaryContent {
   userEmail: string;
   content: string;
-  postedAt: InstanceType<typeof Timestamp>;
   tags: string[];
   title: string;
   imgUrls: string[];
+}
+export interface DiaryContentTypes extends InitialDiaryContent {
+  id: string;
+  postedAt: InstanceType<typeof Timestamp>;
 }

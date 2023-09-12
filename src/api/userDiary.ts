@@ -1,5 +1,6 @@
 import { db } from '@/firebaseApp';
 import {
+  Timestamp,
   addDoc,
   collection,
   deleteDoc,
@@ -10,7 +11,7 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
-import { DiaryContentTypes } from '@/@types/diary.type';
+import { DiaryContentTypes, InitialDiaryContent } from '@/@types/diary.type';
 
 const getUserDiaryList = (userEmail: string) => {
   const ref = collection(db, 'diary');
@@ -43,9 +44,13 @@ const existPlant = async (userEmail: string) => {
   return !snapshot.empty;
 };
 
-const saveDiary = (diaryData: Omit<DiaryContentTypes, 'id'>) => {
+const saveDiary = (diaryData: InitialDiaryContent) => {
   const ref = collection(db, 'diary');
-  return addDoc(ref, diaryData);
+  const savedData: Omit<DiaryContentTypes, 'id'> = {
+    ...diaryData,
+    postedAt: Timestamp.fromDate(new Date()),
+  };
+  return addDoc(ref, savedData);
 };
 
 const updateDiary = (diaryData: DiaryContentTypes) => {
