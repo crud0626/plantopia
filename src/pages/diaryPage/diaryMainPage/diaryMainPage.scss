@@ -88,6 +88,10 @@
 
       &:hover {
         background-color: #338e8e;
+
+        > img {
+          background-color: #338e8e;
+        }
       }
     }
   }
