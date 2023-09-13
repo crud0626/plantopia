@@ -1,13 +1,3 @@
-.hide {
-  overflow: hidden;
-  display: block;
-  position: absolute;
-  border: 0;
-  width: 1px;
-  height: 1px;
-  clip: rect(1px, 1px, 1px, 1px);
-}
-
 /* DIARY 메인 페이지 */
 
 .diary_page {
@@ -36,11 +26,6 @@
       > span {
         font-size: 1.8rem;
         font-weight: 700;
-      }
-
-      > .plant_icon {
-        margin-left: 0.3rem;
-        font-size: 1.2rem;
       }
     }
 
@@ -86,21 +71,27 @@
     position: fixed;
     right: calc(50% - 18rem);
     bottom: 5rem;
-    display: flex;
     padding: 2rem;
     border-radius: 50%;
 
-    .write_btn {
+    > .write_btn {
+      padding: 0;
       width: 5.5rem;
       height: 5.5rem;
       border-radius: 50%;
-      color: #fff;
-      background: #1fb0ad url('@/assets/images/icons/diary_add.png') no-repeat
-        center / 1.5rem;
-      z-index: 1;
+      background-color: #1fb0ad;
+
+      > img {
+        border-radius: inherit;
+        background-color: #1fb0ad;
+      }
 
       &:hover {
-        background-color: rgb(51, 142, 142);
+        background-color: #338e8e;
+
+        > img {
+          background-color: #338e8e;
+        }
       }
     }
   }
@@ -108,9 +99,7 @@
 
 /* PC 반응형 작업 */
 @media screen and (width: 500px) {
-  .diary_page {
-    > .write_btn_wrap {
-      right: calc(50% - 17.1rem);
-    }
+  .diary_page > .write_btn_wrap {
+    right: calc(50% - 17.1rem);
   }
 }

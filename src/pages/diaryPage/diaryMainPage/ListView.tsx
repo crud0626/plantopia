@@ -1,49 +1,44 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { DiaryProps, ListViewProps } from '@/@types/diary.type';
-import NoContent from './NoContent';
+import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { showAlert } from '@/utils/alarmUtil';
+import { DiaryContentTypes } from '@/@types/diary.type';
+
+import NoContent from './NoContent';
 import './listView.scss';
 
-const ListView: React.FC<ListViewProps> = ({ diaryData, handleDelete }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedDiary, setSelectedDiary] = useState<DiaryProps | null>(null);
+interface ListViewProps {
+  diaryData: DiaryContentTypes[] | null;
+  handleDelete: (diaryId: string) => void;
+}
 
-  const toggleModal = (diary: DiaryProps) => {
-    setSelectedDiary(diary);
-    setIsModalOpen(!isModalOpen);
-  };
-
-  const closeModal = () => {
-    setSelectedDiary(null);
-    setIsModalOpen(false);
-  };
-
-  const navigateToEdit = (diary: DiaryProps) => {
-    navigate(`/diary/${diary.id}/edit`);
-    closeModal();
-  };
-
+const ListView = ({ diaryData, handleDelete }: ListViewProps) => {
   const navigate = useNavigate();
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [selectedDiary, setSelectedDiary] = useState<DiaryContentTypes | null>(
+    null,
+  );
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (!target.closest('.more_modal')) {
-        setIsModalOpen(false);
-      }
-    };
+  const toggleModal = (diary: DiaryContentTypes) => {
+    setSelectedDiary(diary);
+    setIsOpenModal(!isOpenModal);
+  };
 
-    document.addEventListener('click', handleClickOutside);
+  const handleClickOutside = ({ target }: MouseEvent) => {
+    if (!(target instanceof HTMLElement)) return;
 
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, []);
+    if (!target.closest('.more_modal')) {
+      setIsOpenModal(false);
+    }
+  };
+
+  useOutsideClick(handleClickOutside);
+
+  const isEmpty = !diaryData || diaryData.length === 0;
 
   return (
     <div className="list_view">
-      {diaryData.length === 0 ? (
+      {isEmpty ? (
         <NoContent />
       ) : (
         <ul className="diary_list_wrap">
@@ -59,16 +54,13 @@ const ListView: React.FC<ListViewProps> = ({ diaryData, handleDelete }) => {
                 </div>
                 <div
                   className={`main_img ${
-                    diary.imgUrls.length > 1 ? 'many' : ''
+                    diary.imgUrls.length > 1 ? 'multiple' : ''
                   }`}
-                  style={{
-                    backgroundImage: `url('${
-                      diary.imgUrls && diary.imgUrls.length > 0
-                        ? diary.imgUrls[0]
-                        : ''
-                    }')`,
-                  }}
-                ></div>
+                >
+                  {diary.imgUrls.length > 0 && (
+                    <img src={diary.imgUrls[0]} alt="" />
+                  )}
+                </div>
               </Link>
               <button
                 className="more"
@@ -77,11 +69,11 @@ const ListView: React.FC<ListViewProps> = ({ diaryData, handleDelete }) => {
                   toggleModal(diary);
                 }}
               ></button>
-              {isModalOpen && selectedDiary === diary && (
+              {isOpenModal && selectedDiary === diary && (
                 <div className="more_modal">
                   <div
                     className="btn modify"
-                    onClick={() => navigateToEdit(diary)}
+                    onClick={() => navigate(`/diary/${diary.id}/edit`)}
                   >
                     게시글 수정
                   </div>
@@ -90,7 +82,6 @@ const ListView: React.FC<ListViewProps> = ({ diaryData, handleDelete }) => {
                     onClick={() => {
                       showAlert('글을 삭제하시겠습니까?', '', () => {
                         handleDelete(diary.id);
-                        closeModal();
                       });
                     }}
                   >

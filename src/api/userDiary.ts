@@ -1,5 +1,6 @@
 import { db } from '@/firebaseApp';
 import {
+  Timestamp,
   addDoc,
   collection,
   deleteDoc,
@@ -10,7 +11,7 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
-import { DiaryProps } from '@/@types/diary.type';
+import { DiaryContentTypes, InitialDiaryContent } from '@/@types/diary.type';
 
 const getUserDiaryList = (userEmail: string) => {
   const ref = collection(db, 'diary');
@@ -19,7 +20,7 @@ const getUserDiaryList = (userEmail: string) => {
   return getDocs(q).then(snapshot =>
     snapshot.docs.map(doc => ({
       id: doc.id,
-      ...(doc.data() as Omit<DiaryProps, 'id'>),
+      ...(doc.data() as Omit<DiaryContentTypes, 'id'>),
     })),
   );
 };
@@ -29,26 +30,29 @@ const getUserDiary = async (diaryId: string) => {
   const snapshot = await getDoc(ref);
 
   if (snapshot.exists()) {
-    const result = snapshot.data() as DiaryProps;
+    const result = snapshot.data() as DiaryContentTypes;
     return result;
   }
 };
 
-/* 필요한지 확인하고 필요없다면 추후 삭제하기 */
 const existPlant = async (userEmail: string) => {
   const ref = collection(db, 'plant');
   const q = query(ref, where('userEmail', '==', userEmail));
 
   const snapshot = await getDocs(q);
-  return snapshot.empty;
+  return !snapshot.empty;
 };
 
-const saveDiary = (diaryData: Omit<DiaryProps, 'id'>) => {
+const saveDiary = (diaryData: InitialDiaryContent) => {
   const ref = collection(db, 'diary');
-  return addDoc(ref, diaryData);
+  const savedData: Omit<DiaryContentTypes, 'id'> = {
+    ...diaryData,
+    postedAt: Timestamp.fromDate(new Date()),
+  };
+  return addDoc(ref, savedData);
 };
 
-const updateDiary = (diaryData: DiaryProps) => {
+const updateDiary = (diaryData: DiaryContentTypes) => {
   const { id, ...newData } = diaryData;
   const diaryRef = doc(db, 'diary', id);
 

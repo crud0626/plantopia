@@ -8,7 +8,7 @@
 }
 
 @mixin diary-stack-icon($top: 0.2rem, $right: 0.2rem, $size: 1rem) {
-  &.many::before {
+  &.multiple::before {
     content: '';
     display: block;
     background: url('@/assets/images/icons/diary_stack.png') no-repeat center /
@@ -24,7 +24,7 @@
 
 .list_view {
   width: 100%;
-  
+
   > .diary_list_wrap {
     padding-bottom: 8rem;
 
@@ -70,13 +70,20 @@
         }
 
         > .main_img {
+          @include diary-stack-icon(0.2rem, 0.2rem, 1rem);
+          position: relative;
           margin-top: 3.5rem;
           min-width: 6rem;
           min-height: 6rem;
           border-radius: 0.5rem;
           background: no-repeat center / cover;
-          position: relative;
-          @include diary-stack-icon(0.2rem, 0.2rem, 1rem);
+
+          > img {
+            width: 100%;
+            height: 100%;
+            border-radius: inherit;
+            object-fit: cover;
+          }
         }
       }
 
