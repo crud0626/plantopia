@@ -39,3 +39,7 @@ export const maxDate = () => {
   const maxDate = format(today, 'yyyy-MM-dd');
   return maxDate;
 };
+
+export const formatFullDate = (date: Date, sep = '-') => {
+  return format(date, `yyyy${sep}MM${sep}dd`);
+};

@@ -30,15 +30,9 @@ const MainPagePlantList = ({
   const sortedPlants = useMemo(() => userPlants.sort(compare), [userPlants]);
 
   const handleEditData = (clickedPlant: UserPlant) => {
-    const dataFromList = {
-      imgUrlFromList: clickedPlant.imgUrl,
-      nicknameFromList: clickedPlant.nickname,
-      plantNameFromList: clickedPlant.plantName,
-      purchasedDayFromList: clickedPlant.purchasedDay,
-      wateredDayFromList: clickedPlant.wateredDays.at(-1),
-      frequencyFromList: clickedPlant.frequency,
-    };
-    navigate(`/myplant/${clickedPlant.id}/edit`, { state: dataFromList });
+    navigate(`/myplant/${clickedPlant.id}/edit`, {
+      state: clickedPlant,
+    });
   };
 
   return (

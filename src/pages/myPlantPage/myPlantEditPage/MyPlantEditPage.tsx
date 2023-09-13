@@ -1,154 +1,112 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
-import Progress from '@/components/progress/Progress';
-import { secondsToDate, dateToTimestamp, maxDate } from '@/utils/dateUtil';
-import { errorNoti, successNoti } from '@/utils/alarmUtil';
-import { UserPlant } from '@/@types/plant.type';
 import { uploadImg } from '@/api/storage';
 import { getUserPlant, updateUserPlant } from '@/api/userPlant';
-import './myPlantEditPage.scss';
+import { Timestamp } from 'firebase/firestore';
+import {
+  dateToTimestamp,
+  formatFullDate,
+  secondsToDate,
+} from '@/utils/dateUtil';
+import { errorNoti, showAlert, successNoti } from '@/utils/alarmUtil';
+import { UserPlant } from '@/@types/plant.type';
 
-import myPlantImgEditIcon from '@/assets/images/icons/solar_pen-bold.png';
+import HeaderBefore from '@/components/headerBefore/HeaderBefore';
+import Progress from '@/components/progress/Progress';
+
+import './myPlantEditPage.scss';
+import EDIT_ICON from '@/assets/images/icons/solar_pen-bold.png';
 
 const MyPlantEditPage = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { docId } = useParams();
-  const [saving, setSaving] = useState(false);
-
-  const nicknameFromDetail = location.state?.nicknameFromDetail;
-  const plantNameFromDetail = location.state?.plantNameFromDetail;
-  const purchasedDayFromDetail = location.state?.purchasedDayFromDetail;
-  const wateredDayFromDetail = location.state?.wateredDayFromDetail;
-  const imgUrlFromDetail = location.state?.imgUrlFromDetail;
-  const frequencyFromDetail = location.state?.frequencyFromDetail;
-
-  const imgUrlFromList = location.state?.imgUrlFromList;
-  const plantNameFromList = location.state?.plantNameFromList;
-  const purchasedDayFromList = location.state?.purchasedDayFromList;
-  const nicknameFromList = location.state?.nicknameFromList;
-  const wateredDayFromList = location.state?.wateredDayFromList;
-  const frequencyFromList = location.state?.frequencyFromList;
-
-  const [myPlantData, setMyPlantData] = useState<UserPlant>();
+  const targetPlant: UserPlant | null = useLocation().state;
   const [isLoading, setIsLoading] = useState(true);
-  const [plantNickname, setPlantNickname] = useState<string>(
-    nicknameFromDetail || nicknameFromList,
-  );
-  const [plantName, setPlantName] = useState<string>(
-    plantNameFromDetail || plantNameFromList,
-  );
-  const [purchasedDay, setPurchasedDay] = useState<string>(
-    secondsToDate(
-      purchasedDayFromDetail?.seconds || purchasedDayFromList?.seconds,
-    ),
-  );
-  const [wateredDay, setWateredDay] = useState<string | number>(
-    wateredDayFromDetail || wateredDayFromList
-      ? secondsToDate(
-          wateredDayFromDetail?.seconds || wateredDayFromList?.seconds,
-        )
-      : 0,
-  );
-  const [frequency, setFrequency] = useState<number>(
-    frequencyFromDetail || frequencyFromList,
-  );
+  const [userPlant, setUserPlant] = useState<UserPlant | null>(targetPlant);
 
-  const [imgUrl, setImgUrl] = useState<string>(
-    imgUrlFromDetail || imgUrlFromList,
-  );
-  const [previewImg, setPreviewImg] = useState<string>();
+  const handleInput = (type: keyof UserPlant, value: string) => {
+    if (!userPlant) return;
 
-  const handlePlantNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPlantNickname(e.target.value);
-  };
-  const purchasedDayHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPurchasedDay(e.target.value);
-  };
-  const wateredDaysHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setWateredDay(e.target.value);
-  };
+    const watered = [...userPlant.wateredDays];
+    let changedValue:
+      | string
+      | number
+      | InstanceType<typeof Timestamp>
+      | InstanceType<typeof Timestamp>[];
 
-  const handleFrequency = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFrequency(Number(e.target.value));
-  };
+    switch (type) {
+      case 'frequency':
+        changedValue = Number(value);
+        break;
+      case 'purchasedDay':
+        changedValue = dateToTimestamp(value);
+        break;
+      case 'wateredDays':
+        watered.pop();
+        changedValue = [...watered, dateToTimestamp(value)];
+        break;
+      default:
+        changedValue = value;
+    }
 
-  const cleanFileName = (fileName: string) => {
-    const cleanedName = fileName.replace(/[^\w\s.-]/gi, '');
-    return cleanedName;
-  };
-
-  const readFileAsDataURL = (file: File) => {
-    return new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = e => resolve(e.target?.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
+    setUserPlant({
+      ...userPlant,
+      [type]: changedValue,
     });
   };
 
-  const handleFileSelect = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+  const handleFileSelect = async ({
+    target,
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    if (!target.files) return;
+
+    const file = target.files[0];
+
     try {
-      const previewUrl = await readFileAsDataURL(file);
-      setPreviewImg(previewUrl);
+      setIsLoading(true);
 
       const url = await uploadImg(file, 'plant');
-      setImgUrl(url);
+      handleInput('imgUrl', url);
     } catch (error) {
-      return;
+      errorNoti('이미지 업로드 중 에러가 발생했습니다.');
+    } finally {
+      setIsLoading(false);
     }
-    event.target.value = '';
   };
 
-  const handleUpdate = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setSaving(true);
-    if (!docId) return;
-    if (!myPlantData?.wateredDays) {
-      myPlantData?.wateredDays.push(dateToTimestamp(wateredDay));
-    } else {
-      myPlantData?.wateredDays.pop();
-      myPlantData?.wateredDays.push(dateToTimestamp(wateredDay));
-    }
-
-    // const documentRef = doc(db, 'plant', docId);
-    const updatedFields = {
-      id: docId,
-      imgUrl: imgUrl,
-      nickname: plantNickname,
-      purchasedDay: dateToTimestamp(purchasedDay),
-      wateredDays: myPlantData?.wateredDays,
-      frequency: frequency,
-    };
+  const handleUpdate = async () => {
+    if (!userPlant) return;
 
     try {
-      await updateUserPlant(updatedFields);
+      setIsLoading(true);
+
+      await updateUserPlant(userPlant);
       successNoti('식물 정보를 수정하였습니다!');
       navigate('/myplant');
     } catch (error) {
-      return;
+      errorNoti('식물 수정에 실패하였습니다.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     (async () => {
-      if (!docId) return;
+      if (!docId || userPlant) {
+        setIsLoading(false);
+        return;
+      }
 
       try {
         const plantInfo = await getUserPlant(docId);
 
         if (!plantInfo) {
-          throw new Error('식물이 존재하지 않습니다.');
+          errorNoti('존재하지 않는 식물 정보입니다.');
+          navigate('/myplant');
+          return;
         }
 
-        setMyPlantData(plantInfo);
-        setPlantName(plantInfo.plantName);
-        setPlantNickname(plantInfo.nickname);
+        setUserPlant(plantInfo);
       } catch (error) {
         errorNoti('식물 정보를 가져올 수 없습니다.');
       } finally {
@@ -157,102 +115,111 @@ const MyPlantEditPage = () => {
     })();
   }, []);
 
+  const lastWateredDay = userPlant?.wateredDays?.at(-1);
+
   return (
     <div className="layout">
-      <HeaderBefore ex={true} title="식물 수정" />
+      <HeaderBefore ex title="식물 수정" />
       <main>
-        <div className="my_plant_edit_container">
-          <div className="my_plant_edit_img_box">
-            <div className="img_wrapper">
-              <span>
-                <img
-                  className="main_img"
-                  src={imgUrl || previewImg}
-                  alt="samplePlant1"
-                />
-              </span>
-              <div className="edit_icon_wrapper">
-                <label htmlFor="photoInput" className="photo_label">
-                  <img
-                    className="edit_icon"
-                    src={myPlantImgEditIcon}
-                    alt="editIcon"
+        {userPlant && (
+          <>
+            <div className="my_plant_edit_container">
+              <div className="my_plant_edit_img_box">
+                <div className="img_wrapper">
+                  <span>
+                    <img
+                      className="main_img"
+                      src={userPlant.imgUrl}
+                      alt="samplePlant1"
+                    />
+                  </span>
+                  <div className="edit_icon_wrapper">
+                    <label htmlFor="photoInput" className="photo_label">
+                      <img
+                        className="edit_icon"
+                        src={EDIT_ICON}
+                        alt="editIcon"
+                      />
+                    </label>
+                    <input
+                      className="photo_input"
+                      id="photoInput"
+                      accept="image/*"
+                      type="file"
+                      onChange={handleFileSelect}
+                    />
+                  </div>
+                </div>
+                <div className="my_plant_input_box">
+                  <input
+                    className="my_plant_edit_input"
+                    value={userPlant.plantName}
+                    disabled
                   />
-                </label>
+                </div>
+              </div>
+              <div className="my_plant_info_form">
+                <div className="my_plant_name_title required">
+                  식물 별명
+                  <span>(5글자 이내로 설정해주세요)</span>
+                </div>
                 <input
-                  className="photo_input"
-                  id="photoInput"
-                  accept="image/*"
-                  type="file"
-                  onChange={handleFileSelect}
+                  className="my_plant_name"
+                  maxLength={5}
+                  value={userPlant.nickname}
+                  onChange={e => handleInput('nickname', e.target.value)}
                 />
+                <div className="watering_frequency required">
+                  물 주는 날<span>(주변 환경에 맞게 조절해주세요)</span>
+                </div>
+                <div className="watering_frequency_input_box">
+                  <input
+                    className="watering_frequency_input"
+                    defaultValue={userPlant.frequency}
+                    onChange={e => handleInput('frequency', e.target.value)}
+                  />
+                  <p className="watering_frequency_info">일에 한 번</p>
+                </div>
+                <p className="my_plant_register_small_title  required">
+                  식물과 처음 함께한 날
+                  <span>(달력을 클릭하여 설정해주세요)</span>
+                </p>
+                <div className="my_plant_register_calender_value">
+                  <input
+                    className="date_selector"
+                    type="date"
+                    value={secondsToDate(userPlant.purchasedDay.seconds)}
+                    onChange={e => handleInput('purchasedDay', e.target.value)}
+                  />
+                </div>
+                <p className="my_plant_register_small_title">
+                  마지막 물준 날 <span>(선택 입력)</span>
+                </p>
+                <div className="my_plant_register_calender_value">
+                  <input
+                    type="date"
+                    className="date_selector"
+                    value={
+                      lastWateredDay ? secondsToDate(lastWateredDay.seconds) : 0
+                    }
+                    max={formatFullDate(new Date())}
+                    onChange={e => handleInput('wateredDays', e.target.value)}
+                  />
+                </div>
               </div>
             </div>
-            <div className="my_plant_input_box">
-              <input
-                className="my_plant_edit_input"
-                value={plantName}
-                disabled
-              />
-            </div>
-          </div>
-
-          <div className="my_plant_info_form">
-            <div className="my_plant_name_title required">
-              식물 별명
-              <span>(5글자 이내로 설정해주세요)</span>
-            </div>
-            <input
-              className="my_plant_name"
-              maxLength={5}
-              value={plantNickname}
-              onChange={handlePlantNickname}
-            />
-
-            <div className="watering_frequency required">
-              물 주는 날<span>(주변 환경에 맞게 조절해주세요)</span>
-            </div>
-            <div className="watering_frequency_input_box">
-              <input
-                className="watering_frequency_input"
-                onChange={handleFrequency}
-                defaultValue={frequencyFromDetail || frequencyFromList}
-              />
-              <p className="watering_frequency_info">일에 한 번</p>
-            </div>
-
-            <p className="my_plant_register_small_title  required">
-              식물과 처음 함께한 날<span>(달력을 클릭하여 설정해주세요)</span>
-            </p>
-            <div className="my_plant_register_calender_value">
-              <input
-                className="date_selector"
-                type="date"
-                value={purchasedDay}
-                onChange={purchasedDayHandler}
-              />
-            </div>
-            <p className="my_plant_register_small_title">
-              마지막 물준 날 <span>(선택 입력)</span>
-            </p>
-            <div className="my_plant_register_calender_value">
-              <input
-                type="date"
-                className="date_selector"
-                value={wateredDay}
-                onChange={wateredDaysHandler}
-                max={maxDate()}
-              />
-            </div>
-          </div>
-        </div>
-        <button
-          className="my_plant_register_btn"
-          onClick={handleUpdate}
-          disabled={saving}
-        >
-          {saving ? '수정 중...' : '수정하기'}
-        </button>
+            <button
+              className="my_plant_register_btn"
+              disabled={isLoading}
+              onClick={e => {
+                e.preventDefault();
+                showAlert('수정하시겠습니까?', '', handleUpdate);
+              }}
+            >
+              {isLoading ? '수정 중...' : '수정하기'}
+            </button>
+          </>
+        )}
       </main>
       {isLoading && <Progress />}
     </div>
