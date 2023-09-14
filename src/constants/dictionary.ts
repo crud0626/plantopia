@@ -69,4 +69,17 @@ const targetClassName = {
 
 const orderDirection: OrderByDirection[] = ['asc', 'desc'];
 
-export { codeInfo, targetQuery, recommend, targetClassName, orderDirection };
+const waterCodeMap = {
+  WC03: 14,
+  WC02: 11,
+  WC01: 7,
+};
+
+export {
+  codeInfo,
+  targetQuery,
+  recommend,
+  targetClassName,
+  orderDirection,
+  waterCodeMap,
+};
