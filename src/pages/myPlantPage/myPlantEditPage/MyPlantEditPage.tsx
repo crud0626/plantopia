@@ -4,7 +4,6 @@ import { getUserPlant, updateUserPlant } from '@/api/userPlant';
 import { errorNoti, successNoti } from '@/utils/alarmUtil';
 import { UserPlant } from '@/@types/plant.type';
 
-import './myPlantEditPage.scss';
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
 import Progress from '@/components/progress/Progress';
 import MyPlantForm from '../MyPlantForm';
@@ -45,23 +44,19 @@ const MyPlantEditPage = () => {
 
   useEffect(() => {
     (async () => {
-      if (!docId || userPlant) {
-        setIsLoading(false);
-        return;
-      }
+      if (!userPlant) return;
 
       try {
+        if (!docId) throw new Error();
+
         const plantInfo = await getUserPlant(docId);
 
-        if (!plantInfo) {
-          errorNoti('존재하지 않는 식물 정보입니다.');
-          navigate('/myplant');
-          return;
-        }
+        if (!plantInfo) throw new Error();
 
         setUserPlant(plantInfo);
       } catch (error) {
         errorNoti('식물 정보를 가져올 수 없습니다.');
+        navigate('/myplant');
       } finally {
         setIsLoading(false);
       }
