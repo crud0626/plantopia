@@ -30,7 +30,6 @@ interface MyPlantFormProps {
   onSubmit: (plantInfo: Omit<UserPlant, 'id' | 'isMain' | 'userEmail'>) => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const validateForm = (arg: any): arg is Omit<UserPlant, 'id' | 'isMain'> => {
   if (!arg.plantName) {
     errorNoti('식물을 지정해주세요.');
@@ -90,9 +89,7 @@ const MyPlantForm = ({
         changedValue = Timestamp.fromDate(new Date(value));
         break;
       case 'wateredDays':
-        // eslint-disable-next-line no-case-declarations
         const newWateredDays = [...formValues.wateredDays];
-        // eslint-disable-next-line no-case-declarations
         const lastIndex = newWateredDays.length;
         newWateredDays[lastIndex] = Timestamp.fromDate(new Date(value));
         changedValue = newWateredDays;
