@@ -52,9 +52,7 @@ const MyPlantMainPage = () => {
       const mainPlant = userPlants.find(plant => plant.isMain);
 
       setPlantList(userPlants);
-
-      // 메인 식물이 없을 때를 대응한 뒤 userPlants[0]은 삭제 예정
-      setMainPlant(mainPlant || userPlants[0]);
+      setMainPlant(mainPlant);
       successNoti('메인 식물을 변경하였습니다.');
     } catch (error) {
       errorNoti('메인 식물 변경에 실패하였습니다.');
@@ -74,9 +72,7 @@ const MyPlantMainPage = () => {
         const mainPlant = userPlants.find(plant => plant.isMain);
 
         setPlantList(userPlants);
-
-        // 메인 식물이 없을 때를 대응한 뒤 userPlants[0]은 삭제 예정
-        setMainPlant(mainPlant || userPlants[0]);
+        setMainPlant(mainPlant);
       } catch (error) {
         errorNoti('유저의 식물 정보를 가져오는 도중 에러가 발생했습니다.');
       } finally {
