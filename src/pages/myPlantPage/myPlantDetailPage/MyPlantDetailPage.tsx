@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { format } from 'date-fns';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks';
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
-import Progress from '@/components/progress/Progress';
-import { monthDifference, secondsToDate } from '@/utils/dateUtil';
+import {
+  formatFullDate,
+  monthDifference,
+  secondsToDate,
+} from '@/utils/dateUtil';
 import { errorNoti, showAlert, successNoti } from '@/utils/alarmUtil';
 import { PlantType } from '@/@types/dictionary.type';
 import { UserPlant } from '@/@types/plant.type';
-import './myPlantDetailPage.scss';
+import { codeInfo } from '@/constants/dictionary';
 import {
   getUserPlant,
   getUserPlantList,
@@ -17,38 +18,19 @@ import {
 } from '@/api/userPlant';
 import { getPlantInfo } from '@/api/dictionary';
 
-import editIcon from '@/assets/images/icons/my_plant_detail_edit_icon.png';
-import sunOn from '@/assets/images/icons/sun_on_icon.png';
-import sunOff from '@/assets/images/icons/sun_off_icon.png';
-import waterOn from '@/assets/images/icons/water_on_icon.png';
-import waterOff from '@/assets/images/icons/water_off_icon.png';
+import './myPlantDetailPage.scss';
+import HeaderBefore from '@/components/headerBefore/HeaderBefore';
+import Progress from '@/components/progress/Progress';
+
+import EDIT_ICON from '@/assets/images/icons/my_plant_detail_edit_icon.png';
 
 const MyPlantDetailPage = () => {
   const user = useAuth();
   const navigate = useNavigate();
   const { docId } = useParams();
   const [isLoading, setIsLoading] = useState(true);
-  const [plantDetail, setPlantDetail] = useState<UserPlant>();
+  const [plantDetail, setPlantDetail] = useState<UserPlant | null>(null);
   const [plantDictDetail, setPlantDictDetail] = useState<PlantType>();
-
-  const navigateDictDetail = () => {
-    navigate(`/dict/detail?plantName=${plantDictDetail?.name}`, {
-      state: plantDictDetail,
-    });
-  };
-
-  const navigateEdit = () => {
-    navigate(`/myplant/${docId}/edit`, {
-      state: {
-        imgUrlFromDetail: plantDetail?.imgUrl,
-        nicknameFromDetail: plantDetail?.nickname,
-        plantNameFromDetail: plantDetail?.plantName,
-        purchasedDayFromDetail: plantDetail?.purchasedDay,
-        wateredDayFromDetail: plantDetail?.wateredDays.at(-1),
-        frequencyFromDetail: plantDetail?.frequency,
-      },
-    });
-  };
 
   const deletePlant = async () => {
     if (!docId || !plantDetail || !user?.email) return;
@@ -57,14 +39,9 @@ const MyPlantDetailPage = () => {
       await deleteUserPlant(docId);
 
       const userPlants = await getUserPlantList(user.email);
-      if (userPlants.length === 0) {
-        successNoti('내 식물이 삭제 되었습니다.');
-        navigate('/myplant');
-        return;
-      }
-
       const hasMainPlant = userPlants.find(plant => plant.isMain);
-      if (!hasMainPlant) {
+
+      if (userPlants.length > 0 && !hasMainPlant) {
         const nextMainPlant = userPlants[0];
         nextMainPlant.isMain = true;
         await updateUserPlant(nextMainPlant);
@@ -83,11 +60,12 @@ const MyPlantDetailPage = () => {
 
       try {
         const plantInfo = await getUserPlant(docId);
-        if (!plantInfo) return;
+        if (!plantInfo) throw new Error();
+
         setPlantDetail(plantInfo);
 
-        const plantInfos = await getPlantInfo(plantInfo.plantName);
-        setPlantDictDetail(plantInfos[0]);
+        const plantsInfo = await getPlantInfo(plantInfo.plantName);
+        setPlantDictDetail(plantsInfo[0]);
       } catch (error) {
         errorNoti('식물 정보를 가져오는 도중 에러가 발생했습니다.');
       } finally {
@@ -101,7 +79,7 @@ const MyPlantDetailPage = () => {
 
   return (
     <div className="layout">
-      <HeaderBefore ex={false} title="내 식물 상세" />
+      <HeaderBefore title="내 식물 상세" />
       <main>
         <div className="my_plant_detail_upper_container">
           <span className="detail_img_wrap">
@@ -114,7 +92,7 @@ const MyPlantDetailPage = () => {
           <p className="detail_plant_name">{plantDictDetail?.scientificName}</p>
           <div className="detail_nickname_box">
             <p
-              className={` ${
+              className={`${
                 plantDetail?.isMain
                   ? 'detail_plant_nickname_main'
                   : 'detail_plant_nickname'
@@ -123,12 +101,16 @@ const MyPlantDetailPage = () => {
               {plantDetail?.nickname}
             </p>
           </div>
-          <div className="my_plant_detail_edit_btn" onClick={navigateEdit}>
+          <Link
+            to={`/myplant/${docId}/edit`}
+            state={plantDetail}
+            className="my_plant_detail_edit_btn"
+          >
             <div className="my_plant_detail_edit_btn_inner_contents">
-              <img src={editIcon} alt="editIcon" />
+              <img src={EDIT_ICON} alt="edit" />
               <p>식물 정보 수정하기</p>
             </div>
-          </div>
+          </Link>
         </div>
         <div className="my_plant_detail_lower_container">
           <div className="my_plant_detail_info_box">
@@ -151,7 +133,7 @@ const MyPlantDetailPage = () => {
                 <span>마지막 물준 날</span>
                 <span>
                   {lastWateringDate
-                    ? format(lastWateringDate, 'yyyy-MM-dd')
+                    ? formatFullDate(new Date(lastWateringDate))
                     : '-'}
                 </span>
               </div>
@@ -171,86 +153,24 @@ const MyPlantDetailPage = () => {
               <div>
                 <span>햇빛</span>
                 <span className="sun_on_off">
-                  {(() => {
-                    if (plantDictDetail?.lightCode === 'LC01') {
-                      return (
-                        <>
-                          <img src={sunOn} alt="" />
-                          <img src={sunOff} alt="" />
-                          <img src={sunOff} alt="" />
-                        </>
-                      );
-                    } else if (plantDictDetail?.lightCode === 'LC02') {
-                      return (
-                        <>
-                          <img src={sunOn} alt="" />
-                          <img src={sunOn} alt="" />
-                          <img src={sunOff} alt="" />
-                        </>
-                      );
-                    } else {
-                      return (
-                        <>
-                          <img src={sunOn} alt="" />
-                          <img src={sunOn} alt="" />
-                          <img src={sunOn} alt="" />
-                        </>
-                      );
-                    }
-                  })()}
+                  {codeInfo[plantDictDetail?.lightCode || 'LC']}
                 </span>
               </div>
               <div>
                 <span>물</span>
                 <span className="water_on_off">
-                  {(() => {
-                    if (plantDictDetail?.waterCode === 'WC01') {
-                      return (
-                        <>
-                          <img src={waterOn} alt="" />
-                          <img src={waterOff} alt="" />
-                          <img src={waterOff} alt="" />
-                        </>
-                      );
-                    } else if (plantDictDetail?.lightCode === 'WC02') {
-                      return (
-                        <>
-                          <img src={waterOn} alt="" />
-                          <img src={waterOn} alt="" />
-                          <img src={waterOff} alt="" />
-                        </>
-                      );
-                    } else {
-                      return (
-                        <>
-                          <img src={waterOn} alt="" />
-                          <img src={waterOn} alt="" />
-                          <img src={waterOn} alt="" />
-                        </>
-                      );
-                    }
-                  })()}
+                  {codeInfo[plantDictDetail?.waterCode || 'WC']}
                 </span>
               </div>
               <div>
                 <span>생육 적정 온도</span>
                 <span className="optimal_temp">
-                  {(() => {
-                    if (plantDictDetail?.temperatureCode === 'TC01') {
-                      return '10 ~ 15℃';
-                    } else if (plantDictDetail?.temperatureCode === 'TC02') {
-                      return '16 ~ 20℃';
-                    } else if (plantDictDetail?.temperatureCode === 'TC03') {
-                      return '21 ~ 25℃';
-                    } else {
-                      return '26 ~ 30℃';
-                    }
-                  })()}
+                  {codeInfo[plantDictDetail?.temperatureCode || 'TC']}
                 </span>
               </div>
             </div>
           </div>
-          {!plantDictDetail?.adviseInfo ? null : (
+          {!plantDictDetail?.adviseInfo && (
             <div className="my_plant_detail_info_box">
               <div className="my_plant_detail_info_head">
                 <p>📌 관리 Tip</p>
@@ -260,11 +180,14 @@ const MyPlantDetailPage = () => {
               </div>
             </div>
           )}
-          <p className="more_info_btn" onClick={navigateDictDetail}>
+          <Link
+            to={`/dict/detail?plantName=${plantDictDetail?.name}`}
+            state={plantDictDetail}
+            className="more_info_btn"
+          >
             식물 도감에서 이 식물 정보 더 알아보기!
-          </p>
+          </Link>
         </div>
-
         <button
           className="delete_my_plant"
           onClick={() =>
