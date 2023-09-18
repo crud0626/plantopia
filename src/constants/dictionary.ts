@@ -34,6 +34,8 @@ const codeInfo = {
   WC03: CodeToImg([WATER_ON_ICON, WATER_OFF_ICON, WATER_OFF_ICON]),
 };
 
+const slideCategories = ['beginner', 'growWell', 'lessWater', 'dark'];
+
 const targetQuery = {
   beginner: ['recommendCode', 'RC01'],
   growWell: ['growCode', 'GC01'],
@@ -82,4 +84,5 @@ export {
   targetClassName,
   orderDirection,
   waterCodeMap,
+  slideCategories,
 };

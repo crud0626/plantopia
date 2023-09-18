@@ -2,63 +2,68 @@ import { Children } from 'react';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation } from 'swiper/modules';
-import { targetClassName, targetQuery } from '@/constants/dictionary';
-import { useRecommend } from '@/hooks';
-import './recommend.scss';
+import { targetClassName } from '@/constants/dictionary';
+import { CategoryNames, PlantType } from '@/@types/dictionary.type';
+import './cardSlide.scss';
 
-interface RecommendProps {
+interface CardContentTypes {
+  type: 'large' | 'small';
   icon: string;
   title: string;
-  target: keyof typeof targetQuery;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  category: CategoryNames;
+  plants: PlantType[];
 }
 
-const Recommend = ({ icon, title, target, setIsLoading }: RecommendProps) => {
-  const { plant } = useRecommend({ target, setIsLoading });
-
+const CardSlide = ({
+  type,
+  icon,
+  title,
+  category,
+  plants,
+}: CardContentTypes) => {
   return (
     <div className="recommend_container">
       <div className="title_wrapper">
-        <div className={targetClassName[target]}>
+        <div className={targetClassName[category]}>
           <img className="plant_icon" src={icon} alt="search icon" />
         </div>
         <span>{title}</span>
       </div>
       <Swiper
-        slidesPerView={target === 'beginner' ? 2 : 3}
-        spaceBetween={target === 'beginner' ? 14 : 13}
+        slidesPerView={type === 'large' ? 2 : 3}
+        spaceBetween={type === 'large' ? 14 : 13}
         navigation={true}
         pagination={{ clickable: true }}
         modules={[Navigation, Pagination]}
         className="plants_container"
       >
         {Children.toArray(
-          plant?.map(item => (
+          plants.map(plant => (
             <SwiperSlide className="plant_wrapper">
-              <Link to={`/dict/detail?plantName=${item.name}`} state={item}>
+              <Link to={`/dict/detail?plantName=${plant.name}`} state={plant}>
                 <img
-                  className={target === 'beginner' ? 'img_two' : 'img_three'}
-                  src={item.imageUrl}
+                  className={category === 'beginner' ? 'img_two' : 'img_three'}
+                  src={plant.imageUrl}
                   alt="plant image"
                 />
                 <div className="name_wrapper">
                   <p
                     className={
-                      target === 'beginner'
+                      category === 'beginner'
                         ? 'english_name_two'
                         : 'english_name_three'
                     }
                   >
-                    {item.scientificName}
+                    {plant.scientificName}
                   </p>
                   <p
                     className={
-                      target === 'beginner'
+                      category === 'beginner'
                         ? 'korean_name_two'
                         : 'korean_name_three'
                     }
                   >
-                    {item.name}
+                    {plant.name}
                   </p>
                 </div>
               </Link>
@@ -70,4 +75,4 @@ const Recommend = ({ icon, title, target, setIsLoading }: RecommendProps) => {
   );
 };
 
-export default Recommend;
+export default CardSlide;
