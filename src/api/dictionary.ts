@@ -1,5 +1,6 @@
 import { db } from '@/firebaseApp';
 import {
+  OrderByDirection,
   collection,
   endAt,
   getDocs,
@@ -15,7 +16,6 @@ import {
   PlantCodeName,
   PlantType,
 } from '@/@types/dictionary.type';
-import { orderDirection } from '@/constants/dictionary';
 import { getRandomIndex, shuffleArray } from '@/utils/arrayUtil';
 
 export const getPlantSearchResults = (fieldName: string, keyword: string) => {
@@ -44,6 +44,8 @@ export const getPlantInfo = (plantName: string) => {
 };
 
 /* 식물 도감의 슬라이드 데이터 */
+const orderDirection: OrderByDirection[] = ['asc', 'desc'];
+
 const targetQuery: {
   [key in CategoryNames]: {
     key: PlantCodeName;

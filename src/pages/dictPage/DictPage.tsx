@@ -81,8 +81,6 @@ const DictPage = () => {
           categories.map((name, i) => (
             <CardSlide
               type={i === 0 ? 'large' : 'small'}
-              icon={''}
-              title={''}
               category={name}
               plants={cardsData[name]}
             />
