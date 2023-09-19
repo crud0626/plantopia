@@ -1,30 +1,40 @@
-import { useState, useEffect, Children } from 'react';
+import { useState, Children } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks';
-import { customerService } from '@/constants/myPage';
 import { errorNoti } from '@/utils/alarmUtil';
 import { logout } from '@/api/auth';
+
+import './myPage.scss';
 import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
 import Progress from '@/components/progress/Progress';
-import './myPage.scss';
 
 import PROFILE from '@/assets/images/icons/default_profile.png';
 
+const customerService = [
+  { title: '사용 가이드', url: '/mypage/guide' },
+  {
+    title: '자주 묻는 질문',
+    url: '/mypage/question',
+  },
+  { title: '식물 추가 요청', url: 'https://forms.gle/g4AjkNKqVDP48Xnc7' },
+];
+
 const MyPage = () => {
   const user = useAuth();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    user && setIsLoading(false);
-  }, [user]);
-
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    logout().catch(() => {
+    try {
+      setIsLoading(true);
+      await logout();
+    } catch (error) {
       errorNoti('로그아웃에 실패했습니다.');
-    });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -53,7 +63,7 @@ const MyPage = () => {
             {Children.toArray(
               customerService.map(({ title, url }) => (
                 <li>
-                  {title === customerService[2].title ? (
+                  {url.startsWith('https') ? (
                     <a href={url} target="_blank" className="move">
                       {title}
                     </a>
@@ -67,7 +77,7 @@ const MyPage = () => {
             )}
           </ul>
           <div className="logout_wrapper">
-            <button onClick={handleClick} className="logout_btn">
+            <button className="logout_btn" onClick={handleClick}>
               로그아웃
             </button>
           </div>
