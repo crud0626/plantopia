@@ -43,7 +43,7 @@ const MyPage = () => {
       <main className="my_container">
         <section className="my_info_box inner">
           <h2>
-            <em>{user?.displayName}</em>님, 플랜토피아와 함께
+            <em>{user?.displayName || '회원'}</em>님, 플랜토피아와 함께
             <br /> 슬기로운 식집사 생활을 시작하세요!
           </h2>
           <div className="my_profile">
