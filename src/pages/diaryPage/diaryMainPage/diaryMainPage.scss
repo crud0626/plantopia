@@ -46,6 +46,10 @@
         color: #d6d6d6;
         cursor: pointer;
         border-bottom: 1px solid #dcdcdc;
+
+        > .tab_img {
+          width: 2rem;
+        }
       }
 
       > .list_tab {
