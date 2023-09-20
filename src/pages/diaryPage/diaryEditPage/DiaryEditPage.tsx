@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { errorNoti, successNoti } from '@/utils/alarmUtil';
+import { showAlert } from '@/utils/dialog';
 import { DiaryContentTypes } from '@/@types/diary.type';
 import { getUserPlantList } from '@/api/userPlant';
 import { getUserDiary, updateDiary } from '@/api/userDiary';
@@ -41,13 +41,13 @@ const DiaryEditPage = () => {
     const { title, tags, content } = contents;
 
     if (!title || tags.length === 0 || !content) {
-      errorNoti(
-        !title
-          ? '제목을 작성해주세요.'
-          : tags.length === 0
-          ? '관련 식물을 1가지 이상 선택해주세요.'
-          : '내용을 작성해주세요.',
-      );
+      const msg = !title
+        ? '제목을 작성해주세요.'
+        : tags.length === 0
+        ? '관련 식물을 1가지 이상 선택해주세요.'
+        : '내용을 작성해주세요.';
+
+      showAlert('error', msg);
       return false;
     }
 
@@ -65,10 +65,10 @@ const DiaryEditPage = () => {
 
       await updateDiary({ ...contents });
 
-      successNoti('수정이 완료되었어요!');
+      showAlert('success', '수정이 완료되었어요!');
       navigate('/diary');
     } catch (error) {
-      errorNoti('수정하는 도중 에러가 발생했습니다!');
+      showAlert('error', '수정하는 도중 에러가 발생했습니다!');
     } finally {
       setIsLoading(false);
     }
@@ -107,7 +107,7 @@ const DiaryEditPage = () => {
         setContents(diaryData);
         setPlantNames(userPlantNames);
       } catch (error) {
-        errorNoti('유저 데이터를 가져오던 도중 에러가 발생했습니다.');
+        showAlert('error', '유저 데이터를 가져오던 도중 에러가 발생했습니다.');
       } finally {
         setIsLoading(false);
       }

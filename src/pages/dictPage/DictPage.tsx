@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks';
 import { getPlantInfoList } from '@/api/dictionary';
 import { CategoryNames, PlantType } from '@/@types/dictionary.type';
-import { errorNoti } from '@/utils/alarmUtil';
+import { showAlert } from '@/utils/dialog';
 
 import CardSlide from './CardSlide';
 import Header from '@/components/header/Header';
@@ -46,7 +46,7 @@ const DictPage = () => {
         const plantsInfo = await getPlantInfoList();
         setCardsData(plantsInfo);
       } catch (error) {
-        errorNoti('식물 목록을 가져오던 도중 에러가 발생했습니다!');
+        showAlert('error', '식물 목록을 가져오던 도중 에러가 발생했습니다!');
       } finally {
         setIsLoading(false);
       }

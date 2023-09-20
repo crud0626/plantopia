@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { WeatherResponse } from '@/@types/weather.type';
 import { fetchWeatherInfo } from '@/api/weatherApi';
 import { weatherContents } from '@/constants/weather';
-import { getGeolocation } from '@/utils/getGeolocation';
+import { getGeolocation } from '@/utils/geolocation';
 
 import LOCATION from '@/assets/images/icons/location.png';
 

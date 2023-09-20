@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { getUserPlant, updateUserPlant } from '@/api/userPlant';
-import { errorNoti, successNoti } from '@/utils/alarmUtil';
+import { showAlert } from '@/utils/dialog';
 import { UserPlant } from '@/@types/plant.type';
 
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
@@ -33,10 +33,10 @@ const MyPlantEditPage = () => {
         userEmail: user.email,
       });
 
-      successNoti('식물 정보를 수정하였습니다!');
+      showAlert('success', '식물 정보를 수정하였습니다!');
       navigate('/myplant');
     } catch (error) {
-      errorNoti('식물 수정에 실패하였습니다.');
+      showAlert('error', '식물 수정에 실패하였습니다.');
     } finally {
       setIsLoading(false);
     }
@@ -55,7 +55,7 @@ const MyPlantEditPage = () => {
 
         setUserPlant(plantInfo);
       } catch (error) {
-        errorNoti('식물 정보를 가져올 수 없습니다.');
+        showAlert('error', '식물 정보를 가져올 수 없습니다.');
         navigate('/myplant');
       } finally {
         setIsLoading(false);

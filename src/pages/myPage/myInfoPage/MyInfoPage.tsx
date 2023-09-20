@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks';
 import { nicknameRe } from '@/constants/regEx';
 import { updateUserInfo } from '@/api/auth';
 import { uploadImg } from '@/api/storage';
-import { errorNoti, successNoti } from '@/utils/alarmUtil';
+import { showAlert } from '@/utils/dialog';
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
 import './myInfoPage.scss';
 
@@ -35,7 +35,7 @@ const MyInfo = () => {
         imgUrl: imgPath,
       }));
     } catch (error) {
-      errorNoti('이미지 등록에 실패하였습니다.');
+      showAlert('error', '이미지 등록에 실패하였습니다.');
     } finally {
       setIsLoading(false);
     }
@@ -45,17 +45,17 @@ const MyInfo = () => {
     const { nickname, password } = values;
 
     if (!nickname) {
-      errorNoti('닉네임을 입력해주세요.');
+      showAlert('error', '닉네임을 입력해주세요.');
       return false;
     }
 
     if (!nicknameRe.test(nickname)) {
-      errorNoti('닉네임이 규칙에 맞지 않습니다.');
+      showAlert('error', '닉네임이 규칙에 맞지 않습니다.');
       return false;
     }
 
     if (!password) {
-      errorNoti('비밀번호를 입력해주세요.');
+      showAlert('error', '비밀번호를 입력해주세요.');
       return false;
     }
 
@@ -74,10 +74,10 @@ const MyInfo = () => {
 
       await updateUserInfo(password, nickname.trim(), imgUrl);
 
-      successNoti('회원정보 수정에 성공했습니다.');
+      showAlert('success', '회원정보 수정에 성공했습니다.');
       navigate('/mypage');
     } catch (error) {
-      errorNoti('회원정보 수정에 실패했습니다.');
+      showAlert('error', '회원정보 수정에 실패했습니다.');
     } finally {
       setIsLoading(false);
     }

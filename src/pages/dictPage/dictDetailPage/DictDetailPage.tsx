@@ -11,7 +11,7 @@ import PLANT4_ICON from '@/assets/images/icons/dict_plant4.png';
 import WATER_ICON from '@/assets/images/icons/dict_water1.png';
 import WATERPOT_ICON from '@/assets/images/icons/dict_waterpot.png';
 import BUG_ICON from '@/assets/images/icons/dict_bug.png';
-import { errorNoti } from '@/utils/alarmUtil';
+import { showAlert } from '@/utils/dialog';
 
 const environmentContents: Array<{
   type: 'lightCode' | 'waterCode' | 'temperatureCode';
@@ -67,7 +67,7 @@ const DictDetailPage = () => {
 
   useEffect(() => {
     if (!plantData) {
-      errorNoti('잘못된 접근입니다.');
+      showAlert('error', '잘못된 접근입니다.');
       navaigate('/dict');
     }
   }, []);

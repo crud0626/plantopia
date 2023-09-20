@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginWithEmail, loginWithSocial } from '@/api/auth';
-import { errorNoti } from '@/utils/alarmUtil';
+import { showAlert } from '@/utils/dialog';
 
 import './loginPage.scss';
 
@@ -34,7 +34,7 @@ const LoginPage = () => {
 
     for (const { key, message, re } of targets) {
       if (!re.test(key)) {
-        errorNoti(message);
+        showAlert('error', message);
         return;
       }
     }
@@ -43,7 +43,7 @@ const LoginPage = () => {
       await loginWithEmail(email, password, isChecked);
       navigate('/');
     } catch (error) {
-      errorNoti('이메일 또는 비밀번호가 일치하지 않습니다.');
+      showAlert('error', '이메일 또는 비밀번호가 일치하지 않습니다.');
     }
   };
 
@@ -52,7 +52,7 @@ const LoginPage = () => {
       await loginWithSocial(isChecked);
       navigate('/');
     } catch (error) {
-      errorNoti('로그인에 실패하였습니다.');
+      showAlert('error', '로그인에 실패하였습니다.');
     }
   };
 

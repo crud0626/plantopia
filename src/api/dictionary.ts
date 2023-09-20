@@ -16,7 +16,7 @@ import {
   PlantCodeName,
   PlantType,
 } from '@/@types/dictionary.type';
-import { getRandomIndex, shuffleArray } from '@/utils/arrayUtil';
+import { getRandomIndex, shuffleArray } from '@/utils/array';
 
 export const getPlantSearchResults = (fieldName: string, keyword: string) => {
   const ref = collection(db, 'dictionary');

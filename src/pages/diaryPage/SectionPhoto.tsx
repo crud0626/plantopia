@@ -2,7 +2,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import { deleteImg, uploadImg } from '@/api/storage';
 import { InitialDiaryContent } from '@/@types/diary.type';
-import { errorNoti } from '@/utils/alarmUtil';
+import { showAlert } from '@/utils/dialog';
 
 import './sectionPhoto.scss';
 
@@ -28,7 +28,7 @@ const SectionPhoto = ({ imgUrls, handleContents }: SectionPhotoProps) => {
 
       handleContents('imgUrls', updatedImgs);
     } catch {
-      errorNoti('이미지 업로드 도중 에러가 발생했습니다!');
+      showAlert('error', '이미지 업로드 도중 에러가 발생했습니다!');
     } finally {
       event.target.value = '';
     }
@@ -42,7 +42,7 @@ const SectionPhoto = ({ imgUrls, handleContents }: SectionPhotoProps) => {
 
       handleContents('imgUrls', updatedImgs);
     } catch (error) {
-      errorNoti('이미지 삭제 도중 에러가 발생했습니다!');
+      showAlert('error', '이미지 삭제 도중 에러가 발생했습니다!');
     }
   };
 

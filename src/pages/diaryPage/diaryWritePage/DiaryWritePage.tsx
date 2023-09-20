@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { saveDiary } from '@/api/userDiary';
 import { getUserPlantList } from '@/api/userPlant';
 import { useAuth } from '@/hooks';
-import { errorNoti, successNoti } from '@/utils/alarmUtil';
+import { showAlert } from '@/utils/dialog';
 import { InitialDiaryContent } from '@/@types/diary.type';
 
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
@@ -47,13 +47,13 @@ const DiaryWritePage = () => {
     const { title, tags, content } = contents;
 
     if (!title || tags.length === 0 || !content) {
-      errorNoti(
-        !title
-          ? '제목을 작성해주세요.'
-          : tags.length === 0
-          ? '관련 식물을 1가지 이상 선택해주세요.'
-          : '내용을 작성해주세요.',
-      );
+      const msg = !title
+        ? '제목을 작성해주세요.'
+        : tags.length === 0
+        ? '관련 식물을 1가지 이상 선택해주세요.'
+        : '내용을 작성해주세요.';
+
+      showAlert('error', msg);
       return false;
     }
 
@@ -68,10 +68,10 @@ const DiaryWritePage = () => {
 
       await saveDiary(contents);
 
-      successNoti('저장이 완료되었어요!');
+      showAlert('success', '저장이 완료되었어요!');
       navigate('/diary');
     } catch (error) {
-      errorNoti('저장에 실패하였습니다.');
+      showAlert('error', '저장에 실패하였습니다.');
     } finally {
       setIsSaving(false);
     }
@@ -101,7 +101,7 @@ const DiaryWritePage = () => {
         setContents(prev => ({ ...prev, userEmail }));
         setPlantNames(userPlantNames);
       } catch (error) {
-        errorNoti('유저 데이터를 가져오던 도중 에러가 발생했습니다.');
+        showAlert('error', '유저 데이터를 가져오던 도중 에러가 발생했습니다.');
       }
     })();
   }, [user?.email]);
