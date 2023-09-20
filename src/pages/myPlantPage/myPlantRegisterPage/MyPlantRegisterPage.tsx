@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks';
 import { addUserPlant } from '@/api/userPlant';
 import { existPlant } from '@/api/userDiary';
 import { waterCodeMap } from '@/constants/dictionary';
-import { errorNoti, successNoti } from '@/utils/alarmUtil';
+import { showAlert } from '@/utils/dialog';
 import { UserPlant } from '@/@types/plant.type';
 
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
@@ -37,10 +37,10 @@ const MyPlantRegisterPage = () => {
         userEmail: user.email,
       });
 
-      successNoti('새 식물 등록에 성공하였습니다');
+      showAlert('success', '새 식물 등록에 성공하였습니다');
       navigate('/myplant');
     } catch (error) {
-      errorNoti('식물 등록에 실패하였습니다.');
+      showAlert('error', '식물 등록에 실패하였습니다.');
     } finally {
       setIsSaving(false);
     }

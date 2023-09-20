@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Timestamp } from 'firebase/firestore';
 import { uploadImg } from '@/api/storage';
-import { errorNoti, showAlert } from '@/utils/alarmUtil';
+import { showAlert, showConfirm } from '@/utils/dialog';
 import { formatFullDate, secondsToDate } from '@/utils/dateUtil';
 import { UserPlant } from '@/@types/plant.type';
 import { valueof } from '@/@types';
@@ -32,20 +32,20 @@ interface MyPlantFormProps {
 
 const validateForm = (arg: any): arg is Omit<UserPlant, 'id' | 'isMain'> => {
   if (!arg.plantName) {
-    errorNoti('식물을 지정해주세요.');
+    showAlert('error', '식물을 지정해주세요.');
     return false;
   }
 
   if (!arg.nickname) {
-    errorNoti('식물의 닉네임을 설정해주세요.');
+    showAlert('error', '식물의 닉네임을 설정해주세요.');
     return false;
   }
   if (!arg.frequency) {
-    errorNoti('식물의 물 주기를 설정해주세요.');
+    showAlert('error', '식물의 물 주기를 설정해주세요.');
     return false;
   }
   if (!arg.purchasedDay) {
-    errorNoti('식물과 함께한 날을 지정해주세요.');
+    showAlert('error', '식물과 함께한 날을 지정해주세요.');
     return false;
   }
 
@@ -113,7 +113,7 @@ const MyPlantForm = ({
       const url = await uploadImg(file, 'plant');
       handleInputField('imgUrl', url);
     } catch (error) {
-      errorNoti('이미지 업로드 도중 에러가 발생했습니다.');
+      showAlert('error', '이미지 업로드 도중 에러가 발생했습니다.');
     }
   };
 
@@ -129,7 +129,7 @@ const MyPlantForm = ({
     <form
       onSubmit={e => {
         e.preventDefault();
-        showAlert(`${subject}하시겠습니까?`, '', handleSubmit);
+        showConfirm(`${subject}하시겠습니까?`, handleSubmit);
       }}
     >
       <div className="my_plant_registeration_container">

@@ -1,7 +1,7 @@
 import { useState, Children } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks';
-import { errorNoti } from '@/utils/alarmUtil';
+import { showAlert } from '@/utils/dialog';
 import { logout } from '@/api/auth';
 
 import './myPage.scss';
@@ -31,7 +31,7 @@ const MyPage = () => {
       setIsLoading(true);
       await logout();
     } catch (error) {
-      errorNoti('로그아웃에 실패했습니다.');
+      showAlert('error', '로그아웃에 실패했습니다.');
     } finally {
       setIsLoading(false);
     }

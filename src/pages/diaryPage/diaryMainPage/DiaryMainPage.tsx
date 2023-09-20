@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DiaryImages } from '@/constants/diary';
 import { useAuth } from '@/hooks';
-import { errorNoti, showAlert, successNoti } from '@/utils/alarmUtil';
+import { showAlert, showConfirm } from '@/utils/dialog';
 import { deleteDiary, existPlant, getUserDiaryList } from '@/api/userDiary';
 import { DiaryContentTypes } from '@/@types/diary.type';
 
@@ -57,10 +57,10 @@ const DiaryPage = () => {
       const newDiaryData = await getUserDiaryList(user.email);
 
       setDiaryData(newDiaryData);
-      successNoti('삭제가 완료되었어요!');
+      showAlert('success', '삭제가 완료되었어요!');
       navigate('/diary');
     } catch (error) {
-      errorNoti('다이어리 삭제 도중 에러가 발생했습니다.');
+      showAlert('error', '다이어리 삭제 도중 에러가 발생했습니다.');
     } finally {
       setIsLoading(false);
     }
@@ -78,9 +78,12 @@ const DiaryPage = () => {
       return;
     }
 
-    showAlert('등록된 식물이 없습니다.', '내 식물을 등록하시겠습니까?', () => {
-      navigate('/myplant/register');
-    });
+    showConfirm(
+      ['등록된 식물이 없습니다.', '내 식물을 등록하시겠습니까?'],
+      () => {
+        navigate('/myplant/register');
+      },
+    );
   };
 
   useEffect(() => {
@@ -96,7 +99,10 @@ const DiaryPage = () => {
         setDiaryData(diaryList);
         setHasPlantsUser(hasPlants);
       } catch (error) {
-        errorNoti('다이어리 목록을 가져오는 도중 에러가 발생했습니다.');
+        showAlert(
+          'error',
+          '다이어리 목록을 가져오는 도중 에러가 발생했습니다.',
+        );
       } finally {
         setIsLoading(false);
       }

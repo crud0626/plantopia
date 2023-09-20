@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { deleteDiary, getUserDiary } from '@/api/userDiary';
 import { useAuth } from '@/hooks';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
-import { errorNoti, showAlert, successNoti } from '@/utils/alarmUtil';
+import { showAlert, showConfirm } from '@/utils/dialog';
 import { DiaryContentTypes } from '@/@types/diary.type';
 
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
@@ -28,10 +28,10 @@ const DiaryDetailPage = () => {
     try {
       await deleteDiary(diaryId);
 
-      successNoti('삭제가 완료되었어요!');
+      showAlert('success', '삭제가 완료되었어요!');
       navigate('/diary');
     } catch (error) {
-      errorNoti('다이어리 삭제 도중 에러가 발생했습니다.');
+      showAlert('error', '다이어리 삭제 도중 에러가 발생했습니다.');
     } finally {
       setIsLoading(false);
     }
@@ -62,7 +62,7 @@ const DiaryDetailPage = () => {
 
         setDiaryDetailData(diaryData);
       } catch (error) {
-        errorNoti('존재하지 않는 다이어리입니다.');
+        showAlert('error', '존재하지 않는 다이어리입니다.');
         navigate('/diary');
       } finally {
         setIsLoading(false);
@@ -93,7 +93,7 @@ const DiaryDetailPage = () => {
             <button
               className="btn delete"
               onClick={() => {
-                showAlert('글을 삭제하시겠습니까?', '', async () => {
+                showConfirm('글을 삭제하시겠습니까?', async () => {
                   await handleDelete(docId);
                   setIsModalOpen(false);
                 });

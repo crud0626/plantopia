@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks';
 import { CALENDAR_ICONS, DAY_OF_WEEK_KR } from '@/constants/calendar';
 import { UserPlant } from '@/@types/plant.type';
 import { TileArgs } from 'node_modules/react-calendar/dist/esm/shared/types';
-import { errorNoti } from '@/utils/alarmUtil';
+import { showAlert } from '@/utils/dialog';
 import { getUserPlantList } from '@/api/userPlant';
 
 import Progress from '@/components/progress/Progress';
@@ -127,7 +127,10 @@ const CalendarPage = () => {
         const calendarData = formatCalendarData(userPlants);
         setCalendarData(calendarData);
       } catch (error) {
-        errorNoti('데이터를 받아오지 못했습니다! 잠시 후 다시 시도해주세요!');
+        showAlert(
+          'error',
+          '데이터를 받아오지 못했습니다! 잠시 후 다시 시도해주세요!',
+        );
       } finally {
         setIsLoading(false);
       }

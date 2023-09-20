@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
-import { showAlert } from '@/utils/alarmUtil';
+import { showConfirm } from '@/utils/dialog';
 import { DiaryContentTypes } from '@/@types/diary.type';
 
 import NoContent from './NoContent';
@@ -80,7 +80,7 @@ const ListView = ({ diaryData, handleDelete }: ListViewProps) => {
                   <div
                     className="btn delete"
                     onClick={() => {
-                      showAlert('글을 삭제하시겠습니까?', '', () => {
+                      showConfirm('글을 삭제하시겠습니까?', () => {
                         handleDelete(diary.id);
                       });
                     }}

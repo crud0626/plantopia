@@ -2,7 +2,7 @@ import { useState, useEffect, Children } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { koreanRe } from '@/constants/regEx';
 import { getPlantSearchResults } from '@/api/dictionary';
-import { errorNoti } from '@/utils/alarmUtil';
+import { showAlert } from '@/utils/dialog';
 import { PlantType } from '@/@types/dictionary.type';
 
 import './dictSearchPage.scss';
@@ -51,7 +51,7 @@ const DictSearchPage = () => {
       const plantList = await getPlantSearchResults(fieldName, plantName);
       setResults(plantList);
     } catch (error) {
-      errorNoti('검색 도중 에러가 발생하였습니다!');
+      showAlert('error', '검색 도중 에러가 발생하였습니다!');
     } finally {
       setIsLoading(false);
     }

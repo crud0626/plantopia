@@ -6,7 +6,7 @@ import {
   monthDifference,
   secondsToDate,
 } from '@/utils/dateUtil';
-import { errorNoti, showAlert, successNoti } from '@/utils/alarmUtil';
+import { showAlert, showConfirm } from '@/utils/dialog';
 import { PlantType } from '@/@types/dictionary.type';
 import { UserPlant } from '@/@types/plant.type';
 import { codeInfo } from '@/constants/dictionary';
@@ -47,10 +47,10 @@ const MyPlantDetailPage = () => {
         await updateUserPlant(nextMainPlant);
       }
 
-      successNoti('내 식물이 삭제 되었습니다.');
+      showAlert('success', '내 식물이 삭제 되었습니다.');
       navigate('/myplant');
     } catch (error) {
-      errorNoti('에러가 발생했습니다.');
+      showAlert('error', '에러가 발생했습니다.');
     }
   };
 
@@ -67,7 +67,7 @@ const MyPlantDetailPage = () => {
         const plantsInfo = await getPlantInfo(plantInfo.plantName);
         setPlantDictDetail(plantsInfo[0]);
       } catch (error) {
-        errorNoti('식물 정보를 가져오는 도중 에러가 발생했습니다.');
+        showAlert('error', '식물 정보를 가져오는 도중 에러가 발생했습니다.');
       } finally {
         setIsLoading(false);
       }
@@ -190,9 +190,7 @@ const MyPlantDetailPage = () => {
         </div>
         <button
           className="delete_my_plant"
-          onClick={() =>
-            showAlert('삭제 확인', '정말로 삭제 하시겠습니까?', deletePlant)
-          }
+          onClick={() => showConfirm('정말로 삭제 하시겠습니까?', deletePlant)}
         >
           내 식물에서 삭제하기
         </button>

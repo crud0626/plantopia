@@ -1,7 +1,7 @@
 import { differenceInDays, format, addDays } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { UserPlant } from '@/@types/plant.type';
-import { showAlert } from '@/utils/alarmUtil';
+import { showConfirm } from '@/utils/dialog';
 import EmptyPlant from './EmptyPlant';
 import WATERING from '@/assets/images/icons/watering.png';
 interface MainPlantProps {
@@ -25,7 +25,7 @@ const MainPlantSection = ({ plant, onWaterPlant }: MainPlantProps) => {
   const onClickWatering = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
 
-    showAlert('식물에 물을 주시겠습니까?', '', () => onWaterPlant(plant.id));
+    showConfirm('식물에 물을 주시겠습니까?', () => onWaterPlant(plant.id));
   };
 
   const lastWateringDate = (plant.wateredDays.at(-1)?.seconds || 0) * 1000;

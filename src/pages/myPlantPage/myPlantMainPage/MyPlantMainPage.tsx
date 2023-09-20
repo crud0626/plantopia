@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks';
 import { getUserPlantList, updateUserPlant } from '@/api/userPlant';
-import { errorNoti, infoNoti, successNoti } from '@/utils/alarmUtil';
+import { showAlert } from '@/utils/dialog';
 import { UserPlant } from '@/@types/plant.type';
 
 import './myPlantMainPage.scss';
@@ -27,7 +27,7 @@ const MyPlantMainPage = () => {
 
   const handleAddPlant = () => {
     if (plantList.length >= PLANTS_LIMIT) {
-      infoNoti(`식물 등록은 ${PLANTS_LIMIT}개까지 가능합니다.`);
+      showAlert('info', `식물 등록은 ${PLANTS_LIMIT}개까지 가능합니다.`);
       return;
     }
 
@@ -53,9 +53,9 @@ const MyPlantMainPage = () => {
 
       setPlantList(userPlants);
       setMainPlant(mainPlant);
-      successNoti('메인 식물을 변경하였습니다.');
+      showAlert('success', '메인 식물을 변경하였습니다.');
     } catch (error) {
-      errorNoti('메인 식물 변경에 실패하였습니다.');
+      showAlert('error', '메인 식물 변경에 실패하였습니다.');
     } finally {
       setIsLoading(false);
     }
@@ -74,7 +74,10 @@ const MyPlantMainPage = () => {
         setPlantList(userPlants);
         setMainPlant(mainPlant);
       } catch (error) {
-        errorNoti('유저의 식물 정보를 가져오는 도중 에러가 발생했습니다.');
+        showAlert(
+          'error',
+          '유저의 식물 정보를 가져오는 도중 에러가 발생했습니다.',
+        );
       } finally {
         setIsLoading(false);
       }
