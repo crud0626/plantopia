@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { WeatherResponse } from '@/@types/weather.type';
-import { Coordinates } from '@/utils/getGeolocation';
+import { Coordinates } from '@/utils/geolocation';
 
 const fetchWeatherInfo = ({
   latitude,
