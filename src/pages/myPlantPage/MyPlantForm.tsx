@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Timestamp } from 'firebase/firestore';
 import { uploadImg } from '@/api/storage';
 import { showAlert, showConfirm } from '@/utils/dialog';
-import { formatFullDate, secondsToDate } from '@/utils/dateUtil';
+import { formatFullDate, secondsToDateStr } from '@/utils/date';
 import { UserPlant } from '@/@types/plant.type';
 import { valueof } from '@/@types';
 
@@ -204,7 +204,7 @@ const MyPlantForm = ({
             <input
               type="date"
               className="date_selector"
-              value={secondsToDate(formValues.purchasedDay.seconds)}
+              value={secondsToDateStr(formValues.purchasedDay.seconds)}
               max={formatFullDate(new Date())}
               onChange={e => handleInputField('purchasedDay', e.target.value)}
             />
@@ -217,7 +217,7 @@ const MyPlantForm = ({
               type="date"
               className="date_selector"
               value={
-                lastWateredDay ? secondsToDate(lastWateredDay.seconds) : '0'
+                lastWateredDay ? secondsToDateStr(lastWateredDay.seconds) : '0'
               }
               max={formatFullDate(new Date())}
               onChange={e => handleInputField('wateredDays', e.target.value)}
