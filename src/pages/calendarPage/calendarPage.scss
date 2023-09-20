@@ -156,14 +156,13 @@
     }
 
     .date_list {
-      // outline: 1px solid red;
       margin-top: 1.8rem;
       position: relative;
       height: 100%;
 
       .list_line {
         position: absolute;
-        left: 0;
+        left: 0.8rem;
         top: 50%;
         transform: translateY(-50%);
         width: 1px;
@@ -185,14 +184,14 @@
           &::before {
             content: '';
             position: absolute;
-            left: -0.4rem;
+            left: 0.4rem;
             top: 50%;
             transform: translateY(-50%);
             width: 0.8rem;
             height: 0.8rem;
             border-radius: 50%;
             background-color: #ffffff;
-            border: 1px solid #c4c4c4;
+            outline: 1px solid #c4c4c4;
           }
         }
 
