@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import paths from '@/constants/routePath';
 
 const DiaryMainPage = lazy(
   () => import('@/pages/diaryPage/diaryMainPage/DiaryMainPage'),
@@ -14,13 +15,13 @@ const DiaryEditPage = lazy(
 );
 
 const diaryRoutes = [
-  { path: '/diary', element: <DiaryMainPage /> },
+  { path: paths.diary, element: <DiaryMainPage /> },
   {
-    path: '/diary/:docId',
+    path: `${paths.diary}/:docId`,
     element: <DiaryDetailPage />,
   },
-  { path: '/diary/write', element: <DiaryWritePage /> },
-  { path: '/diary/edit/:docId', element: <DiaryEditPage /> },
+  { path: paths.diaryWrite, element: <DiaryWritePage /> },
+  { path: `${paths.diaryEdit}/:docId`, element: <DiaryEditPage /> },
 ];
 
 export default diaryRoutes;

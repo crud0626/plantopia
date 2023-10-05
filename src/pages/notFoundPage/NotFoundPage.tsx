@@ -1,5 +1,6 @@
 import { useAuth } from '@/hooks';
 import { Link } from 'react-router-dom';
+import paths from '@/constants/routePath';
 import './notFoundPage.scss';
 
 const NotFoundPage = () => {
@@ -13,7 +14,7 @@ const NotFoundPage = () => {
             <strong>빈페이지</strong>를 발견하셨습니다!
           </h2>
           <p>슬기로운 식집사 생활을 이어나가시겠어요?🌱</p>
-          <Link to="/">메인으로 이동하기</Link>
+          <Link to={paths.main}>메인으로 이동하기</Link>
         </section>
       </main>
     </div>

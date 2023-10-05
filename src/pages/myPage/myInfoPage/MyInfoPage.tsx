@@ -6,6 +6,7 @@ import { updateUserInfo } from '@/api/auth';
 import { uploadImg } from '@/api/storage';
 import { showAlert } from '@/utils/dialog';
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
+import paths from '@/constants/routePath';
 import './myInfoPage.scss';
 
 import PROFILE from '@/assets/images/icons/default_profile.png';
@@ -75,7 +76,7 @@ const MyInfo = () => {
       await updateUserInfo(password, nickname.trim(), imgUrl);
 
       showAlert('success', '회원정보 수정에 성공했습니다.');
-      navigate('/mypage');
+      navigate(paths.mypage);
     } catch (error) {
       showAlert('error', '회원정보 수정에 실패했습니다.');
     } finally {

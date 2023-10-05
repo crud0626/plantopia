@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { UserPlant } from '@/@types/plant.type';
 import { showConfirm } from '@/utils/dialog';
 import EmptyPlant from './EmptyPlant';
+import paths from '@/constants/routePath';
+
 import WATERING from '@/assets/images/icons/watering.png';
 interface MainPlantProps {
   plant?: UserPlant;
@@ -39,7 +41,7 @@ const MainPlantSection = ({ plant, onWaterPlant }: MainPlantProps) => {
 
   return (
     <div className="inner">
-      <Link to={`/myplant/${plant.id}`} className="main_plant">
+      <Link to={`${paths.myplant}/${plant.id}`} className="main_plant">
         <div className="inner_circle">
           <img src={plant.imgUrl} alt="plant" />
         </div>

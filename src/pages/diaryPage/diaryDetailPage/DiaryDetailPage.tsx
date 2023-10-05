@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { showAlert, showConfirm } from '@/utils/dialog';
 import { DiaryContentTypes } from '@/@types/diary.type';
+import paths from '@/constants/routePath';
 
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
 import Progress from '@/components/progress/Progress';
@@ -29,7 +30,7 @@ const DiaryDetailPage = () => {
       await deleteDiary(diaryId);
 
       showAlert('success', '삭제가 완료되었어요!');
-      navigate('/diary');
+      navigate(paths.diary);
     } catch (error) {
       showAlert('error', '다이어리 삭제 도중 에러가 발생했습니다.');
     } finally {
@@ -50,7 +51,7 @@ const DiaryDetailPage = () => {
   useEffect(() => {
     (async () => {
       if (!docId) {
-        navigate('/diary');
+        navigate(paths.diary);
         return;
       }
 
@@ -63,7 +64,7 @@ const DiaryDetailPage = () => {
         setDiaryDetailData(diaryData);
       } catch (error) {
         showAlert('error', '존재하지 않는 다이어리입니다.');
-        navigate('/diary');
+        navigate(paths.diary);
       } finally {
         setIsLoading(false);
       }
@@ -86,7 +87,7 @@ const DiaryDetailPage = () => {
           <div className="more_modal">
             <button
               className="btn modify"
-              onClick={() => navigate(`/diary/edit/${docId}`)}
+              onClick={() => navigate(`${paths.diaryEdit}/${docId}`)}
             >
               게시글 수정
             </button>

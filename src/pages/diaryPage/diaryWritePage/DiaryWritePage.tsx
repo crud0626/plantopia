@@ -5,6 +5,7 @@ import { getUserPlantList } from '@/api/userPlant';
 import { useAuth } from '@/hooks';
 import { showAlert } from '@/utils/dialog';
 import { InitialDiaryContent } from '@/@types/diary.type';
+import paths from '@/constants/routePath';
 
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
 import SectionPhoto from '../SectionPhoto';
@@ -69,7 +70,7 @@ const DiaryWritePage = () => {
       await saveDiary(contents);
 
       showAlert('success', '저장이 완료되었어요!');
-      navigate('/diary');
+      navigate(paths.diary);
     } catch (error) {
       showAlert('error', '저장에 실패하였습니다.');
     } finally {

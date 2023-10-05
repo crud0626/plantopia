@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
+import paths from '@/constants/routePath';
 import './footer.scss';
 
 import DICT_ON from '@/assets/images/icons/dict_on.png';
@@ -22,22 +23,28 @@ const Footer = () => {
   return (
     <footer className="inner footer">
       <nav>
-        <Link className={`btn ${dictActive ? 'active' : ''}`} to="/dict">
+        <Link to={paths.dict} className={`btn ${dictActive ? 'active' : ''}`}>
           <img src={dictActive ? DICT_ON : DICT_OFF} alt="plant dictionary" />
           식물도감
         </Link>
-        <Link className={`btn ${diaryActive ? 'active' : ''}`} to="/diary">
+        <Link to={paths.diary} className={`btn ${diaryActive ? 'active' : ''}`}>
           <img src={diaryActive ? DIARY_ON : DIARY_OFF} alt="diary" />
           다이어리
         </Link>
-        <Link className="home_btn" to="/">
+        <Link to={paths.main} className="home_btn">
           <img src={HOME} className="main_logo" alt="home" />
         </Link>
-        <Link className={`btn ${myPlantActive ? 'active' : ''}`} to="/myplant">
+        <Link
+          to={paths.myplant}
+          className={`btn ${myPlantActive ? 'active' : ''}`}
+        >
           <img src={myPlantActive ? MYPLANT_ON : MYPLANT_OFF} alt="myplant" />
           내식물
         </Link>
-        <Link className={`btn ${myPageActive ? 'active' : ''}`} to="/mypage">
+        <Link
+          to={paths.mypage}
+          className={`btn ${myPageActive ? 'active' : ''}`}
+        >
           <img src={myPageActive ? MYPAGE_ON : MYPAGE_OFF} alt="my" />
           MY
         </Link>

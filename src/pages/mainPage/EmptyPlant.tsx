@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks';
+import paths from '@/constants/routePath';
+
 import MAIN_PLANT from '@/assets/images/plants/main_plant.png';
 import EDIT_ICON from '@/assets/images/icons/my_plant_detail_edit_icon.png';
 
@@ -17,7 +19,7 @@ const EmptyPlant = () => {
         <strong>{user?.displayName || '회원'}</strong>님, 플랜토피아와 함께
         슬기로운 식집사 생활을 시작하세요!
       </p>
-      <Link to="/myplant/register" className="register_btn">
+      <Link to={paths.myplantRegister} className="register_btn">
         <img src={EDIT_ICON} alt="edit" />
         <p>내 식물 등록하기</p>
       </Link>

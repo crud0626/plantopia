@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks';
 import { showAlert, showConfirm } from '@/utils/dialog';
 import { deleteDiary, existPlant, getUserDiaryList } from '@/api/userDiary';
 import { DiaryContentTypes } from '@/@types/diary.type';
+import paths from '@/constants/routePath';
 
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
@@ -58,7 +59,7 @@ const DiaryPage = () => {
 
       setDiaryData(newDiaryData);
       showAlert('success', '삭제가 완료되었어요!');
-      navigate('/diary');
+      navigate(paths.diary);
     } catch (error) {
       showAlert('error', '다이어리 삭제 도중 에러가 발생했습니다.');
     } finally {
@@ -74,14 +75,14 @@ const DiaryPage = () => {
 
   const handleAddBtn = () => {
     if (hasPlantsUser) {
-      navigate('/diary/write');
+      navigate(paths.diaryWrite);
       return;
     }
 
     showConfirm(
       ['등록된 식물이 없습니다.', '내 식물을 등록하시겠습니까?'],
       () => {
-        navigate('/myplant/register');
+        navigate(paths.myplantRegister);
       },
     );
   };

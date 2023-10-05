@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginWithEmail, loginWithSocial } from '@/api/auth';
 import { showAlert } from '@/utils/dialog';
+import paths from '@/constants/routePath';
 
 import './loginPage.scss';
 
@@ -41,7 +42,7 @@ const LoginPage = () => {
 
     try {
       await loginWithEmail(email, password, isChecked);
-      navigate('/');
+      navigate(paths.main);
     } catch (error) {
       showAlert('error', '이메일 또는 비밀번호가 일치하지 않습니다.');
     }
@@ -50,7 +51,7 @@ const LoginPage = () => {
   const handleClick = async () => {
     try {
       await loginWithSocial(isChecked);
-      navigate('/');
+      navigate(paths.main);
     } catch (error) {
       showAlert('error', '로그인에 실패하였습니다.');
     }

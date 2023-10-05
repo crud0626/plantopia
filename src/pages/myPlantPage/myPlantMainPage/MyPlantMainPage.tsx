@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks';
 import { getUserPlantList, updateUserPlant } from '@/api/userPlant';
 import { showAlert } from '@/utils/dialog';
 import { UserPlant } from '@/@types/plant.type';
+import paths from '@/constants/routePath';
 
 import './myPlantMainPage.scss';
 import Header from '@/components/header/Header';
@@ -31,7 +32,7 @@ const MyPlantMainPage = () => {
       return;
     }
 
-    navigate('/myplant/register');
+    navigate(paths.myplantRegister);
   };
 
   const changeMainPlant = async (nextMainPlant: UserPlant) => {

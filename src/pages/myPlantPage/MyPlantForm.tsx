@@ -6,6 +6,7 @@ import { showAlert, showConfirm } from '@/utils/dialog';
 import { formatFullDate, secondsToDateStr } from '@/utils/date';
 import { UserPlant } from '@/@types/plant.type';
 import { valueof } from '@/@types';
+import paths from '@/constants/routePath';
 
 import './myPlantForm.scss';
 import DEFAULT_IMG from '@/assets/images/icons/sample_plant1.png';
@@ -159,7 +160,7 @@ const MyPlantForm = ({
         <div className="my_plant_input_box">
           <p className="my_plant_input_title">식물선택</p>
           <Link
-            to="/dict/search"
+            to={paths.dictSearch}
             state={{ inputValue: '' }}
             className="my_plant_input_wrapper"
           >

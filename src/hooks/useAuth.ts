@@ -1,7 +1,8 @@
-import { auth } from '@/firebaseApp';
-import { User } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { auth } from '@/firebaseApp';
+import { User } from 'firebase/auth';
+import paths from '@/constants/routePath';
 
 const useAuth = () => {
   const [user, setUser] = useState<User>();
@@ -10,7 +11,7 @@ const useAuth = () => {
   useEffect(() => {
     auth.onAuthStateChanged(user => {
       if (!user) {
-        navigate('/login');
+        navigate(paths.login);
         return;
       }
 

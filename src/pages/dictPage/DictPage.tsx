@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks';
 import { getPlantInfoList } from '@/api/dictionary';
 import { CategoryNames, PlantType } from '@/@types/dictionary.type';
 import { showAlert } from '@/utils/dialog';
-
+import paths from '@/constants/routePath';
 import CardSlide from './CardSlide';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
@@ -31,7 +31,7 @@ const DictPage = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    navigate('/dict/search', {
+    navigate(paths.dictSearch, {
       state: {
         inputValue: searchValue,
       },

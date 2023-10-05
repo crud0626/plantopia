@@ -5,6 +5,7 @@ import { DiaryContentTypes } from '@/@types/diary.type';
 import { getUserPlantList } from '@/api/userPlant';
 import { getUserDiary, updateDiary } from '@/api/userDiary';
 import { useAuth } from '@/hooks';
+import paths from '@/constants/routePath';
 
 import HeaderBefore from '@/components/headerBefore/HeaderBefore';
 import SectionPhoto from '../SectionPhoto';
@@ -66,7 +67,7 @@ const DiaryEditPage = () => {
       await updateDiary({ ...contents });
 
       showAlert('success', '수정이 완료되었어요!');
-      navigate('/diary');
+      navigate(paths.diary);
     } catch (error) {
       showAlert('error', '수정하는 도중 에러가 발생했습니다!');
     } finally {
