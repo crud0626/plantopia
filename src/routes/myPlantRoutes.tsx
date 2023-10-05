@@ -16,7 +16,7 @@ const MyPlantEditPage = lazy(
 const myPlantRoutes = [
   { path: '/myplant', element: <MyPlantMainPage /> },
   { path: '/myplant/:docId', element: <MyPlantDetailPage /> },
-  { path: '/myplant/:docId/edit', element: <MyPlantEditPage /> },
+  { path: '/myplant/edit/:docId', element: <MyPlantEditPage /> },
   { path: '/myplant/register', element: <MyPlantRegisterPage /> },
 ];
 

@@ -86,7 +86,7 @@ const DiaryDetailPage = () => {
           <div className="more_modal">
             <button
               className="btn modify"
-              onClick={() => navigate(`/diary/${docId}/edit`)}
+              onClick={() => navigate(`/diary/edit/${docId}`)}
             >
               게시글 수정
             </button>

@@ -73,7 +73,7 @@ const ListView = ({ diaryData, handleDelete }: ListViewProps) => {
                 <div className="more_modal">
                   <div
                     className="btn modify"
-                    onClick={() => navigate(`/diary/${diary.id}/edit`)}
+                    onClick={() => navigate(`/diary/edit/${diary.id}`)}
                   >
                     게시글 수정
                   </div>

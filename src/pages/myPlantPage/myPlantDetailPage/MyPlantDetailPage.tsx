@@ -101,7 +101,7 @@ const MyPlantDetailPage = () => {
               </p>
             </div>
             <Link
-              to={`/myplant/${docId}/edit`}
+              to={`/myplant/edit/${docId}`}
               state={plantDetail}
               className="my_plant_detail_edit_btn"
             >

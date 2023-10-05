@@ -30,7 +30,7 @@ const MainPagePlantList = ({
   const sortedPlants = useMemo(() => userPlants.sort(compare), [userPlants]);
 
   const handleEditData = (clickedPlant: UserPlant) => {
-    navigate(`/myplant/${clickedPlant.id}/edit`, {
+    navigate(`/myplant/edit/${clickedPlant.id}`, {
       state: clickedPlant,
     });
   };
