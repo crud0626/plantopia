@@ -1,6 +1,8 @@
 import { FormEvent, useMemo, useState } from 'react';
-import { InitialDiaryContent } from '@/@types/diary.type';
 import { showAlert } from '@/utils/dialog';
+import { InitialDiaryContent } from '@/@types/diary.type';
+
+import './diaryForm.scss';
 import SectionBoard from './SectionBoard';
 import SectionPhoto from './SectionPhoto';
 
@@ -97,7 +99,7 @@ const DiaryForm = ({
   const btnText = useMemo(() => btnTextByType[callerType], [callerType]);
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="diaryform_container" onSubmit={handleSubmit}>
       <SectionPhoto
         imgUrls={contents.imgUrls}
         handleContents={handleContents}
@@ -108,7 +110,7 @@ const DiaryForm = ({
         handleContents={handleContents}
         handleTags={handleTags}
       />
-      <button>{btnText[Number(isSubmitting)]}</button>
+      <button className="submit_btn">{btnText[Number(isSubmitting)]}</button>
     </form>
   );
 };

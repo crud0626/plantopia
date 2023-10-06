@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/hooks';
 import { saveDiary } from '@/api/userDiary';
 import { getUserPlantList } from '@/api/userPlant';
-import { useAuth } from '@/hooks';
 import { showAlert } from '@/utils/dialog';
 import { InitialDiaryContent } from '@/@types/diary.type';
 import paths from '@/constants/routePath';
@@ -53,15 +53,17 @@ const DiaryWritePage = () => {
 
   return (
     <div className="layout">
-      <PageHeader exitBtn title="글쓰기" />
-      {user?.email && (
-        <DiaryForm
-          callerType="write"
-          plantNames={plantNames}
-          oldContents={{ userEmail: user.email }}
-          onSubmit={handleClickSave}
-        />
-      )}
+      <main className="diary_write_wrap">
+        <PageHeader exitBtn title="글쓰기" />
+        {user?.email && (
+          <DiaryForm
+            callerType="write"
+            plantNames={plantNames}
+            oldContents={{ userEmail: user.email }}
+            onSubmit={handleClickSave}
+          />
+        )}
+      </main>
       {isLoading && <Progress />}
     </div>
   );
