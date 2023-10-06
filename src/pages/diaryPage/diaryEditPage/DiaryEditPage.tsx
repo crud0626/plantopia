@@ -30,7 +30,7 @@ const DiaryEditPage = () => {
 
       const updatedContents: DiaryContentTypes = {
         ...contents,
-        id: docId,
+        id: oldContents.id,
         postedAt: oldContents.postedAt,
       };
 
