@@ -7,7 +7,7 @@ import paths from '@/constants/routePath';
 
 import PageHeader from '@/components/pageHeader/PageHeader';
 import Progress from '@/components/progress/Progress';
-import MyPlantForm from '../MyPlantForm';
+import MyPlantForm from '@/components/myPlantForm/MyPlantForm';
 import { useAuth } from '@/hooks';
 
 const MyPlantEditPage = () => {

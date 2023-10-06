@@ -8,7 +8,7 @@ import { showAlert } from '@/utils/dialog';
 import { UserPlant } from '@/@types/plant.type';
 
 import PageHeader from '@/components/pageHeader/PageHeader';
-import MyPlantForm from '../MyPlantForm';
+import MyPlantForm from '@/components/myPlantForm/MyPlantForm';
 
 interface DictPlantInfo {
   name: string;
