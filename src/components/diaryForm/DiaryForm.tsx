@@ -3,8 +3,8 @@ import { showAlert } from '@/utils/dialog';
 import { InitialDiaryContent } from '@/@types/diary.type';
 
 import './diaryForm.scss';
-import SectionBoard from './SectionBoard';
-import SectionPhoto from './SectionPhoto';
+import BoardSection from './BoardSection';
+import PhotoSection from './PhotoSection';
 
 interface DiaryFormProps {
   callerType: 'write' | 'edit';
@@ -100,11 +100,11 @@ const DiaryForm = ({
 
   return (
     <form className="diaryform_container" onSubmit={handleSubmit}>
-      <SectionPhoto
+      <PhotoSection
         imgUrls={contents.imgUrls}
         handleContents={handleContents}
       />
-      <SectionBoard
+      <BoardSection
         contents={contents}
         plantNames={plantNames}
         handleContents={handleContents}

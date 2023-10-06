@@ -4,7 +4,7 @@ import { deleteImg, uploadImg } from '@/api/storage';
 import { InitialDiaryContent } from '@/@types/diary.type';
 import { showAlert } from '@/utils/dialog';
 
-import './sectionPhoto.scss';
+import './photoSection.scss';
 
 interface SectionPhotoProps {
   imgUrls: string[];
@@ -16,7 +16,7 @@ interface SectionPhotoProps {
 
 const imgLimit = 4;
 
-const SectionPhoto = ({ imgUrls, handleContents }: SectionPhotoProps) => {
+const PhotoSection = ({ imgUrls, handleContents }: SectionPhotoProps) => {
   const handleAdd = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
 
@@ -94,4 +94,4 @@ const SectionPhoto = ({ imgUrls, handleContents }: SectionPhotoProps) => {
   );
 };
 
-export default SectionPhoto;
+export default PhotoSection;
