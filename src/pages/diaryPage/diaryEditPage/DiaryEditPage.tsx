@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { showAlert } from '@/utils/dialog';
-import { DiaryContentTypes, InitialDiaryContent } from '@/@types/diary.type';
+import { useAuth } from '@/hooks';
 import { getUserPlantList } from '@/api/userPlant';
 import { getUserDiary, updateDiary } from '@/api/userDiary';
-import { useAuth } from '@/hooks';
+import { showAlert } from '@/utils/dialog';
+import { DiaryContentTypes, InitialDiaryContent } from '@/@types/diary.type';
 import paths from '@/constants/routePath';
 
 import './diaryEditPage.scss';
 import PageHeader from '@/components/pageHeader/PageHeader';
 import DiaryForm from '@/components/diaryForm/DiaryForm';
+import Progress from '@/components/progress/Progress';
 
 const DiaryEditPage = () => {
   const user = useAuth();
@@ -21,24 +22,22 @@ const DiaryEditPage = () => {
     null,
   );
 
-  const handleSaveClick = async (contents: InitialDiaryContent) => {
+  const handleClickSave = async (contents: InitialDiaryContent) => {
     const isInvalid = !user?.email || !docId || !oldContents;
-    // const isValidContent = validateInput();
 
     try {
       if (isInvalid) throw Error();
 
-      const data = {
+      const updatedContents: DiaryContentTypes = {
         ...contents,
         id: docId,
         postedAt: oldContents.postedAt,
       };
 
-      await updateDiary(data);
-
+      await updateDiary(updatedContents);
       navigate(paths.diary);
-    } catch {
-      console.error('에러 발생');
+    } catch (error) {
+      showAlert('error', '수정에 실패하였습니다.');
     }
   };
 
@@ -79,10 +78,11 @@ const DiaryEditPage = () => {
             callerType="edit"
             plantNames={plantNames}
             oldContents={oldContents}
-            onSubmit={handleSaveClick}
+            onSubmit={handleClickSave}
           />
         )}
       </main>
+      {isLoading && <Progress />}
     </div>
   );
 };
