@@ -1,10 +1,9 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useMemo, useState } from 'react';
 import { InitialDiaryContent } from '@/@types/diary.type';
 import { showAlert } from '@/utils/dialog';
 import SectionBoard from './SectionBoard';
 import SectionPhoto from './SectionPhoto';
 
-// props: onSubmit, 채울 데이터, plantNames
 interface DiaryFormProps {
   callerType: 'write' | 'edit';
   plantNames: string[];
@@ -12,22 +11,20 @@ interface DiaryFormProps {
   onSubmit: (contents: InitialDiaryContent) => Promise<void>;
 }
 
-// 유효성 검사
-const validateInput = (contents: InitialDiaryContent) => {
+const validateInput = (contents: InitialDiaryContent): [boolean, string] => {
   const { title, tags, content } = contents;
 
   if (!title || tags.length === 0 || !content) {
-    const msg = !title
+    const message = !title
       ? '제목을 작성해주세요.'
       : tags.length === 0
       ? '관련 식물을 1가지 이상 선택해주세요.'
       : '내용을 작성해주세요.';
 
-    showAlert('error', msg);
-    return false;
+    return [false, message];
   }
 
-  return true;
+  return [true, ''];
 };
 
 const btnTextByType: { [type in DiaryFormProps['callerType']]: string[] } = {
@@ -82,33 +79,28 @@ const DiaryForm = ({
     });
   };
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    const isValid = validateInput(contents);
+    const [isValid, errMsg] = validateInput(contents);
 
-    if (!isValid) return;
-    // 유효성 검사 실패했을 때 메세지 띄워주기
-
-    try {
-      setIsSubmitting(false);
-      await onSubmit(contents);
-
-      showAlert('success', '저장이 완료되었어요!');
-    } catch (error) {
-      showAlert('error', '실패하였습니다.');
-    } finally {
-      setIsSubmitting(true);
+    if (!isValid) {
+      showAlert('error', errMsg);
+      return;
     }
+
+    setIsSubmitting(true);
+
+    onSubmit(contents).finally(() => setIsSubmitting(false));
   };
 
-  const btnText = btnTextByType[callerType];
+  const btnText = useMemo(() => btnTextByType[callerType], [callerType]);
 
   return (
     <form onSubmit={handleSubmit}>
       <SectionPhoto
-        imgUrls={contents.imgUrls || []}
-        handleContents={() => {}}
+        imgUrls={contents.imgUrls}
+        handleContents={handleContents}
       />
       <SectionBoard
         contents={contents}
