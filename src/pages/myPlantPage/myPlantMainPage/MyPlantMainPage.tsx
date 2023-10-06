@@ -9,7 +9,7 @@ import paths from '@/constants/routePath';
 import './myPlantMainPage.scss';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
-import MainPagePlantList from '../MyPlantList';
+import MainPagePlantList from './MyPlantList';
 import Progress from '@/components/progress/Progress';
 
 import PLUS_ICON from '@/assets/images/icons/ph_plus-light.png';
