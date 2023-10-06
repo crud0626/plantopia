@@ -7,7 +7,7 @@ import { PlantType } from '@/@types/dictionary.type';
 import paths from '@/constants/routePath';
 import './dictSearchPage.scss';
 import Progress from '@/components/progress/Progress';
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
+import PageHeader from '@/components/pageHeader/PageHeader';
 
 import SEARCH_ICON from '@/assets/images/icons/dict_search.png';
 
@@ -65,7 +65,7 @@ const DictSearchPage = () => {
 
   return (
     <div className="search_container layout">
-      <HeaderBefore title="검색 결과" />
+      <PageHeader title="검색 결과" />
       <main className="inner">
         <section className="search_wrapper">
           <form onSubmit={handleSubmit}>

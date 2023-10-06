@@ -7,7 +7,7 @@ import { waterCodeMap } from '@/constants/dictionary';
 import { showAlert } from '@/utils/dialog';
 import { UserPlant } from '@/@types/plant.type';
 
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
+import PageHeader from '@/components/pageHeader/PageHeader';
 import MyPlantForm from '../MyPlantForm';
 
 interface DictPlantInfo {
@@ -58,7 +58,7 @@ const MyPlantRegisterPage = () => {
 
   return (
     <div className="layout">
-      <HeaderBefore ex title="식물 등록" />
+      <PageHeader exitBtn title="식물 등록" />
       <main>
         <MyPlantForm
           pageName="register"

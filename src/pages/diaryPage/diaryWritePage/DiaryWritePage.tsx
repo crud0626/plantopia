@@ -7,7 +7,7 @@ import { showAlert } from '@/utils/dialog';
 import { InitialDiaryContent } from '@/@types/diary.type';
 import paths from '@/constants/routePath';
 
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
+import PageHeader from '@/components/pageHeader/PageHeader';
 import SectionPhoto from '../SectionPhoto';
 import SectionBoard from '../SectionBoard';
 import './diaryWritePage.scss';
@@ -109,7 +109,7 @@ const DiaryWritePage = () => {
 
   return (
     <div className="layout">
-      <HeaderBefore ex title="글쓰기" />
+      <PageHeader exitBtn title="글쓰기" />
       {user?.email && (
         <>
           <main className="diary_main">

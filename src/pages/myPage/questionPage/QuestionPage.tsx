@@ -1,5 +1,5 @@
 import { Children, useState } from 'react';
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
+import PageHeader from '@/components/pageHeader/PageHeader';
 import Footer from '@/components/footer/Footer';
 import './questionPage.scss';
 import BTN_DOWN from '@/assets/images/icons/button_down.png';
@@ -34,7 +34,7 @@ const QuestionPage = () => {
 
   return (
     <div className="noti_container layout">
-      <HeaderBefore title="자주 묻는 질문" />
+      <PageHeader title="자주 묻는 질문" />
       <main>
         <h2 className="noti_title">궁금한 점이 있으신가요?</h2>
         <section className="list_box inner">

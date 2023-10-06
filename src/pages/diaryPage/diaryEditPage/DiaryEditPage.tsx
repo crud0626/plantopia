@@ -7,7 +7,7 @@ import { getUserDiary, updateDiary } from '@/api/userDiary';
 import { useAuth } from '@/hooks';
 import paths from '@/constants/routePath';
 
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
+import PageHeader from '@/components/pageHeader/PageHeader';
 import SectionPhoto from '../SectionPhoto';
 import SectionBoard from '../SectionBoard';
 import './diaryEditPage.scss';
@@ -117,7 +117,7 @@ const DiaryEditPage = () => {
 
   return (
     <div className="layout">
-      <HeaderBefore ex={true} title="수정하기" />
+      <PageHeader exitBtn title="수정하기" />
       <main className="diary_write_wrap">
         {contents && docId && (
           <>

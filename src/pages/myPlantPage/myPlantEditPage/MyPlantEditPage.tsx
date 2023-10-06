@@ -5,7 +5,7 @@ import { showAlert } from '@/utils/dialog';
 import { UserPlant } from '@/@types/plant.type';
 import paths from '@/constants/routePath';
 
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
+import PageHeader from '@/components/pageHeader/PageHeader';
 import Progress from '@/components/progress/Progress';
 import MyPlantForm from '../MyPlantForm';
 import { useAuth } from '@/hooks';
@@ -66,7 +66,7 @@ const MyPlantEditPage = () => {
 
   return (
     <div className="layout">
-      <HeaderBefore ex title="식물 수정" />
+      <PageHeader exitBtn title="식물 수정" />
       <main>
         {userPlant && (
           <MyPlantForm

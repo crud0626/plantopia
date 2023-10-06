@@ -2,7 +2,7 @@ import { Children, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { codeInfo } from '@/constants/dictionary';
 import { PlantType } from '@/@types/dictionary.type';
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
+import PageHeader from '@/components/pageHeader/PageHeader';
 import paths from '@/constants/routePath';
 import './dictDetailPage.scss';
 
@@ -75,7 +75,7 @@ const DictDetailPage = () => {
 
   return (
     <div className="layout">
-      <HeaderBefore title="식물 상세" />
+      <PageHeader title="식물 상세" />
       <main className="detail_container">
         {plantData && (
           <>

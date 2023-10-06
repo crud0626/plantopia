@@ -17,7 +17,7 @@ import { getPlantInfo } from '@/api/dictionary';
 import paths from '@/constants/routePath';
 
 import './myPlantDetailPage.scss';
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
+import PageHeader from '@/components/pageHeader/PageHeader';
 import Progress from '@/components/progress/Progress';
 import EDIT_ICON from '@/assets/images/icons/my_plant_detail_edit_icon.png';
 
@@ -76,7 +76,7 @@ const MyPlantDetailPage = () => {
 
   return (
     <div className="layout">
-      <HeaderBefore title="내 식물 상세" />
+      <PageHeader title="내 식물 상세" />
       {plantDetail && (
         <main>
           <div className="my_plant_detail_upper_container">

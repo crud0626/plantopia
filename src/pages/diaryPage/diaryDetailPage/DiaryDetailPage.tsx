@@ -7,7 +7,7 @@ import { showAlert, showConfirm } from '@/utils/dialog';
 import { DiaryContentTypes } from '@/@types/diary.type';
 import paths from '@/constants/routePath';
 
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
+import PageHeader from '@/components/pageHeader/PageHeader';
 import Progress from '@/components/progress/Progress';
 import DetailSlide from './DetailSlide';
 import './diaryDetailPage.scss';
@@ -77,7 +77,7 @@ const DiaryDetailPage = () => {
 
   return (
     <div className="diary_detail_wrap layout">
-      <HeaderBefore title="다이어리" />
+      <PageHeader title="다이어리" />
       <div className="more_btn_wrap">
         <button
           className="more"

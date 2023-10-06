@@ -10,7 +10,7 @@ import { showAlert } from '@/utils/dialog';
 import { getUserPlantList } from '@/api/userPlant';
 
 import Progress from '@/components/progress/Progress';
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
+import PageHeader from '@/components/pageHeader/PageHeader';
 
 import './calendarPage.scss';
 
@@ -143,7 +143,7 @@ const CalendarPage = () => {
 
   return (
     <div className="layout">
-      <HeaderBefore ex={true} title="물주기 기록" />
+      <PageHeader exitBtn title="물주기 기록" />
       <main className="calendar_page">
         <section className="calendar_wrap inner">
           <Calendar
