@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks';
 import { showAlert } from '@/utils/dialog';
 import { logout } from '@/api/auth';
-
+import paths from '@/constants/routePath';
 import './myPage.scss';
 import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
@@ -52,7 +52,7 @@ const MyPage = () => {
               <strong>{user?.displayName}</strong>
               <p>{user?.email}</p>
             </div>
-            <Link to="/mypage/info" className="edit_info">
+            <Link to={paths.mypageInfo} className="edit_info">
               내 정보 수정하기
             </Link>
           </div>

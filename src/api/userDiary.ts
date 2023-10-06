@@ -30,7 +30,11 @@ const getUserDiary = async (diaryId: string) => {
   const snapshot = await getDoc(ref);
 
   if (snapshot.exists()) {
-    const result = snapshot.data() as DiaryContentTypes;
+    const result: DiaryContentTypes = {
+      id: snapshot.id,
+      ...(snapshot.data() as Omit<DiaryContentTypes, 'id'>),
+    };
+
     return result;
   }
 };

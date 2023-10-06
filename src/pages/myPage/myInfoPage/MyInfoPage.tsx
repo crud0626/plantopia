@@ -5,7 +5,8 @@ import { nicknameRe } from '@/constants/regEx';
 import { updateUserInfo } from '@/api/auth';
 import { uploadImg } from '@/api/storage';
 import { showAlert } from '@/utils/dialog';
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
+import PageHeader from '@/components/pageHeader/PageHeader';
+import paths from '@/constants/routePath';
 import './myInfoPage.scss';
 
 import PROFILE from '@/assets/images/icons/default_profile.png';
@@ -75,7 +76,7 @@ const MyInfo = () => {
       await updateUserInfo(password, nickname.trim(), imgUrl);
 
       showAlert('success', '회원정보 수정에 성공했습니다.');
-      navigate('/mypage');
+      navigate(paths.mypage);
     } catch (error) {
       showAlert('error', '회원정보 수정에 실패했습니다.');
     } finally {
@@ -85,7 +86,7 @@ const MyInfo = () => {
 
   return (
     <div className="my_info_page layout">
-      <HeaderBefore title="내 정보" />
+      <PageHeader title="내 정보" />
       <main className="my_info_container inner">
         <section className="profile_section">
           <div className="profile">

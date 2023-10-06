@@ -3,10 +3,11 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { getUserPlant, updateUserPlant } from '@/api/userPlant';
 import { showAlert } from '@/utils/dialog';
 import { UserPlant } from '@/@types/plant.type';
+import paths from '@/constants/routePath';
 
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
+import PageHeader from '@/components/pageHeader/PageHeader';
 import Progress from '@/components/progress/Progress';
-import MyPlantForm from '../MyPlantForm';
+import MyPlantForm from '@/components/myPlantForm/MyPlantForm';
 import { useAuth } from '@/hooks';
 
 const MyPlantEditPage = () => {
@@ -34,7 +35,7 @@ const MyPlantEditPage = () => {
       });
 
       showAlert('success', '식물 정보를 수정하였습니다!');
-      navigate('/myplant');
+      navigate(paths.myplant);
     } catch (error) {
       showAlert('error', '식물 수정에 실패하였습니다.');
     } finally {
@@ -56,7 +57,7 @@ const MyPlantEditPage = () => {
         setUserPlant(plantInfo);
       } catch (error) {
         showAlert('error', '식물 정보를 가져올 수 없습니다.');
-        navigate('/myplant');
+        navigate(paths.myplant);
       } finally {
         setIsLoading(false);
       }
@@ -65,7 +66,7 @@ const MyPlantEditPage = () => {
 
   return (
     <div className="layout">
-      <HeaderBefore ex title="식물 수정" />
+      <PageHeader exitBtn title="식물 수정" />
       <main>
         {userPlant && (
           <MyPlantForm

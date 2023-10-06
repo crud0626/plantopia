@@ -1,137 +1,70 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/hooks';
 import { saveDiary } from '@/api/userDiary';
 import { getUserPlantList } from '@/api/userPlant';
-import { useAuth } from '@/hooks';
 import { showAlert } from '@/utils/dialog';
 import { InitialDiaryContent } from '@/@types/diary.type';
+import paths from '@/constants/routePath';
 
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
-import SectionPhoto from '../SectionPhoto';
-import SectionBoard from '../SectionBoard';
 import './diaryWritePage.scss';
-
-const initialContents: InitialDiaryContent = {
-  userEmail: '',
-  title: '',
-  content: '',
-  tags: [],
-  imgUrls: [],
-};
+import PageHeader from '@/components/pageHeader/PageHeader';
+import DiaryForm from '@/components/diaryForm/DiaryForm';
+import Progress from '@/components/progress/Progress';
 
 const DiaryWritePage = () => {
   const user = useAuth();
   const navigate = useNavigate();
-  const [isSaving, setIsSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [plantNames, setPlantNames] = useState<string[]>([]);
-  const [contents, setContents] =
-    useState<InitialDiaryContent>(initialContents);
 
-  const handleTags = (targetTag: string) => {
-    if (!contents) return;
-
-    const prevTags = [...contents.tags];
-    const hasTarget = prevTags.includes(targetTag);
-
-    const newTags = hasTarget
-      ? prevTags.filter(name => name !== targetTag)
-      : [...prevTags, targetTag];
-
-    setContents({
-      ...contents,
-      tags: newTags,
-    });
-  };
-
-  const validateInput = () => {
-    const { title, tags, content } = contents;
-
-    if (!title || tags.length === 0 || !content) {
-      const msg = !title
-        ? '제목을 작성해주세요.'
-        : tags.length === 0
-        ? '관련 식물을 1가지 이상 선택해주세요.'
-        : '내용을 작성해주세요.';
-
-      showAlert('error', msg);
-      return false;
-    }
-
-    return true;
-  };
-
-  const handleSaveClick = async () => {
-    if (!validateInput() || !contents.userEmail) return;
-
+  const handleClickSave = async (contents: InitialDiaryContent) => {
     try {
-      setIsSaving(true);
+      if (!contents.userEmail) throw Error();
 
       await saveDiary(contents);
 
       showAlert('success', '저장이 완료되었어요!');
-      navigate('/diary');
+      navigate(paths.diary);
     } catch (error) {
       showAlert('error', '저장에 실패하였습니다.');
-    } finally {
-      setIsSaving(false);
     }
-  };
-
-  const handleContents = (
-    key: keyof InitialDiaryContent,
-    value: InitialDiaryContent[typeof key],
-  ) => {
-    if (!contents) return;
-
-    setContents({
-      ...contents,
-      [key]: value,
-    });
   };
 
   useEffect(() => {
     (async () => {
       if (!user?.email) return;
 
-      const userEmail = user.email;
       try {
-        const plantList = await getUserPlantList(userEmail);
-        const userPlantNames = plantList.map(({ nickname }) => nickname);
+        setIsLoading(true);
 
-        setContents(prev => ({ ...prev, userEmail }));
-        setPlantNames(userPlantNames);
+        const plantNames = await getUserPlantList(user.email).then(plants =>
+          plants.map(({ nickname }) => nickname),
+        );
+
+        setPlantNames(plantNames);
       } catch (error) {
         showAlert('error', '유저 데이터를 가져오던 도중 에러가 발생했습니다.');
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, [user?.email]);
 
   return (
     <div className="layout">
-      <HeaderBefore ex title="글쓰기" />
-      {user?.email && (
-        <>
-          <main className="diary_main">
-            <SectionPhoto
-              imgUrls={contents.imgUrls}
-              handleContents={handleContents}
-            />
-            <SectionBoard
-              contents={contents}
-              handleContents={handleContents}
-              plantNames={plantNames}
-              handleTags={handleTags}
-            />
-          </main>
-          <button
-            className="save_button"
-            onClick={handleSaveClick}
-            disabled={isSaving}
-          >
-            {isSaving ? '저장 중...' : '저장하기'}
-          </button>
-        </>
-      )}
+      <main className="diary_write_wrap">
+        <PageHeader exitBtn title="글쓰기" />
+        {user?.email && (
+          <DiaryForm
+            callerType="write"
+            plantNames={plantNames}
+            oldContents={{ userEmail: user.email }}
+            onSubmit={handleClickSave}
+          />
+        )}
+      </main>
+      {isLoading && <Progress />}
     </div>
   );
 };

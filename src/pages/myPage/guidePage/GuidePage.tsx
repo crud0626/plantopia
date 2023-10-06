@@ -1,6 +1,6 @@
 import { Children, useState } from 'react';
 import './guidePage.scss';
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
+import PageHeader from '@/components/pageHeader/PageHeader';
 import Footer from '@/components/footer/Footer';
 import CHROME_IMG from '@/assets/images/pwa_chrome.png';
 import IOS_IMG from '@/assets/images/pwa_ios.png';
@@ -36,7 +36,7 @@ const NotiPage = () => {
 
   return (
     <div className="noti_container layout">
-      <HeaderBefore title="사용 가이드" />
+      <PageHeader title="사용 가이드" />
       <main>
         <h2 className="noti_title">앱처럼 사용해 보세요!</h2>
         <section className="list_box inner">

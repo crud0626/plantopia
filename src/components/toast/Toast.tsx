@@ -5,15 +5,8 @@ export const Toast = () => {
     <ToastContainer
       position="top-center"
       autoClose={2000}
-      hideProgressBar
-      newestOnTop={false}
-      closeOnClick
-      rtl={false}
-      pauseOnFocusLoss
-      draggable
-      pauseOnHover
-      theme="light"
       transition={Slide}
+      hideProgressBar
     />
   );
 };

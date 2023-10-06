@@ -4,10 +4,10 @@ import { koreanRe } from '@/constants/regEx';
 import { getPlantSearchResults } from '@/api/dictionary';
 import { showAlert } from '@/utils/dialog';
 import { PlantType } from '@/@types/dictionary.type';
-
+import paths from '@/constants/routePath';
 import './dictSearchPage.scss';
 import Progress from '@/components/progress/Progress';
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
+import PageHeader from '@/components/pageHeader/PageHeader';
 
 import SEARCH_ICON from '@/assets/images/icons/dict_search.png';
 
@@ -65,7 +65,7 @@ const DictSearchPage = () => {
 
   return (
     <div className="search_container layout">
-      <HeaderBefore title="검색 결과" />
+      <PageHeader title="검색 결과" />
       <main className="inner">
         <section className="search_wrapper">
           <form onSubmit={handleSubmit}>
@@ -85,7 +85,10 @@ const DictSearchPage = () => {
           {results.length ? (
             Children.toArray(
               results.map(plant => (
-                <Link to={`/dict/detail?plantName=${plant.name}`} state={plant}>
+                <Link
+                  to={`${paths.dictDetail}?plantName=${plant.name}`}
+                  state={plant}
+                >
                   <div className="plant_wrapper">
                     <img src={plant.imageUrl} alt="plant" />
                     <div className="name_wrapper">

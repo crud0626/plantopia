@@ -4,7 +4,7 @@ import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { InitialDiaryContent } from '@/@types/diary.type';
 import { valueof } from '@/@types';
 
-import './sectionBoard.scss';
+import './boardSection.scss';
 
 interface SectionBoardProps {
   contents: InitialDiaryContent;
@@ -16,7 +16,7 @@ interface SectionBoardProps {
   handleTags: (targetTag: string) => void;
 }
 
-const SectionBoard = ({
+const BoardSection = ({
   contents,
   handleContents,
   plantNames,
@@ -127,4 +127,4 @@ const SectionBoard = ({
   );
 };
 
-export default SectionBoard;
+export default BoardSection;

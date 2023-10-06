@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
+import paths from '@/constants/routePath';
 import './footer.scss';
 
 import DICT_ON from '@/assets/images/icons/dict_on.png';
@@ -14,31 +15,49 @@ import HOME from '@/assets/images/icons/home.png';
 const Footer = () => {
   const location = useLocation();
 
-  const dictActive = location.pathname.includes('/dict');
-  const diaryActive = location.pathname.includes('/diary');
-  const myPlantActive = location.pathname.includes('/myplant');
-  const myPageActive = location.pathname.includes('/mypage');
+  const activeMapper = (path: string) => {
+    if (location.pathname.includes(path)) {
+      return 'active';
+    }
+
+    return '';
+  };
 
   return (
     <footer className="inner footer">
       <nav>
-        <Link className={`btn ${dictActive ? 'active' : ''}`} to="/dict">
-          <img src={dictActive ? DICT_ON : DICT_OFF} alt="plant dictionary" />
+        <Link to={paths.dict} className={`btn ${activeMapper(paths.dict)}`}>
+          <img
+            src={activeMapper(paths.dict) ? DICT_ON : DICT_OFF}
+            alt="dictionary"
+          />
           식물도감
         </Link>
-        <Link className={`btn ${diaryActive ? 'active' : ''}`} to="/diary">
-          <img src={diaryActive ? DIARY_ON : DIARY_OFF} alt="diary" />
+        <Link to={paths.diary} className={`btn ${activeMapper(paths.diary)}`}>
+          <img
+            src={activeMapper(paths.diary) ? DIARY_ON : DIARY_OFF}
+            alt="diary"
+          />
           다이어리
         </Link>
-        <Link className="home_btn" to="/">
+        <Link to={paths.main} className="home_btn">
           <img src={HOME} className="main_logo" alt="home" />
         </Link>
-        <Link className={`btn ${myPlantActive ? 'active' : ''}`} to="/myplant">
-          <img src={myPlantActive ? MYPLANT_ON : MYPLANT_OFF} alt="myplant" />
+        <Link
+          to={paths.myplant}
+          className={`btn ${activeMapper(paths.myplant)}`}
+        >
+          <img
+            src={activeMapper(paths.myplant) ? MYPLANT_ON : MYPLANT_OFF}
+            alt="myplant"
+          />
           내식물
         </Link>
-        <Link className={`btn ${myPageActive ? 'active' : ''}`} to="/mypage">
-          <img src={myPageActive ? MYPAGE_ON : MYPAGE_OFF} alt="my" />
+        <Link to={paths.mypage} className={`btn ${activeMapper(paths.mypage)}`}>
+          <img
+            src={activeMapper(paths.mypage) ? MYPAGE_ON : MYPAGE_OFF}
+            alt="my"
+          />
           MY
         </Link>
       </nav>

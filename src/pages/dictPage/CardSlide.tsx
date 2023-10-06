@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation } from 'swiper/modules';
 import { CategoryNames, PlantType } from '@/@types/dictionary.type';
+import paths from '@/constants/routePath';
 
 import './cardSlide.scss';
 import PLANT1_ICON from '@/assets/images/icons/dict_plant1.png';
@@ -66,7 +67,10 @@ const CardSlide = ({ type, category, plants }: CardContentTypes) => {
         {Children.toArray(
           plants.map(plant => (
             <SwiperSlide className="plant_wrapper">
-              <Link to={`/dict/detail?plantName=${plant.name}`} state={plant}>
+              <Link
+                to={`${paths.dictDetail}?plantName=${plant.name}`}
+                state={plant}
+              >
                 <img
                   className={category === 'beginner' ? 'img_two' : 'img_three'}
                   src={plant.imageUrl}

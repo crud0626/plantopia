@@ -14,9 +14,10 @@ import {
   updateUserPlant,
 } from '@/api/userPlant';
 import { getPlantInfo } from '@/api/dictionary';
+import paths from '@/constants/routePath';
 
 import './myPlantDetailPage.scss';
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
+import PageHeader from '@/components/pageHeader/PageHeader';
 import Progress from '@/components/progress/Progress';
 import EDIT_ICON from '@/assets/images/icons/my_plant_detail_edit_icon.png';
 
@@ -44,7 +45,7 @@ const MyPlantDetailPage = () => {
       }
 
       showAlert('success', '내 식물이 삭제 되었습니다.');
-      navigate('/myplant');
+      navigate(paths.myplant);
     } catch (error) {
       showAlert('error', '에러가 발생했습니다.');
     }
@@ -75,7 +76,7 @@ const MyPlantDetailPage = () => {
 
   return (
     <div className="layout">
-      <HeaderBefore title="내 식물 상세" />
+      <PageHeader title="내 식물 상세" />
       {plantDetail && (
         <main>
           <div className="my_plant_detail_upper_container">
@@ -101,7 +102,7 @@ const MyPlantDetailPage = () => {
               </p>
             </div>
             <Link
-              to={`/myplant/${docId}/edit`}
+              to={`${paths.myplantEdit}/${docId}`}
               state={plantDetail}
               className="my_plant_detail_edit_btn"
             >
@@ -185,7 +186,7 @@ const MyPlantDetailPage = () => {
               </div>
             )}
             <Link
-              to={`/dict/detail?plantName=${plantDictDetail?.name}`}
+              to={`${paths.dictDetail}?plantName=${plantDictDetail?.name}`}
               state={plantDictDetail}
               className="more_info_btn"
             >

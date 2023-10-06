@@ -2,7 +2,8 @@ import { Children, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { codeInfo } from '@/constants/dictionary';
 import { PlantType } from '@/@types/dictionary.type';
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
+import PageHeader from '@/components/pageHeader/PageHeader';
+import paths from '@/constants/routePath';
 import './dictDetailPage.scss';
 
 import ADD_ICON from '@/assets/images/icons/dict_post.png';
@@ -68,13 +69,13 @@ const DictDetailPage = () => {
   useEffect(() => {
     if (!plantData) {
       showAlert('error', '잘못된 접근입니다.');
-      navaigate('/dict');
+      navaigate(paths.dict);
     }
   }, []);
 
   return (
     <div className="layout">
-      <HeaderBefore title="식물 상세" />
+      <PageHeader title="식물 상세" />
       <main className="detail_container">
         {plantData && (
           <>
@@ -82,7 +83,7 @@ const DictDetailPage = () => {
               <img src={plantData.imageUrl} alt="plant image" />
               <h3 className="english_name">{plantData.scientificName}</h3>
               <h3 className="korean_name">{plantData.name}</h3>
-              <Link to="/myplant/register" state={registerState}>
+              <Link to={paths.myplantRegister} state={registerState}>
                 <img src={ADD_ICON} alt="plant add image" />내 식물로 등록
               </Link>
             </section>

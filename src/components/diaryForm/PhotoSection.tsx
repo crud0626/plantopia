@@ -4,7 +4,7 @@ import { deleteImg, uploadImg } from '@/api/storage';
 import { InitialDiaryContent } from '@/@types/diary.type';
 import { showAlert } from '@/utils/dialog';
 
-import './sectionPhoto.scss';
+import './photoSection.scss';
 
 interface SectionPhotoProps {
   imgUrls: string[];
@@ -16,7 +16,7 @@ interface SectionPhotoProps {
 
 const imgLimit = 4;
 
-const SectionPhoto = ({ imgUrls, handleContents }: SectionPhotoProps) => {
+const PhotoSection = ({ imgUrls, handleContents }: SectionPhotoProps) => {
   const handleAdd = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
 
@@ -52,7 +52,7 @@ const SectionPhoto = ({ imgUrls, handleContents }: SectionPhotoProps) => {
     <section className="photo_section inner">
       {imgCount < imgLimit && (
         <div className="upload_button_wrapper">
-          <button className="upload_button">
+          <button type="button" className="upload_button">
             <label htmlFor="photoInput" className="photo_label">
               <div className="photo_counter">
                 <span className="current_count">{imgCount}</span>
@@ -94,4 +94,4 @@ const SectionPhoto = ({ imgUrls, handleContents }: SectionPhotoProps) => {
   );
 };
 
-export default SectionPhoto;
+export default PhotoSection;

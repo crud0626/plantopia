@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserPlant } from '@/@types/plant.type';
+import paths from '@/constants/routePath';
 
 import './myPlantList.scss';
 import BOOKMARK_TRUE from '@/assets/images/icons/main_plant_true_icon.png';
@@ -30,7 +31,7 @@ const MainPagePlantList = ({
   const sortedPlants = useMemo(() => userPlants.sort(compare), [userPlants]);
 
   const handleEditData = (clickedPlant: UserPlant) => {
-    navigate(`/myplant/${clickedPlant.id}/edit`, {
+    navigate(`${paths.myplantEdit}/${clickedPlant.id}`, {
       state: clickedPlant,
     });
   };
@@ -40,7 +41,7 @@ const MainPagePlantList = ({
       {sortedPlants.map(plant => (
         <Link
           key={plant.id}
-          to={`/myplant/${plant.id}`}
+          to={`${paths.myplant}/${plant.id}`}
           className="subplant_list_box_link"
         >
           <div className="subplant_list_box">

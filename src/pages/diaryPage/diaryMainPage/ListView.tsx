@@ -6,6 +6,7 @@ import { DiaryContentTypes } from '@/@types/diary.type';
 
 import NoContent from './NoContent';
 import './listView.scss';
+import paths from '@/constants/routePath';
 
 interface ListViewProps {
   diaryData: DiaryContentTypes[] | null;
@@ -44,7 +45,7 @@ const ListView = ({ diaryData, handleDelete }: ListViewProps) => {
         <ul className="diary_list_wrap">
           {diaryData.map(diary => (
             <li className="diary_list" key={diary.id}>
-              <Link to={`/diary/${diary.id}`}>
+              <Link to={`${paths.diary}/${diary.id}`}>
                 <div className="left_box">
                   <h5 className="title">{diary.title}</h5>
                   <p className="content">{diary.content}</p>
@@ -73,7 +74,7 @@ const ListView = ({ diaryData, handleDelete }: ListViewProps) => {
                 <div className="more_modal">
                   <div
                     className="btn modify"
-                    onClick={() => navigate(`/diary/${diary.id}/edit`)}
+                    onClick={() => navigate(`${paths.diaryEdit}/${diary.id}`)}
                   >
                     게시글 수정
                   </div>
