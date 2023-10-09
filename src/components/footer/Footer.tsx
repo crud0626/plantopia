@@ -2,15 +2,15 @@ import { Link, useLocation } from 'react-router-dom';
 import paths from '@/constants/routePath';
 import './footer.scss';
 
-import DICT_ON from '@/assets/images/icons/dict_on.png';
-import DICT_OFF from '@/assets/images/icons/dict_off.png';
-import DIARY_ON from '@/assets/images/icons/diary_on.png';
-import DIARY_OFF from '@/assets/images/icons/diary_off.png';
-import MYPLANT_ON from '@/assets/images/icons/myplant_on.png';
-import MYPLANT_OFF from '@/assets/images/icons/myplant_off.png';
-import MYPAGE_ON from '@/assets/images/icons/mypage_on.png';
-import MYPAGE_OFF from '@/assets/images/icons/mypage_off.png';
-import HOME from '@/assets/images/icons/home.png';
+import DICT_ON from '@/assets/images/icons/nav/dict_on.png';
+import DICT_OFF from '@/assets/images/icons/nav/dict_off.png';
+import DIARY_ON from '@/assets/images/icons/nav/diary_on.png';
+import DIARY_OFF from '@/assets/images/icons/nav/diary_off.png';
+import MYPLANT_ON from '@/assets/images/icons/nav/myplant_on.png';
+import MYPLANT_OFF from '@/assets/images/icons/nav/myplant_off.png';
+import MYPAGE_ON from '@/assets/images/icons/nav/mypage_on.png';
+import MYPAGE_OFF from '@/assets/images/icons/nav/mypage_off.png';
+import HOME from '@/assets/images/icons/nav/home.png';
 
 const Footer = () => {
   const location = useLocation();

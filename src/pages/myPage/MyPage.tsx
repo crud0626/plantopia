@@ -9,7 +9,7 @@ import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
 import Progress from '@/components/progress/Progress';
 
-import PROFILE from '@/assets/images/icons/default_profile.png';
+import PROFILE from '@/assets/images/profile.png';
 
 const customerService = [
   { title: '사용 가이드', url: '/mypage/guide' },

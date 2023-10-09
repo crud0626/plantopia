@@ -9,7 +9,7 @@ import PageHeader from '@/components/pageHeader/PageHeader';
 import paths from '@/constants/routePath';
 import './myInfoPage.scss';
 
-import PROFILE from '@/assets/images/icons/default_profile.png';
+import PROFILE from '@/assets/images/profile.png';
 
 const MyInfo = () => {
   const user = useAuth();

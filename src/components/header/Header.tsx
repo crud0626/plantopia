@@ -3,7 +3,7 @@ import paths from '@/constants/routePath';
 import { useAuth } from '@/hooks';
 
 import './header.scss';
-import MAIN_LOGO from '@/assets/images/icons/main_logo.png';
+import MAIN_LOGO from '@/assets/images/main_logo.png';
 import CALENDAR from '@/assets/images/icons/calendar.png';
 
 interface HeaderProps {

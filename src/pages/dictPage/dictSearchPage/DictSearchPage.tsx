@@ -9,7 +9,7 @@ import './dictSearchPage.scss';
 import Progress from '@/components/progress/Progress';
 import PageHeader from '@/components/pageHeader/PageHeader';
 
-import SEARCH_ICON from '@/assets/images/icons/dict_search.png';
+import SEARCH_ICON from '@/assets/images/icons/search.png.png';
 
 const EmptyResult = () => {
   return (

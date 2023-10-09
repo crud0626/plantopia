@@ -9,9 +9,9 @@ import { valueof } from '@/@types';
 import paths from '@/constants/routePath';
 
 import './myPlantForm.scss';
-import DEFAULT_IMG from '@/assets/images/icons/sample_plant1.png';
-import EDIT_ICON from '@/assets/images/icons/solar_pen-bold.png';
-import SEARCH_ICON from '@/assets/images/icons/my_plant_input_glass.png';
+import DEFAULT_IMG from '@/assets/images/default_plant.png';
+import EDIT_ICON from '@/assets/images/icons/edit.png';
+import SEARCH_ICON from '@/assets/images/icons/search.png';
 
 interface FormStateTypes
   extends Pick<

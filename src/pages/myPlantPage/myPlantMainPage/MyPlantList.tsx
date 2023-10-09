@@ -4,9 +4,9 @@ import { UserPlant } from '@/@types/plant.type';
 import paths from '@/constants/routePath';
 
 import './myPlantList.scss';
-import BOOKMARK_TRUE from '@/assets/images/icons/main_plant_true_icon.png';
-import BOOKMARK_FALSE from '@/assets/images/icons/main_plant_false_icon.png';
-import EDIT_ICON from '@/assets/images/icons/my_plants_edit_icon.png';
+import BOOKMARK_TRUE from '@/assets/images/icons/bookmark.png';
+import BOOKMARK_FALSE from '@/assets/images/icons/bookmark_empty.png';
+import EDIT_ICON from '@/assets/images/icons/edit_gray.png';
 
 interface MainPagePlantListProps {
   userPlants: UserPlant[];

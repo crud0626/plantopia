@@ -14,7 +14,7 @@ import ListView from './ListView';
 import GalleryView from './GalleryView';
 
 import './diaryMainPage.scss';
-import ADD_BTN from '@/assets/images/icons/diary_add.png';
+import ADD_BTN from '@/assets/images/icons/add_white.png';
 
 type DiaryViewTypes = 'List' | 'Gallery';
 

@@ -47,14 +47,14 @@
         padding: 0;
         width: 1.8rem;
         height: 1.8rem;
-        background: url('../../assets/images/icons/calendar_prev.png') no-repeat
+        background: url('@/assets/images/icons/calendar_prev.png') no-repeat
           left center / contain;
       }
       .react-calendar__navigation__next-button {
         padding: 0;
         width: 1.8rem;
         height: 1.8rem;
-        background: url('../../assets/images/icons/calendar_next.png') no-repeat
+        background: url('@/assets/images/icons/calendar_next.png') no-repeat
           right center / contain;
       }
 
@@ -149,8 +149,8 @@
     .date_title {
       display: inline-block;
       padding: 0.2rem 0 0.2rem 2.2rem;
-      background: url('../../assets/images/icons/icon_calendar.png') no-repeat
-        left center / 1.6rem;
+      background: url('@/assets/images/icons/icon_calendar.png') no-repeat left
+        center / 1.6rem;
       font-size: 1.3rem;
       font-weight: 700;
     }
@@ -263,7 +263,7 @@
         padding-top: 5.4rem;
         color: #9b9fb1;
         font-size: 1.2rem;
-        background: url('../../assets/images/icons/icon_point.png') no-repeat
+        background: url('@/assets/images/icons/exclamation.png') no-repeat
           center top / 4.2rem;
       }
     }

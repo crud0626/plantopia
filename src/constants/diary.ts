@@ -1,8 +1,7 @@
-/* 메인페이지 - 탭 구분 */
-import LISTON from '@/assets/images/icons/diary_list_tab_on.png';
-import LISTOFF from '@/assets/images/icons/diary_list_tab_off.png';
-import GALLERYON from '@/assets/images/icons/diary_gallery_tab_on.png';
-import GALLERYOFF from '@/assets/images/icons/diary_gallery_tab_off.png';
+import LISTON from '@/assets/images/icons/hamburger.png';
+import LISTOFF from '@/assets/images/icons/hamburger_gray.png';
+import GALLERYON from '@/assets/images/icons/grid.png';
+import GALLERYOFF from '@/assets/images/icons/grid_gray.png';
 
 export const DiaryImages = {
   LISTON,
