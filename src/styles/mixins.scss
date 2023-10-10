@@ -32,3 +32,15 @@ $arrow-type: (
     object-fit: cover;
   }
 }
+
+@mixin multiple-icon($distance: 0px, $size: 1rem) {
+  content: '';
+  display: block;
+  position: absolute;
+  right: $distance;
+  top: $distance;
+  width: $size;
+  height: $size;
+  background: url('@/assets/icons/popup.png') no-repeat center / contain;
+  opacity: 0.9;
+}

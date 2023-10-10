@@ -1,3 +1,5 @@
+@use '@/styles/mixins';
+
 .gallery_view {
   width: 100%;
   display: grid;
@@ -13,6 +15,10 @@
     height: 10.3rem;
     border-radius: 0.3rem;
 
+    &.multiple::before {
+      @include mixins.multiple-icon(0.5rem, 1.5rem);
+    }
+
     > img {
       width: 100%;
       height: 100%;
@@ -20,17 +26,4 @@
       object-fit: cover;
     }
   }
-}
-
-/* 사진이 여러장인 경우 */
-.multiple::before {
-  content: '';
-  position: absolute;
-  display: inline-block;
-  background: url('@/assets/icons/popup.png') no-repeat center / contain;
-  right: 0.5rem;
-  top: 0.5rem;
-  width: 1.5rem;
-  height: 1.5rem;
-  opacity: 0.9;
 }

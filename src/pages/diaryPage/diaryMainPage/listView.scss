@@ -1,3 +1,5 @@
+@use '@/styles/mixins';
+
 @mixin ellipsis($line-cnt, $line-height) {
   overflow: hidden;
   line-height: $line-height;
@@ -5,20 +7,6 @@
   display: -webkit-box;
   -webkit-line-clamp: $line-cnt;
   -webkit-box-orient: vertical;
-}
-
-@mixin diary-stack-icon($top: 0.2rem, $right: 0.2rem, $size: 1rem) {
-  &.multiple::before {
-    content: '';
-    display: block;
-    background: url('@/assets/icons/popup.png') no-repeat center / contain;
-    position: absolute;
-    right: $right;
-    top: $top;
-    width: $size;
-    height: $size;
-    opacity: 0.9;
-  }
 }
 
 .list_view {
@@ -69,13 +57,16 @@
         }
 
         > .main_img {
-          @include diary-stack-icon(0.2rem, 0.2rem, 1rem);
           position: relative;
           margin-top: 3.5rem;
           min-width: 6rem;
           min-height: 6rem;
           border-radius: 0.5rem;
           background: no-repeat center / cover;
+
+          &.multiple::before {
+            @include mixins.multiple-icon(0.2rem, 1rem);
+          }
 
           > img {
             width: 100%;
