@@ -1,4 +1,4 @@
-import POT from '@/assets/images/icons/diary_pot.png';
+import POT from '@/assets/icons/diary_pot.png';
 import './noContent.scss';
 
 const NoContent = () => {

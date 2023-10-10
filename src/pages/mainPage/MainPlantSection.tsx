@@ -5,7 +5,7 @@ import { showConfirm } from '@/utils/dialog';
 import EmptyPlant from './EmptyPlant';
 import paths from '@/constants/routePath';
 
-import WATERING from '@/assets/images/icons/watering.png';
+import WATERING from '@/assets/icons/watering.png';
 interface MainPlantProps {
   plant?: UserPlant;
   onWaterPlant: (plantId: string) => void;

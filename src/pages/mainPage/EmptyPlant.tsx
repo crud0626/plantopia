@@ -3,7 +3,7 @@ import { useAuth } from '@/hooks';
 import paths from '@/constants/routePath';
 
 import MAIN_PLANT from '@/assets/images/plants/main_plant.png';
-import EDIT_ICON from '@/assets/images/icons/add_popup.png';
+import EDIT_ICON from '@/assets/icons/add_popup.png';
 
 const EmptyPlant = () => {
   const user = useAuth();

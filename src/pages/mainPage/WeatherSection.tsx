@@ -4,7 +4,7 @@ import { fetchWeatherInfo } from '@/api/weatherApi';
 import { weatherContents } from '@/constants/weather';
 import { getGeolocation } from '@/utils/geolocation';
 
-import LOCATION from '@/assets/images/icons/location.png';
+import LOCATION from '@/assets/icons/location.png';
 
 const WeatherSection = () => {
   const [weatherInfo, setWeatherInfo] = useState<WeatherResponse | null>(null);

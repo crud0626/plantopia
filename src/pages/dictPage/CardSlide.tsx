@@ -6,10 +6,10 @@ import { CategoryNames, PlantType } from '@/@types/dictionary.type';
 import paths from '@/constants/routePath';
 
 import './cardSlide.scss';
-import PLANT1_ICON from '@/assets/images/icons/dict_plant1.png';
-import PLANT2_ICON from '@/assets/images/icons/dict_plant2.png';
-import WATER_ICON from '@/assets/images/icons/dict_water2.png';
-import MOON_ICON from '@/assets/images/icons/dict_moon.png';
+import PLANT1_ICON from '@/assets/icons/dict_plant1.png';
+import PLANT2_ICON from '@/assets/icons/dict_plant2.png';
+import WATER_ICON from '@/assets/icons/dict_water2.png';
+import MOON_ICON from '@/assets/icons/dict_moon.png';
 
 interface CardContentTypes {
   type: 'large' | 'small';

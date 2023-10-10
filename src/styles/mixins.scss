@@ -8,10 +8,10 @@ $arrow-degree: (
 );
 
 $arrow-type: (
-  'black': url(@/assets/images/icons/arrow.png),
-  'blackLight': url(@/assets/images/icons/arrow_light.png),
-  'gray': url(@/assets/images/icons/arrow_gray.png),
-  'grayLight': url(@/assets/images/icons/arrow_gray_light.png),
+  'black': url(@/assets/icons/arrow.png),
+  'blackLight': url(@/assets/icons/arrow_light.png),
+  'gray': url(@/assets/icons/arrow_gray.png),
+  'grayLight': url(@/assets/icons/arrow_gray_light.png),
 );
 
 @mixin arrow-icon($type: 'black', $direction: 'top') {

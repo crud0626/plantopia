@@ -1,7 +1,7 @@
-import LISTON from '@/assets/images/icons/hamburger.png';
-import LISTOFF from '@/assets/images/icons/hamburger_gray.png';
-import GALLERYON from '@/assets/images/icons/grid.png';
-import GALLERYOFF from '@/assets/images/icons/grid_gray.png';
+import LISTON from '@/assets/icons/hamburger.png';
+import LISTOFF from '@/assets/icons/hamburger_gray.png';
+import GALLERYON from '@/assets/icons/grid.png';
+import GALLERYOFF from '@/assets/icons/grid_gray.png';
 
 export const DiaryImages = {
   LISTON,

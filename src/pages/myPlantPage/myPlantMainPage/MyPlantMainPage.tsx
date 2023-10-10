@@ -12,10 +12,10 @@ import Footer from '@/components/footer/Footer';
 import MainPagePlantList from './MyPlantList';
 import Progress from '@/components/progress/Progress';
 
-import PLUS_ICON from '@/assets/images/icons/add_white.png';
-import EDIT_ICON from '@/assets/images/icons/add_popup.png';
+import PLUS_ICON from '@/assets/icons/add_white.png';
+import EDIT_ICON from '@/assets/icons/add_popup.png';
 import SAMPLE_PLANT from '@/assets/images/default_plant.png';
-import BOOKMARK_TRUE_ICON from '@/assets/images/icons/bookmark.png';
+import BOOKMARK_TRUE_ICON from '@/assets/icons/bookmark.png';
 
 const PLANTS_LIMIT = 10;
 

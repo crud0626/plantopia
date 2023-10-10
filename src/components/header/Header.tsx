@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks';
 
 import './header.scss';
 import MAIN_LOGO from '@/assets/images/main_logo.png';
-import CALENDAR from '@/assets/images/icons/calendar.png';
+import CALENDAR from '@/assets/icons/calendar.png';
 
 interface HeaderProps {
   isMainPage?: boolean;

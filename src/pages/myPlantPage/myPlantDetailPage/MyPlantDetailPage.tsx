@@ -19,7 +19,7 @@ import paths from '@/constants/routePath';
 import './myPlantDetailPage.scss';
 import PageHeader from '@/components/pageHeader/PageHeader';
 import Progress from '@/components/progress/Progress';
-import EDIT_ICON from '@/assets/images/icons/add_popup.png';
+import EDIT_ICON from '@/assets/icons/add_popup.png';
 
 const MyPlantDetailPage = () => {
   const user = useAuth();

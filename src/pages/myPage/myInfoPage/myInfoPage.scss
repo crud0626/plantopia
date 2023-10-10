@@ -36,8 +36,7 @@
         &::after {
           content: '';
           display: inline-block;
-          background: url('@/assets/images/icons/edit.png') no-repeat center /
-            contain;
+          background: url('@/assets/icons/edit.png') no-repeat center / contain;
           width: 1.4rem;
           height: 1.4rem;
         }

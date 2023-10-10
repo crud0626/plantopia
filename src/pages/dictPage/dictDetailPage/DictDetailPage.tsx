@@ -6,12 +6,12 @@ import PageHeader from '@/components/pageHeader/PageHeader';
 import paths from '@/constants/routePath';
 import './dictDetailPage.scss';
 
-import ADD_ICON from '@/assets/images/icons/add_popup.png';
-import PLANT3_ICON from '@/assets/images/icons/dict_plant3.png';
-import PLANT4_ICON from '@/assets/images/icons/dict_plant4.png';
-import WATER_ICON from '@/assets/images/icons/dict_water1.png';
-import WATERPOT_ICON from '@/assets/images/icons/dict_waterpot.png';
-import BUG_ICON from '@/assets/images/icons/dict_bug.png';
+import ADD_ICON from '@/assets/icons/add_popup.png';
+import PLANT3_ICON from '@/assets/icons/dict_plant3.png';
+import PLANT4_ICON from '@/assets/icons/dict_plant4.png';
+import WATER_ICON from '@/assets/icons/dict_water1.png';
+import WATERPOT_ICON from '@/assets/icons/dict_waterpot.png';
+import BUG_ICON from '@/assets/icons/dict_bug.png';
 import { showAlert } from '@/utils/dialog';
 
 const environmentContents: Array<{
