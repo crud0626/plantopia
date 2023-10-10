@@ -9,12 +9,3 @@ export const DiaryImages = {
   GALLERYON,
   GALLERYOFF,
 };
-
-/* 글쓰기 페이지 - 식물선택 */
-import ARROW_UP from '@/assets/images/icons/diary_arrow_up.png';
-import ARROW_DOWN from '@/assets/images/icons/diary_arrow_down.png';
-
-export const ArrowImages = {
-  ARROW_UP,
-  ARROW_DOWN,
-};

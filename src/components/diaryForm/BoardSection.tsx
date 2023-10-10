@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { ArrowImages } from '@/constants/diary';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { InitialDiaryContent } from '@/@types/diary.type';
 import { valueof } from '@/@types';
@@ -51,14 +50,12 @@ const BoardSection = ({
           />
         </div>
         <div className="plant_select_wrapper">
-          <div className="plant_select">
+          <div
+            className="plant_select"
+            onClick={() => setIsOpenDropdown(prev => !prev)}
+          >
             {isEmptyTag ? (
-              <div
-                className="choose_text"
-                onClick={() => setIsOpenDropdown(prev => !prev)}
-              >
-                식물을 선택하세요.
-              </div>
+              <div className="choose_text">식물을 선택하세요.</div>
             ) : (
               <div className="chosen_wrap">
                 {tags.map(tagName => (
@@ -76,17 +73,10 @@ const BoardSection = ({
                 ))}
               </div>
             )}
-            <div
-              className="arrow_icon"
-              onClick={() => setIsOpenDropdown(prev => !prev)}
-            >
-              <img
-                src={
-                  isOpenDropdown ? ArrowImages.ARROW_UP : ArrowImages.ARROW_DOWN
-                }
-                alt={isOpenDropdown ? 'Up' : 'Down'}
-              />
-            </div>
+            <button
+              type="button"
+              className={`toggle ${isOpenDropdown ? 'open' : ''}`}
+            ></button>
           </div>
           {isOpenDropdown && (
             <>

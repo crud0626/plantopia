@@ -1,3 +1,5 @@
+@use '@/styles/mixins';
+
 .noti_container {
   > main {
     min-height: calc(100vh - 5.6rem);
@@ -44,10 +46,18 @@
             font-family: 'Pretendard', Arial, sans-serif;
             color: #22264c;
 
-            > img {
-              position: absolute;
+            &::after {
+              @include mixins.arrow-icon('grayLight', 'bottom');
+              content: '';
               right: 0;
+              position: absolute;
+              display: inline-block;
               width: 1.5rem;
+              height: 1.5rem;
+            }
+
+            &.open::after {
+              @include mixins.arrow-icon('grayLight', 'top');
             }
           }
 

@@ -1,3 +1,27 @@
+@use 'sass:map';
+
+$arrow-degree: (
+  'top': rotate(0deg),
+  'right': rotate(90deg),
+  'bottom': rotate(180deg),
+  'left': rotate(270deg),
+);
+
+$arrow-type: (
+  'black': url(@/assets/images/icons/arrow.png),
+  'blackLight': url(@/assets/images/icons/arrow_light.png),
+  'gray': url(@/assets/images/icons/arrow_gray.png),
+  'grayLight': url(@/assets/images/icons/arrow_gray_light.png),
+);
+
+@mixin arrow-icon($type: 'black', $direction: 'top') {
+  background-image: map.get($arrow-type, $type);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  transform: map.get($arrow-degree, $direction);
+}
+
 @mixin avatar($radius: 0px) {
   border-radius: $radius;
 

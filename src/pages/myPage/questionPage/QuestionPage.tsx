@@ -2,8 +2,6 @@ import { Children, useState } from 'react';
 import PageHeader from '@/components/pageHeader/PageHeader';
 import Footer from '@/components/footer/Footer';
 import './questionPage.scss';
-import BTN_DOWN from '@/assets/images/icons/button_down.png';
-import BTN_UP from '@/assets/images/icons/button_up.png';
 
 const contents = [
   {
@@ -44,6 +42,7 @@ const QuestionPage = () => {
               contents.map(({ title, content }, i) => (
                 <li>
                   <button
+                    className={`${isOpenContent[i] ? 'open' : ''}`}
                     onClick={() =>
                       setIsOpenContent(prev => {
                         const newState = [...prev];
@@ -53,7 +52,7 @@ const QuestionPage = () => {
                     }
                   >
                     {title}
-                    <img src={isOpenContent[i] ? BTN_UP : BTN_DOWN} />
+                    {/* <img src={isOpenContent[i] ? BTN_UP : BTN_DOWN} /> */}
                   </button>
                   {isOpenContent[i] && (
                     <div className="content_wrapper">

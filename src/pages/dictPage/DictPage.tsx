@@ -11,7 +11,7 @@ import Footer from '@/components/footer/Footer';
 import Progress from '@/components/progress/Progress';
 
 import './dictPage.scss';
-import SEARCH_ICON from '@/assets/images/icons/search.png.png';
+import SEARCH_ICON from '@/assets/images/icons/search.png';
 
 type CardsDataTypes = {
   [key in CategoryNames]: PlantType[];

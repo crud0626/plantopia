@@ -1,3 +1,5 @@
+@use '@/styles/mixins';
+
 .my_page {
   display: flex;
   flex-direction: column;
@@ -71,9 +73,8 @@
           border-radius: 0.6rem;
           color: #22264c;
           background-color: #f2f2f2;
-          &:hover{
-          background-color: #e7e7e7;
-
+          &:hover {
+            background-color: #e7e7e7;
           }
         }
       }
@@ -102,16 +103,26 @@
           height: 4.8rem;
 
           > a {
+            display: flex;
+            align-items: center;
+            position: relative;
             margin: 0 2rem;
             padding: 0;
             width: 100%;
             text-align: left;
+            color: #22264c;
             font-size: 1.4rem;
             line-height: 4.8rem;
             cursor: pointer;
-            background: url('../../assets/images/icons/icon_move.png') no-repeat
-              right center / 16px;
-            color: #22264c;
+
+            &::after {
+              @include mixins.arrow-icon('blackLight', 'right');
+              content: '';
+              right: 0;
+              position: absolute;
+              width: 1.6rem;
+              height: 1.6rem;
+            }
           }
         }
         li ~ li {

@@ -1,12 +1,11 @@
 import { Children, useState } from 'react';
-import './guidePage.scss';
 import PageHeader from '@/components/pageHeader/PageHeader';
 import Footer from '@/components/footer/Footer';
+import './guidePage.scss';
+
 import CHROME_IMG from '@/assets/images/pwa_chrome.png';
 import IOS_IMG from '@/assets/images/pwa_ios.png';
 import ANDROID_IMG from '@/assets/images/pwa_android.png';
-import BTN_DOWN from '@/assets/images/icons/button_down.png';
-import BTN_UP from '@/assets/images/icons/button_up.png';
 
 const contents = {
   chrome: {
@@ -48,6 +47,7 @@ const NotiPage = () => {
                 return (
                   <li>
                     <button
+                      className={`${isOpenContent[name] ? 'open' : ''}`}
                       onClick={() =>
                         setIsOpenContent(prev => ({
                           ...prev,
@@ -56,7 +56,6 @@ const NotiPage = () => {
                       }
                     >
                       {title}
-                      <img src={isOpenContent[name] ? BTN_UP : BTN_DOWN} />
                     </button>
                     {isOpenContent[name] && (
                       <div className="content_wrapper">
