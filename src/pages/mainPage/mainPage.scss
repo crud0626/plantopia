@@ -106,26 +106,33 @@
   box-shadow: 0 1rem 1.6rem 0 rgba(0, 0, 0, 0.1);
 
   > .inner_circle {
-    @include mixins.avatar(50%);
-
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: 100%;
+    border-radius: 50%;
     background-color: #e4ece8;
+
+    > img {
+      @include mixins.avatar(50%);
+    }
   }
 
   > .watering_btn {
-    @include mixins.avatar(50%);
     position: absolute;
     right: 1.7rem;
     bottom: 0.7rem;
     padding: 0;
     width: 5.3rem;
     height: 5.3rem;
+    border-radius: 50%;
     background-color: #f8f8fa;
     filter: drop-shadow(0 0.4rem 2rem rgba(0, 0, 0, 0.25));
+
+    > img {
+      @include mixins.avatar(50%);
+    }
 
     > .watering_label {
       position: absolute;
@@ -261,15 +268,18 @@
         padding: 0.3rem;
 
         > .avatar {
-          @include mixins.avatar(50%);
-
           display: flex;
           justify-content: center;
           align-items: center;
           width: 100%;
           height: 100%;
+          border-radius: 50%;
           background: #ffffff;
           filter: drop-shadow(0 0.4rem 0.8rem rgba(0, 0, 0, 0.1));
+
+          > img {
+            @include mixins.avatar(50%);
+          }
         }
 
         > .name {

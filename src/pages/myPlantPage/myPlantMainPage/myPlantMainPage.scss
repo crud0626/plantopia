@@ -29,10 +29,14 @@
   width: 100%;
 
   span {
+    margin: 0 auto;
     width: 14.8rem;
     height: 14.8rem;
-    @include mixins.avatar(50%);
-    margin: 0 auto;
+    border-radius: 50%;
+
+    > img {
+      @include mixins.avatar(50%);
+    }
   }
 
   > .main_plant_head {
@@ -132,14 +136,6 @@
     font-weight: 400;
     font-size: 1.3rem;
   }
-}
-
-.main_plant_sample_img {
-  @include mixins.avatar(50%);
-  width: 14.8rem;
-  height: 14.8rem;
-  margin: 0 auto;
-  background-color: #dfe9e4;
 }
 
 .my_plant_main_add_btn_inner_contents {

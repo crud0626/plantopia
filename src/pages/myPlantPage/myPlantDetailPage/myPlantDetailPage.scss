@@ -256,10 +256,14 @@
 }
 
 .detail_img_wrap {
-  @include mixins.avatar(50%);
+  margin: 0 auto;
   width: 16rem;
   height: 16rem;
-  margin: 0 auto;
+  border-radius: 50%;
+
+  > img {
+    @include mixins.avatar(50%);
+  }
 }
 
 .detail_plant_name {
