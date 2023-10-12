@@ -1,5 +1,4 @@
 @use 'react-toastify/dist/ReactToastify.css';
-@use '@/styles/customToastStyles.scss';
 @use 'react-confirm-alert/src/react-confirm-alert.css';
 @use '@/styles/alertStyle.scss';
 @use 'reset';
@@ -28,7 +27,7 @@ body {
     background-clip: padding-box;
     border: 3px solid transparent;
   }
-  ::selection{
+  ::selection {
     background-color: #dfedec;
   }
 }
