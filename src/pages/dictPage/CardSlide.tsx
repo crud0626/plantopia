@@ -51,6 +51,8 @@ const slideContents: {
 const CardSlide = ({ type, category, plants }: CardContentTypes) => {
   const { icon, title } = slideContents[category];
 
+  const isLargeCard = type === 'large';
+
   return (
     <div className={styles.container}>
       <div className={styles.title_wrapper}>
@@ -60,8 +62,8 @@ const CardSlide = ({ type, category, plants }: CardContentTypes) => {
         <span>{title}</span>
       </div>
       <Swiper
-        slidesPerView={type === 'large' ? 2 : 3}
-        spaceBetween={type === 'large' ? 14 : 13}
+        slidesPerView={isLargeCard ? 2 : 3}
+        spaceBetween={isLargeCard ? 14 : 13}
         navigation={true}
         pagination={{ clickable: true }}
         modules={[Navigation, Pagination]}
@@ -75,27 +77,21 @@ const CardSlide = ({ type, category, plants }: CardContentTypes) => {
                 state={plant}
               >
                 <img
-                  className={
-                    category === 'beginner' ? styles.img_two : styles.img_three
-                  }
+                  className={isLargeCard ? styles.img_lg : styles.img_sm}
                   src={plant.imageUrl}
                   alt="plant"
                 />
                 <div className={styles.name_wrapper}>
                   <p
                     className={
-                      category === 'beginner'
-                        ? styles.english_name_two
-                        : styles.english_name_three
+                      isLargeCard ? styles.eng_name_lg : styles.eng_name_sm
                     }
                   >
                     {plant.scientificName}
                   </p>
                   <p
                     className={
-                      category === 'beginner'
-                        ? styles.korean_name_two
-                        : styles.korean_name_three
+                      isLargeCard ? styles.kor_name_lg : styles.kor_name_sm
                     }
                   >
                     {plant.name}

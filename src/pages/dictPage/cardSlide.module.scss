@@ -81,14 +81,14 @@
         transition: all 0.3s ease;
       }
 
-      .img_two {
+      .img_lg {
         width: 13.143rem;
         height: 13.182rem;
         margin: 1rem 0;
         border-radius: 1rem;
       }
 
-      .img_three {
+      .img_sm {
         width: 8.318rem;
         height: 8.5rem;
         margin: 0.7rem 0;
@@ -104,7 +104,7 @@
           white-space: nowrap;
           overflow: hidden;
 
-          &.english_name_two {
+          &.eng_name_lg {
             margin-top: 0.5rem;
             max-width: 13.143rem;
             height: 1.7rem;
@@ -114,7 +114,7 @@
             line-height: 0.9rem;
           }
 
-          &.korean_name_two {
+          &.kor_name_lg {
             padding-top: 0.2rem;
             max-width: 13.143rem;
             height: 2.7rem;
@@ -123,7 +123,7 @@
             max-width: 13.143rem;
           }
 
-          &.english_name_three {
+          &.eng_name_sm {
             margin-top: 0.5rem;
             max-width: 8.318rem;
             height: 1.7rem;
@@ -133,7 +133,7 @@
             line-height: 0.9rem;
           }
 
-          &.korean_name_three {
+          &.kor_name_sm {
             max-width: 8.318rem;
             height: 2rem;
             font-size: 1rem;
