@@ -1,0 +1,29 @@
+@use '@/styles/mixins';
+
+.gallery_view {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: auto;
+  grid-column-gap: 0.6rem;
+  grid-row-gap: 0.6rem;
+  padding: 2rem 2rem 4rem 2rem;
+
+  > .card {
+    position: relative;
+    width: 10.3rem;
+    height: 10.3rem;
+    border-radius: 0.3rem;
+
+    &.multiple::before {
+      @include mixins.multiple-icon(0.5rem, 1.5rem);
+    }
+
+    > img {
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      object-fit: cover;
+    }
+  }
+}

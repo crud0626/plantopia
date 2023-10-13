@@ -1,0 +1,165 @@
+/* Common Styles */
+@use 'swiper/css';
+@use 'swiper/css/navigation';
+@use 'swiper/css/pagination';
+
+/* DIARY-Detail 페이지 */
+.container {
+  position: relative;
+  padding-bottom: 3rem;
+
+  > .more_btn_wrap {
+    position: fixed;
+    width: 3rem;
+    z-index: 15;
+    height: 5.6rem;
+    right: calc(50% - 18rem);
+    top: 0;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+
+    > .more {
+      width: 3rem;
+      height: 3rem;
+      transform: translateX(0.2rem);
+      color: #979797;
+      opacity: 0.8;
+      background: url('@/assets/icons/vertical_dots.png') no-repeat center /
+        0.35rem;
+      z-index: 15;
+    }
+
+    > .more_modal {
+      width: 11.5rem;
+      height: 7.5rem;
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      right: 1.3rem;
+      top: 4rem;
+      font-size: 1.3rem;
+      background: #fff;
+      overflow: hidden;
+      z-index: 15;
+      border-radius: 0.4rem;
+      box-shadow: 0rem 0rem 0.3rem rgba(1, 1, 1, 0.15);
+
+      > .btn {
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        height: 50%;
+        font-size: 1.3rem;
+        cursor: pointer;
+
+        &:hover {
+          background: #f7f8f7;
+        }
+      }
+
+      > .modify {
+        color: #22274c;
+      }
+
+      > .delete {
+        color: red;
+      }
+    }
+  }
+
+  > .diary_detail_page {
+    width: 100%;
+    min-height: calc(100vh - 5.6rem);
+    position: relative;
+
+    > .diary_detail_container {
+      display: flex;
+      flex-direction: column;
+
+      > .slide_section {
+        position: relative;
+        width: 100%;
+        padding-bottom: 3rem;
+        overflow: hidden;
+
+        > .swiper {
+          position: relative;
+          width: 100%;
+          height: 36rem;
+          overflow: visible;
+
+          .slide_container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+
+            .slide_img {
+              display: block;
+              width: 36rem;
+              height: 36rem;
+              object-fit: contain;
+              margin: 0 auto;
+            }
+          }
+        }
+      }
+
+      /* 게시글 SECTION */
+      > .content_section {
+        > .diary_title {
+          font-size: 2rem;
+          color: #22264c;
+          padding: 2rem 0;
+        }
+
+        > .plant_list {
+          > span {
+            color: #979797;
+            padding: 0.2rem 1rem;
+            border-radius: 0.4rem;
+            background: #f8f8fa;
+            margin-right: 1rem;
+            font-size: 1.2rem;
+          }
+        }
+
+        > .text_wrap {
+          padding: 3rem 0;
+          color: #979797;
+
+          > .diary_text {
+            font-size: 1.4rem;
+            line-height: 2.2rem;
+          }
+          > .diary_date {
+            font-size: 1.2rem;
+            margin-top: 3rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* 이미지 슬라이드 SECTION */
+:global .swiper-slide {
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+:global .swiper-pagination {
+  bottom: -2rem !important;
+
+  .swiper-pagination-bullet {
+    background-color: #c4c4c4;
+  }
+
+  & .swiper-pagination-bullet-active {
+    background-color: #1fb0ad;
+  }
+}

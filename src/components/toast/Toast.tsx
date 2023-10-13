@@ -1,4 +1,5 @@
 import { ToastContainer, Slide } from 'react-toastify';
+import './toast.scss';
 
 export const Toast = () => {
   return (

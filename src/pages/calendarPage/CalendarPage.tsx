@@ -12,7 +12,7 @@ import { getUserPlantList } from '@/api/userPlant';
 import Progress from '@/components/progress/Progress';
 import PageHeader from '@/components/pageHeader/PageHeader';
 
-import './calendarPage.scss';
+import styles from './calendarPage.module.scss';
 
 type ValuePiece = Date | null;
 interface RecordDataType {
@@ -43,22 +43,26 @@ const ContentSection = ({ contents, selectedDate }: ContentSectionProps) => {
   }, []);
 
   return (
-    <section className="date_list_wrap inner">
-      <strong className="date_title">{formatContentTitle(selectedDate)}</strong>
+    <section className={`${styles.date_list_wrap} inner`}>
+      <strong className={styles.date_title}>
+        {formatContentTitle(selectedDate)}
+      </strong>
       {contents ? (
-        <div className="date_list">
-          <div className="list_line"></div>
+        <div className={styles.date_list}>
+          <div className={styles.list_line}></div>
           <ul>
             {contents.map(({ time, plantName }, i) => (
               <li key={nanoid()}>
                 <em>{time}</em>
-                <div className={`list_card color${i % 4}`}>{plantName}</div>
+                <div className={`${styles.list_card} ${styles.color[i % 4]}`}>
+                  {plantName}
+                </div>
               </li>
             ))}
           </ul>
         </div>
       ) : (
-        <div className="no_data">
+        <div className={styles.no_data}>
           <span>물주기 기록이 없네요, 내 식물에게 물을 주세요</span>
         </div>
       )}
@@ -142,10 +146,10 @@ const CalendarPage = () => {
     : null;
 
   return (
-    <div className="layout">
+    <>
       <PageHeader exitBtn title="물주기 기록" />
-      <main className="calendar_page">
-        <section className="calendar_wrap inner">
+      <main className={styles.calendar_page}>
+        <section className={`${styles.calendar_wrap} inner`}>
           <Calendar
             value={selectedDate}
             formatDay={(_, date) => format(date, 'd')}
@@ -164,7 +168,7 @@ const CalendarPage = () => {
         />
       </main>
       {isLoading && <Progress />}
-    </div>
+    </>
   );
 };
 

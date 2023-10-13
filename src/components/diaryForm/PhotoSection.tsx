@@ -4,7 +4,7 @@ import { deleteImg, uploadImg } from '@/api/storage';
 import { InitialDiaryContent } from '@/@types/diary.type';
 import { showAlert } from '@/utils/dialog';
 
-import './photoSection.scss';
+import styles from './photoSection.module.scss';
 
 interface SectionPhotoProps {
   imgUrls: string[];
@@ -49,19 +49,19 @@ const PhotoSection = ({ imgUrls, handleContents }: SectionPhotoProps) => {
   const imgCount = imgUrls.length;
 
   return (
-    <section className="photo_section inner">
+    <section className={`${styles.container} inner`}>
       {imgCount < imgLimit && (
-        <div className="upload_button_wrapper">
-          <button type="button" className="upload_button">
-            <label htmlFor="photoInput" className="photo_label">
-              <div className="photo_counter">
-                <span className="current_count">{imgCount}</span>
+        <div className={styles.upload_button_wrapper}>
+          <button type="button" className={styles.upload_button}>
+            <label htmlFor="photoInput" className={styles.photo_label}>
+              <div className={styles.photo_counter}>
+                <span className={styles.current_count}>{imgCount}</span>
                 <span>/</span>
-                <span className="max_count">4</span>
+                <span className={styles.max_count}>4</span>
               </div>
             </label>
             <input
-              className="photo_input"
+              className={styles.photo_input}
               id="photoInput"
               accept="image/*"
               type="file"
@@ -71,20 +71,20 @@ const PhotoSection = ({ imgUrls, handleContents }: SectionPhotoProps) => {
         </div>
       )}
       <Swiper
-        className={`photo_select_swiper ${
+        className={`${styles.photo_select_swiper} ${
           imgCount === imgLimit ? 'full_photo' : ''
         }`}
         modules={[Navigation]}
         slidesPerView={2.5}
       >
         {imgUrls.map((url, index) => (
-          <SwiperSlide key={index} className="slide">
-            <div className="photo_slide attached">
+          <SwiperSlide key={index} className={styles.slide}>
+            <div className={styles.photo_slide}>
               <img src={url} alt="diary photo" />
-              {index === 0 && <div className="main_photo">대표사진</div>}
+              {index === 0 && <div className={styles.main_photo}>대표사진</div>}
             </div>
             <button
-              className="photo_delete_btn"
+              className={styles.photo_delete_btn}
               onClick={() => handleDelete(url)}
             ></button>
           </SwiperSlide>

@@ -7,9 +7,9 @@ import { uploadImg } from '@/api/storage';
 import { showAlert } from '@/utils/dialog';
 import PageHeader from '@/components/pageHeader/PageHeader';
 import paths from '@/constants/routePath';
-import './myInfoPage.scss';
+import styles from './myInfoPage.module.scss';
 
-import PROFILE from '@/assets/images/icons/default_profile.png';
+import PROFILE from '@/assets/images/profile.png';
 
 const MyInfo = () => {
   const user = useAuth();
@@ -85,13 +85,13 @@ const MyInfo = () => {
   };
 
   return (
-    <div className="my_info_page layout">
+    <>
       <PageHeader title="내 정보" />
-      <main className="my_info_container inner">
-        <section className="profile_section">
-          <div className="profile">
+      <main className={`${styles.container} inner`}>
+        <section className={styles.profile_section}>
+          <div className={styles.profile}>
             <img src={userInfo.imgUrl || PROFILE} alt="profile" />
-            <label htmlFor="profile" className="edit_btn" />
+            <label htmlFor="profile" className={styles.edit_btn} />
             <input
               id="profile"
               type="file"
@@ -100,7 +100,7 @@ const MyInfo = () => {
             />
           </div>
         </section>
-        <section className="input_section">
+        <section className={styles.input_section}>
           <ul>
             <li>
               <label>이메일</label>
@@ -138,10 +138,14 @@ const MyInfo = () => {
           </ul>
         </section>
       </main>
-      <button className="info_post" disabled={isLoading} onClick={handleClick}>
+      <button
+        className={styles.info_post}
+        disabled={isLoading}
+        onClick={handleClick}
+      >
         {isLoading ? '수정 중...' : '수정하기'}
       </button>
-    </div>
+    </>
   );
 };
 

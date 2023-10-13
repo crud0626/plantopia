@@ -13,8 +13,8 @@ import Progress from '@/components/progress/Progress';
 import ListView from './ListView';
 import GalleryView from './GalleryView';
 
-import './diaryMainPage.scss';
-import ADD_BTN from '@/assets/images/icons/diary_add.png';
+import styles from './diaryMainPage.module.scss';
+import ADD_BTN from '@/assets/icons/add_white.png';
 
 type DiaryViewTypes = 'List' | 'Gallery';
 
@@ -111,32 +111,32 @@ const DiaryPage = () => {
   }, [user?.email]);
 
   return (
-    <div className="layout">
+    <>
       <Header />
-      <main className="diary_page">
-        <div className="diary_container">
-          <h2 className="title inner">
+      <main className={styles.diary_page}>
+        <div className={styles.diary_container}>
+          <h2 className={`${styles.title} inner`}>
             <span>{user?.displayName ?? '회원'}</span>님, 식물의 성장 기록을
             남겨보세요.
           </h2>
-          <section className="tab_section">
+          <section className={styles.tab_section}>
             {tabData.map(({ label, styleName, onImage, offImage }, i) => (
               <div
                 key={i}
-                className={`view_tab ${styleName} ${
-                  currentTab === label ? 'on' : ''
+                className={`${styles.view_tab} ${styleName} ${
+                  currentTab === label ? styles.on : ''
                 }`}
                 onClick={() => handleTabChange(label)}
               >
                 <img
                   src={currentTab === label ? onImage : offImage}
-                  className="tab_img"
+                  className={styles.tab_img}
                   alt={`${label}_btn`}
                 />
               </div>
             ))}
           </section>
-          <section className="content_section">
+          <section className={styles.content_section}>
             {currentTab === 'List' ? (
               <ListView diaryData={diaryData} handleDelete={handleDelete} />
             ) : (
@@ -144,15 +144,15 @@ const DiaryPage = () => {
             )}
           </section>
         </div>
-        <div className="write_btn_wrap">
-          <button className="write_btn" onClick={handleAddBtn}>
+        <div className={styles.write_btn_wrap}>
+          <button className={styles.write_btn} onClick={handleAddBtn}>
             <img src={ADD_BTN} alt="add" />
           </button>
         </div>
       </main>
       <Footer />
       {isLoading && <Progress />}
-    </div>
+    </>
   );
 };
 

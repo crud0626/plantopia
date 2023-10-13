@@ -1,12 +1,16 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import { DiaryContentTypes } from '@/@types/diary.type';
+import styles from './diaryDetailPage.module.scss';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 const DetailSlide = ({ imgUrls }: Pick<DiaryContentTypes, 'imgUrls'>) => {
   return (
-    <section className="slide_section">
+    <section className={styles.slide_section}>
       <Swiper
-        className="diary_img_swiper swiper "
+        className={`${styles.diary_img_swiper} ${styles.swiper}`}
         modules={[Pagination, Navigation]}
         slidesPerView={1}
         spaceBetween={0}
@@ -21,8 +25,12 @@ const DetailSlide = ({ imgUrls }: Pick<DiaryContentTypes, 'imgUrls'>) => {
       >
         {imgUrls.map((imgUrl, index) => (
           <SwiperSlide key={index}>
-            <div className="slide_container">
-              <img src={imgUrl} className="slide_img" alt="슬라이드 이미지" />
+            <div className={styles.slide_container}>
+              <img
+                src={imgUrl}
+                className={styles.slide_img}
+                alt="슬라이드 이미지"
+              />
             </div>
           </SwiperSlide>
         ))}

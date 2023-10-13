@@ -1,9 +1,7 @@
 import { Children, useState } from 'react';
 import PageHeader from '@/components/pageHeader/PageHeader';
 import Footer from '@/components/footer/Footer';
-import './questionPage.scss';
-import BTN_DOWN from '@/assets/images/icons/button_down.png';
-import BTN_UP from '@/assets/images/icons/button_up.png';
+import styles from './questionPage.module.scss';
 
 const contents = [
   {
@@ -33,17 +31,18 @@ const QuestionPage = () => {
   );
 
   return (
-    <div className="noti_container layout">
+    <>
       <PageHeader title="자주 묻는 질문" />
-      <main>
-        <h2 className="noti_title">궁금한 점이 있으신가요?</h2>
-        <section className="list_box inner">
-          <span className="list_title">Q&A</span>
-          <ul className="list_contents">
+      <main className={styles.container}>
+        <h2 className={styles.title}>궁금한 점이 있으신가요?</h2>
+        <section className={`${styles.list_box} inner`}>
+          <span className={styles.list_title}>Q&A</span>
+          <ul className={styles.list_contents}>
             {Children.toArray(
               contents.map(({ title, content }, i) => (
                 <li>
                   <button
+                    className={`${isOpenContent[i] ? styles.open : ''}`}
                     onClick={() =>
                       setIsOpenContent(prev => {
                         const newState = [...prev];
@@ -53,10 +52,9 @@ const QuestionPage = () => {
                     }
                   >
                     {title}
-                    <img src={isOpenContent[i] ? BTN_UP : BTN_DOWN} />
                   </button>
                   {isOpenContent[i] && (
-                    <div className="content_wrapper">
+                    <div className={styles.content_wrapper}>
                       <p>{content}</p>
                     </div>
                   )}
@@ -67,7 +65,7 @@ const QuestionPage = () => {
         </section>
       </main>
       <Footer />
-    </div>
+    </>
   );
 };
 

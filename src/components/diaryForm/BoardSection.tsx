@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { ArrowImages } from '@/constants/diary';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { InitialDiaryContent } from '@/@types/diary.type';
 import { valueof } from '@/@types';
 
-import './boardSection.scss';
+import styles from './boardSection.module.scss';
 
 interface SectionBoardProps {
   contents: InitialDiaryContent;
@@ -39,58 +38,51 @@ const BoardSection = ({
   const isEmptyTag = tags.length === 0;
 
   return (
-    <div className="section_board">
-      <section className="board">
-        <div className="title_wrapper">
+    <div className={styles.container}>
+      <section className={styles.board}>
+        <div className={styles.title_wrapper}>
           <input
             type="text"
             placeholder="제목을 작성하세요."
-            className="title"
+            className={styles.title}
             value={title}
             onChange={({ target }) => handleContents('title', target.value)}
           />
         </div>
-        <div className="plant_select_wrapper">
-          <div className="plant_select">
+        <div className={`${styles.plant_select_wrapper} plant_select_wrapper`}>
+          <div
+            className={styles.plant_select}
+            onClick={() => setIsOpenDropdown(prev => !prev)}
+          >
             {isEmptyTag ? (
-              <div
-                className="choose_text"
-                onClick={() => setIsOpenDropdown(prev => !prev)}
-              >
-                식물을 선택하세요.
-              </div>
+              <div className={styles.choose_text}>식물을 선택하세요.</div>
             ) : (
-              <div className="chosen_wrap">
+              <div className={styles.chosen_wrap}>
                 {tags.map(tagName => (
                   <div
                     key={tagName}
-                    className="chosen_plant"
+                    className={styles.chosen_plant}
                     onClick={e => {
                       e.stopPropagation();
                       handleTags(tagName);
                     }}
                   >
                     {tagName}
-                    <span className="cancel"></span>
+                    <span className={styles.cancel}></span>
                   </div>
                 ))}
               </div>
             )}
-            <div
-              className="arrow_icon"
-              onClick={() => setIsOpenDropdown(prev => !prev)}
-            >
-              <img
-                src={
-                  isOpenDropdown ? ArrowImages.ARROW_UP : ArrowImages.ARROW_DOWN
-                }
-                alt={isOpenDropdown ? 'Up' : 'Down'}
-              />
-            </div>
+            <button
+              type="button"
+              className={`${styles.toggle} ${
+                isOpenDropdown ? styles.open : ''
+              }`}
+            ></button>
           </div>
           {isOpenDropdown && (
             <>
-              <div className="plant_list">
+              <div className={styles.plant_list}>
                 <ul>
                   {plantNames.map(plantName => (
                     <li key={plantName}>
@@ -107,7 +99,7 @@ const BoardSection = ({
                   ))}
                 </ul>
                 <button
-                  className="choose_complete"
+                  className={styles.choose_complete}
                   onClick={() => setIsOpenDropdown(prev => !prev)}
                 >
                   선택 완료
@@ -118,7 +110,7 @@ const BoardSection = ({
         </div>
         <textarea
           value={content}
-          className="content"
+          className={styles.content}
           placeholder="내용을 작성하세요."
           onChange={({ target }) => handleContents('content', target.value)}
         />

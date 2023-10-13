@@ -7,7 +7,7 @@ import { showAlert } from '@/utils/dialog';
 import { InitialDiaryContent } from '@/@types/diary.type';
 import paths from '@/constants/routePath';
 
-import './diaryWritePage.scss';
+import styles from './diaryWritePage.module.scss';
 import PageHeader from '@/components/pageHeader/PageHeader';
 import DiaryForm from '@/components/diaryForm/DiaryForm';
 import Progress from '@/components/progress/Progress';
@@ -52,9 +52,9 @@ const DiaryWritePage = () => {
   }, [user?.email]);
 
   return (
-    <div className="layout">
-      <main className="diary_write_wrap">
-        <PageHeader exitBtn title="글쓰기" />
+    <>
+      <PageHeader exitBtn title="글쓰기" />
+      <main className={styles.container}>
         {user?.email && (
           <DiaryForm
             callerType="write"
@@ -65,7 +65,7 @@ const DiaryWritePage = () => {
         )}
       </main>
       {isLoading && <Progress />}
-    </div>
+    </>
   );
 };
 

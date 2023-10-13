@@ -6,7 +6,6 @@ import { setBodyHeight } from './utils/setBodyHeight';
 
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import '@/styles/customToastStyles.scss';
 import '@/styles/alertStyle.scss';
 
 const App = () => {

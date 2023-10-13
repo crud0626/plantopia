@@ -4,7 +4,7 @@ import { loginWithEmail, loginWithSocial } from '@/api/auth';
 import { showAlert } from '@/utils/dialog';
 import paths from '@/constants/routePath';
 
-import './loginPage.scss';
+import styles from './loginPage.module.scss';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -58,13 +58,13 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="layout">
-      <main className="login_page">
-        <div className="login_box inner">
+    <>
+      <main className={styles.container}>
+        <div className={`${styles.login_box} inner`}>
           <h1>
             <span>Plantopia</span>
           </h1>
-          <h2 className="sub_title">
+          <h2 className={styles.sub_title}>
             <div>
               간편하게 로그인하고
               <br />
@@ -81,7 +81,7 @@ const LoginPage = () => {
               placeholder="이메일을 입력해주세요."
               id="inpEmail"
             />
-            <label htmlFor="inpPwd" className="mar_top32">
+            <label htmlFor="inpPwd" className={styles.mar_top32}>
               비밀번호
             </label>
             <input
@@ -90,7 +90,7 @@ const LoginPage = () => {
               onChange={handleChange}
               placeholder="비밀번호를 입력해주세요."
             />
-            <div className="auto_login">
+            <div className={styles.auto_login}>
               <input
                 id="check"
                 type="checkbox"
@@ -101,19 +101,19 @@ const LoginPage = () => {
                 자동 로그인
               </label>
             </div>
-            <button type="submit" className="submit_btn">
+            <button type="submit" className={styles.submit_btn}>
               로그인
             </button>
           </form>
-          <div className="oauth_box">
+          <div className={styles.oauth_box}>
             <p>SNS 계정으로 로그인하기</p>
-            <button className="google" onClick={handleClick}>
+            <button className={styles.google} onClick={handleClick}>
               <span className="hide">구글 아이디로 로그인하기</span>
             </button>
           </div>
         </div>
       </main>
-    </div>
+    </>
   );
 };
 

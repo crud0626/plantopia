@@ -1,0 +1,52 @@
+.container {
+  min-height: inherit;
+  background: #f6f6f6 url('@/assets/images/bg_login.png') no-repeat center /
+    cover;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: inherit;
+  text-align: center;
+
+  > .bg {
+    margin-top: -3rem;
+    width: 100%;
+    height: 500px;
+    background: url('@/assets/images/404_cat.svg') no-repeat center;
+  }
+
+  > h2 {
+    font-size: 1.5rem;
+    font-weight: 500;
+
+    > strong {
+      font-size: 2rem;
+      font-weight: 900;
+      color: rgb(50, 199, 37);
+    }
+  }
+
+  > p {
+    padding: 1rem 0 4rem 0;
+    font-size: 1.4rem;
+    font-weight: 500;
+  }
+
+  > a {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgb(1, 112, 6);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: white;
+    background-color: rgb(12, 136, 41);
+
+    &:hover {
+      background-color: rgb(18, 192, 58);
+    }
+  }
+}
