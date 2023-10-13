@@ -11,7 +11,7 @@
 }
 
 /* PHOTO 섹션 */
-.photo_section {
+.container {
   width: 100%;
   display: flex;
   position: relative;
@@ -27,11 +27,6 @@
     > .upload_button {
       @include photo-slide-wrap(8rem, 8rem);
       position: relative;
-
-      background-repeat: no-repeat;
-      background-position: 50% 50%;
-      background-size: cover;
-      background-image: url('');
 
       > .photo_label {
         width: 100%;

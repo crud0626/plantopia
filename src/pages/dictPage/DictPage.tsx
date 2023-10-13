@@ -10,7 +10,7 @@ import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 import Progress from '@/components/progress/Progress';
 
-import './dictPage.scss';
+import styles from './dictPage.module.scss';
 import SEARCH_ICON from '@/assets/icons/search.png';
 
 type CardsDataTypes = {
@@ -56,15 +56,15 @@ const DictPage = () => {
   const categories = Object.keys(cardsData) as Array<keyof typeof cardsData>;
 
   return (
-    <div className="dict_conatiner layout">
+    <div className={`${styles.container} layout`}>
       <Header />
-      <main className="dict_wrapper ">
-        <h2 className="dict_title">
+      <main className={styles.wrapper}>
+        <h2 className={styles.title}>
           <span>{user?.displayName || '회원'}</span>님, 어떤 식물을 찾고있나요?
         </h2>
-        <section className="search_wrapper">
+        <section className={styles.search_wrapper}>
           <form onSubmit={handleSubmit}>
-            <div className="input_wrapper">
+            <div className={styles.input_wrapper}>
               <input
                 name="input"
                 placeholder="식물 이름으로 검색하기"
@@ -72,7 +72,11 @@ const DictPage = () => {
                 onChange={({ target: { value } }) => setSearchValue(value)}
               />
               <button>
-                <img className="search_img" src={SEARCH_ICON} alt="search" />
+                <img
+                  src={SEARCH_ICON}
+                  className={styles.search_img}
+                  alt="search"
+                />
               </button>
             </div>
           </form>

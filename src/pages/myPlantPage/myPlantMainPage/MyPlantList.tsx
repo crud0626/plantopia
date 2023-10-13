@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { UserPlant } from '@/@types/plant.type';
 import paths from '@/constants/routePath';
 
-import './myPlantList.scss';
+import styles from './myPlantList.module.scss';
 import BOOKMARK_TRUE from '@/assets/icons/bookmark.png';
 import BOOKMARK_FALSE from '@/assets/icons/bookmark_empty.png';
 import EDIT_ICON from '@/assets/icons/edit_gray.png';
@@ -37,50 +37,48 @@ const MainPagePlantList = ({
   };
 
   return (
-    <div className="subplant_container">
+    <div className={styles.container}>
       {sortedPlants.map(plant => (
         <Link
           key={plant.id}
           to={`${paths.myplant}/${plant.id}`}
-          className="subplant_list_box_link"
+          className={styles.list_box}
         >
-          <div className="subplant_list_box">
-            <div className="subplant_main_data">
-              <span>
-                <img
-                  className="subplant_img"
-                  src={plant.imgUrl}
-                  alt="subPlantImg"
-                />
-              </span>
-              <p className="subplant_name">{plant.nickname}</p>
-            </div>
-            <div className="main_check_and_edit">
-              <button
-                onClick={e => {
-                  e.preventDefault();
-                  changeMainPlant(plant);
-                }}
-              >
-                <img
-                  className="main_tag_img"
-                  src={plant.isMain ? BOOKMARK_TRUE : BOOKMARK_FALSE}
-                  alt="set mainplant"
-                />
-              </button>
-              <button
-                onClick={e => {
-                  e.preventDefault();
-                  handleEditData(plant);
-                }}
-              >
-                <img
-                  className="edit_button_img"
-                  src={EDIT_ICON}
-                  alt="edit plant"
-                />
-              </button>
-            </div>
+          <div className={styles.main_data}>
+            <span>
+              <img
+                className="subplant_img"
+                src={plant.imgUrl}
+                alt="subPlantImg"
+              />
+            </span>
+            <p className={styles.nickname}>{plant.nickname}</p>
+          </div>
+          <div className={styles.btn_wrapper}>
+            <button
+              onClick={e => {
+                e.preventDefault();
+                changeMainPlant(plant);
+              }}
+            >
+              <img
+                className="main_tag_img"
+                src={plant.isMain ? BOOKMARK_TRUE : BOOKMARK_FALSE}
+                alt="set mainplant"
+              />
+            </button>
+            <button
+              onClick={e => {
+                e.preventDefault();
+                handleEditData(plant);
+              }}
+            >
+              <img
+                className="edit_button_img"
+                src={EDIT_ICON}
+                alt="edit plant"
+              />
+            </button>
           </div>
         </Link>
       ))}

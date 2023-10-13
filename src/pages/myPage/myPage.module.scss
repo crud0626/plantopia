@@ -6,14 +6,14 @@
   min-height: 100vh;
   background-color: #f8f8fa;
 
-  .my_container {
+  .container {
     position: relative;
     display: flex;
     flex-direction: column;
     flex: 1 auto;
     margin-bottom: 5.2rem;
 
-    .my_info_box {
+    .info_wrapper {
       position: relative;
       background-color: #ffffff;
 
@@ -30,7 +30,7 @@
         }
       }
 
-      .my_profile {
+      .profile {
         display: flex;
         align-items: center;
         padding-bottom: 3rem;
@@ -39,7 +39,7 @@
           @include mixins.avatar(50%, 6rem);
         }
 
-        .my_info {
+        .info {
           padding-left: 1.4rem;
 
           > strong {
@@ -71,6 +71,7 @@
           border-radius: 0.6rem;
           color: #22264c;
           background-color: #f2f2f2;
+
           &:hover {
             background-color: #e7e7e7;
           }

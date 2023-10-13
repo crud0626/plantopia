@@ -16,7 +16,7 @@ import {
 import { getPlantInfo } from '@/api/dictionary';
 import paths from '@/constants/routePath';
 
-import './myPlantDetailPage.scss';
+import styles from './myPlantDetailPage.module.scss';
 import PageHeader from '@/components/pageHeader/PageHeader';
 import Progress from '@/components/progress/Progress';
 import EDIT_ICON from '@/assets/icons/add_popup.png';
@@ -79,23 +79,19 @@ const MyPlantDetailPage = () => {
       <PageHeader title="내 식물 상세" />
       {plantDetail && (
         <main>
-          <div className="my_plant_detail_upper_container">
-            <span className="detail_img_wrap">
-              <img
-                className="detail_plant_img"
-                src={plantDetail.imgUrl}
-                alt="mainPlantImg"
-              />
-            </span>
-            <p className="detail_plant_name">
+          <div className={styles.upper_container}>
+            <img
+              className={styles.plant_img}
+              src={plantDetail.imgUrl}
+              alt="mainPlantImg"
+            />
+            <p className={styles.plant_name}>
               {plantDictDetail?.scientificName}
             </p>
-            <div className="detail_nickname_box">
+            <div className={styles.nickname_box}>
               <p
-                className={`${
-                  plantDetail.isMain
-                    ? 'detail_plant_nickname_main'
-                    : 'detail_plant_nickname'
+                className={`${styles.nickname} ${
+                  plantDetail.isMain ? styles.main : ''
                 }`}
               >
                 {plantDetail.nickname}
@@ -104,17 +100,15 @@ const MyPlantDetailPage = () => {
             <Link
               to={`${paths.myplantEdit}/${docId}`}
               state={plantDetail}
-              className="my_plant_detail_edit_btn"
+              className={styles.edit_btn}
             >
-              <div className="my_plant_detail_edit_btn_inner_contents">
-                <img src={EDIT_ICON} alt="edit" />
-                <p>식물 정보 수정하기</p>
-              </div>
+              <img src={EDIT_ICON} alt="edit" />
+              <p>식물 정보 수정하기</p>
             </Link>
           </div>
-          <div className="my_plant_detail_lower_container">
-            <div className="my_plant_detail_info_box">
-              <div className="my_plant_detail_info_head">
+          <div className={styles.lower_container}>
+            <div className={styles.info_box}>
+              <div className={styles.info_head}>
                 <p>
                   ⏰ {plantDetail.nickname} 식물과 함께한지{' '}
                   <span>
@@ -127,12 +121,12 @@ const MyPlantDetailPage = () => {
                   이 지났어요
                 </p>
               </div>
-              <div className="my_plant_detail_info_metadata">
-                <div className="watering_info">
+              <div className={styles.info_metadata}>
+                <div className={styles.watering_info}>
                   <span>물주기</span>
                   <span>{plantDetail.frequency} Days</span>
                 </div>
-                <div className="last_watering_info">
+                <div className={styles.last_watering_info}>
                   <span>마지막 물준 날</span>
                   <span>
                     {lastWateringDate
@@ -140,7 +134,7 @@ const MyPlantDetailPage = () => {
                       : '-'}
                   </span>
                 </div>
-                <div className="first_day_info">
+                <div className={styles.first_day_info}>
                   <span>처음 함께한 날</span>
                   <span>
                     {secondsToDateStr(plantDetail.purchasedDay.seconds)}
@@ -148,38 +142,40 @@ const MyPlantDetailPage = () => {
                 </div>
               </div>
             </div>
-            <div className="my_plant_detail_info_box">
-              <div className="my_plant_detail_info_head">
+            <div className={styles.info_box}>
+              <div className={styles.info_head}>
                 <p>👍 잘 자라는 환경</p>
               </div>
-              <div className="my_plant_detail_info_metadata gridset">
+              <div className={`${styles.info_metadata} ${styles.gridset}`}>
                 <div>
                   <span>햇빛</span>
-                  <span className="sun_on_off">
+                  <span className={styles.sun_on_off}>
                     {codeInfo[plantDictDetail?.lightCode || 'LC']}
                   </span>
                 </div>
                 <div>
                   <span>물</span>
-                  <span className="water_on_off">
+                  <span className={styles.water_on_off}>
                     {codeInfo[plantDictDetail?.waterCode || 'WC']}
                   </span>
                 </div>
                 <div>
                   <span>생육 적정 온도</span>
-                  <span className="optimal_temp">
+                  <span className={styles.optimal_temp}>
                     {codeInfo[plantDictDetail?.temperatureCode || 'TC']}
                   </span>
                 </div>
               </div>
             </div>
-            {!plantDictDetail?.adviseInfo && (
-              <div className="my_plant_detail_info_box">
-                <div className="my_plant_detail_info_head">
+            {plantDictDetail?.adviseInfo && (
+              <div className={styles.info_box}>
+                <div className={styles.info_head}>
                   <p>📌 관리 Tip</p>
                 </div>
-                <div className="my_plant_detail_info_metadata management_tip_box">
-                  <p className="management_tip">
+                <div
+                  className={`${styles.info_metadata} ${styles.management_tip_box}`}
+                >
+                  <p className={styles.management_tip}>
                     {plantDictDetail?.adviseInfo}
                   </p>
                 </div>
@@ -188,13 +184,13 @@ const MyPlantDetailPage = () => {
             <Link
               to={`${paths.dictDetail}?plantName=${plantDictDetail?.name}`}
               state={plantDictDetail}
-              className="more_info_btn"
+              className={styles.more_info_btn}
             >
               식물 도감에서 이 식물 정보 더 알아보기!
             </Link>
           </div>
           <button
-            className="delete_my_plant"
+            className={styles.delete_btn}
             onClick={() =>
               showConfirm('정말로 삭제 하시겠습니까?', deletePlant)
             }

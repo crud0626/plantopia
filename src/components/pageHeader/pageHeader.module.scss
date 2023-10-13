@@ -1,4 +1,4 @@
-.header_container {
+.container {
   position: sticky;
   top: 0;
   display: flex;
@@ -10,7 +10,7 @@
   background-color: #ffffff;
   z-index: 10;
 
-  > .header_title {
+  > .title {
     text-align: center;
     font-size: 1.6rem;
     font-weight: 700;

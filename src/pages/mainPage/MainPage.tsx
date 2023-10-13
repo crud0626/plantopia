@@ -12,7 +12,8 @@ import Footer from '@/components/footer/Footer';
 import Progress from '@/components/progress/Progress';
 import MainPlantSection from './MainPlantSection';
 import WeatherSection from './WeatherSection';
-import './mainPage.scss';
+import 'swiper/scss';
+import styles from './mainPage.module.scss';
 
 interface PlantListProps {
   plants: UserPlant[];
@@ -22,15 +23,18 @@ interface PlantListProps {
 const PlantList = ({ plants, onClickItem }: PlantListProps) => {
   if (plants.length > 0) {
     return (
-      <div className="slide_wrapper">
-        <Swiper slidesPerView={3.5} className="swiper">
+      <div className={styles.slide_wrapper}>
+        <Swiper slidesPerView={3.5} className={styles.swiper}>
           {plants.map(plant => (
             <SwiperSlide key={nanoid()}>
-              <button className="slide" onClick={() => onClickItem(plant)}>
-                <div className="avatar">
+              <button
+                className={styles.slide}
+                onClick={() => onClickItem(plant)}
+              >
+                <div className={styles.avatar}>
                   <img src={plant.imgUrl} alt="plant" />
                 </div>
-                <span className="name">{plant.nickname}</span>
+                <span className={styles.name}>{plant.nickname}</span>
               </button>
             </SwiperSlide>
           ))}
@@ -98,7 +102,7 @@ const MainPage = () => {
   return (
     <div className="layout">
       <Header isMainPage />
-      <main className="main_page">
+      <main className={styles.container}>
         <section>
           <WeatherSection />
           {plantList && (

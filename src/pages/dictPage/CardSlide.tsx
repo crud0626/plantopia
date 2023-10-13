@@ -5,7 +5,10 @@ import { Pagination, Navigation } from 'swiper/modules';
 import { CategoryNames, PlantType } from '@/@types/dictionary.type';
 import paths from '@/constants/routePath';
 
-import './cardSlide.scss';
+import styles from './cardSlide.module.scss';
+import 'swiper/scss';
+import 'swiper/scss/navigation';
+import 'swiper/scss/pagination';
 import PLANT1_ICON from '@/assets/icons/dict/plant1.png';
 import PLANT2_ICON from '@/assets/icons/dict/plant2.png';
 import WATER_ICON from '@/assets/icons/dict/water2.png';
@@ -18,10 +21,10 @@ interface CardContentTypes {
 }
 
 const targetClassName = {
-  beginner: 'img_wrapper_white',
-  growWell: 'img_wrapper_navy',
-  lessWater: 'img_wrapper_blue',
-  dark: 'img_wrapper_gray',
+  beginner: styles.img_wrapper_white,
+  growWell: styles.img_wrapper_navy,
+  lessWater: styles.img_wrapper_blue,
+  dark: styles.img_wrapper_gray,
 };
 
 const slideContents: {
@@ -49,10 +52,10 @@ const CardSlide = ({ type, category, plants }: CardContentTypes) => {
   const { icon, title } = slideContents[category];
 
   return (
-    <div className="recommend_container">
-      <div className="title_wrapper">
+    <div className={styles.container}>
+      <div className={styles.title_wrapper}>
         <div className={targetClassName[category]}>
-          <img src={icon} className="plant_icon" alt="search icon" />
+          <img src={icon} className={styles.plant_icon} alt="search icon" />
         </div>
         <span>{title}</span>
       </div>
@@ -62,26 +65,28 @@ const CardSlide = ({ type, category, plants }: CardContentTypes) => {
         navigation={true}
         pagination={{ clickable: true }}
         modules={[Navigation, Pagination]}
-        className="plants_container"
+        className={styles.plants_container}
       >
         {Children.toArray(
           plants.map(plant => (
-            <SwiperSlide className="plant_wrapper">
+            <SwiperSlide className={styles.plant_wrapper}>
               <Link
                 to={`${paths.dictDetail}?plantName=${plant.name}`}
                 state={plant}
               >
                 <img
-                  className={category === 'beginner' ? 'img_two' : 'img_three'}
+                  className={
+                    category === 'beginner' ? styles.img_two : styles.img_three
+                  }
                   src={plant.imageUrl}
                   alt="plant"
                 />
-                <div className="name_wrapper">
+                <div className={styles.name_wrapper}>
                   <p
                     className={
                       category === 'beginner'
-                        ? 'english_name_two'
-                        : 'english_name_three'
+                        ? styles.english_name_two
+                        : styles.english_name_three
                     }
                   >
                     {plant.scientificName}
@@ -89,8 +94,8 @@ const CardSlide = ({ type, category, plants }: CardContentTypes) => {
                   <p
                     className={
                       category === 'beginner'
-                        ? 'korean_name_two'
-                        : 'korean_name_three'
+                        ? styles.korean_name_two
+                        : styles.korean_name_three
                     }
                   >
                     {plant.name}

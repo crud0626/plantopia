@@ -1,7 +1,6 @@
 @use '@/styles/mixins';
-@use 'swiper/scss';
 
-.main_page {
+.container {
   min-height: 100vh;
   padding-bottom: 5.6rem;
   background-color: #ffffff;
@@ -27,7 +26,7 @@
 }
 
 /* 날씨 영역 */
-.main_page > section > .weather_wrapper {
+.weather_wrapper {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -94,7 +93,7 @@
 }
 
 /* 메인 식물 영역*/
-.main_page > section > div > .main_plant {
+.main_plant {
   display: block;
   position: relative;
   margin: 2.8rem auto 0 auto;
@@ -147,7 +146,7 @@
 }
 
 /* 메인 식물 정보 */
-.main_page > section > div > .main_plant_info {
+.main_plant_info {
   margin-top: 1.8rem;
   text-align: center;
 
@@ -170,7 +169,7 @@
     font-size: 2.2rem;
     font-weight: 700;
 
-    > .main-plant {
+    > .main {
       position: relative;
 
       &::before {
@@ -249,7 +248,7 @@
 }
 
 /* 서브 식물 리스트 슬라이드*/
-.main_page > section > .slide_wrapper {
+.slide_wrapper {
   margin-top: 3.3rem;
   margin-left: 2rem;
   min-height: 10.9rem;
@@ -257,45 +256,43 @@
   > .swiper {
     min-height: inherit;
 
-    > .swiper-wrapper > .swiper-slide {
-      > .slide {
-        padding: 0;
-        width: 8rem;
-        height: 8rem;
-        text-align: center;
-        background: #d8e8e0;
+    .slide {
+      padding: 0;
+      width: 8rem;
+      height: 8rem;
+      text-align: center;
+      background: #d8e8e0;
+      border-radius: 50%;
+      padding: 0.3rem;
+
+      > .avatar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
         border-radius: 50%;
-        padding: 0.3rem;
+        background: #ffffff;
+        filter: drop-shadow(0 0.4rem 0.8rem rgba(0, 0, 0, 0.1));
 
-        > .avatar {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-          background: #ffffff;
-          filter: drop-shadow(0 0.4rem 0.8rem rgba(0, 0, 0, 0.1));
-
-          > img {
-            @include mixins.avatar(50%);
-          }
+        > img {
+          @include mixins.avatar(50%);
         }
+      }
 
-        > .name {
-          display: block;
-          margin-top: 1.2rem;
-          font-family: 'Pretendard', Arial, sans-serif;
-          font-size: 1.4rem;
-          font-weight: 700;
-          color: #22264c;
-        }
+      > .name {
+        display: block;
+        margin-top: 1.2rem;
+        font-family: 'Pretendard', Arial, sans-serif;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #22264c;
       }
     }
   }
 }
 
-.main_page > section > div {
+.container > section > div {
   > .welcome_text {
     margin: 4.6rem auto 0 auto;
     width: 22.4rem;

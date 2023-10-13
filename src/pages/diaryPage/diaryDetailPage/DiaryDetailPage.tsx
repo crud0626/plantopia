@@ -10,7 +10,7 @@ import paths from '@/constants/routePath';
 import PageHeader from '@/components/pageHeader/PageHeader';
 import Progress from '@/components/progress/Progress';
 import DetailSlide from './DetailSlide';
-import './diaryDetailPage.scss';
+import styles from './diaryDetailPage.module.scss';
 
 const DiaryDetailPage = () => {
   const user = useAuth();
@@ -76,23 +76,23 @@ const DiaryDetailPage = () => {
   const { content, postedAt, tags, title, imgUrls } = diaryDetailData;
 
   return (
-    <div className="diary_detail_wrap layout">
+    <div className={`${styles.container} layout`}>
       <PageHeader title="다이어리" />
-      <div className="more_btn_wrap">
+      <div className={styles.more_btn_wrap}>
         <button
-          className="more"
+          className={styles.more}
           onClick={() => setIsModalOpen(prev => !prev)}
         ></button>
         {isModalOpen && (
-          <div className="more_modal">
+          <div className={styles.more_modal}>
             <button
-              className="btn modify"
+              className={`${styles.btn} ${styles.modify}`}
               onClick={() => navigate(`${paths.diaryEdit}/${docId}`)}
             >
               게시글 수정
             </button>
             <button
-              className="btn delete"
+              className={`${styles.btn} ${styles.delete}`}
               onClick={() => {
                 showConfirm('글을 삭제하시겠습니까?', async () => {
                   await handleDelete(docId);
@@ -105,19 +105,19 @@ const DiaryDetailPage = () => {
           </div>
         )}
       </div>
-      <main className="diary_detail_page">
-        <div className="diary_detail_container">
+      <main className={styles.diary_detail_page}>
+        <div className={styles.diary_detail_container}>
           {imgUrls.length > 0 && <DetailSlide imgUrls={imgUrls} />}
-          <section className="content_section inner">
-            <h5 className="diary_title">{title}</h5>
-            <div className="plant_list">
+          <section className={`${styles.content_section} inner`}>
+            <h5 className={styles.diary_title}>{title}</h5>
+            <div className={styles.plant_list}>
               {tags.map((tag, i) => (
                 <span key={i}>{tag}</span>
               ))}
             </div>
-            <div className="text_wrap">
-              <p className="diary_text">{content}</p>
-              <p className="diary_date">
+            <div className={styles.text_wrap}>
+              <p className={styles.diary_text}>{content}</p>
+              <p className={styles.diary_date}>
                 {postedAt.toDate().toLocaleDateString()}
               </p>
             </div>

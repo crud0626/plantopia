@@ -5,7 +5,7 @@ import { showConfirm } from '@/utils/dialog';
 import { DiaryContentTypes } from '@/@types/diary.type';
 
 import NoContent from './NoContent';
-import './listView.scss';
+import styles from './listView.module.scss';
 import paths from '@/constants/routePath';
 
 interface ListViewProps {
@@ -38,24 +38,24 @@ const ListView = ({ diaryData, handleDelete }: ListViewProps) => {
   const isEmpty = !diaryData || diaryData.length === 0;
 
   return (
-    <div className="list_view">
+    <div className={styles.list_view}>
       {isEmpty ? (
         <NoContent />
       ) : (
-        <ul className="diary_list_wrap">
+        <ul className={styles.diary_list_wrap}>
           {diaryData.map(diary => (
-            <li className="diary_list" key={diary.id}>
+            <li className={styles.diary_list} key={diary.id}>
               <Link to={`${paths.diary}/${diary.id}`}>
-                <div className="left_box">
-                  <h5 className="title">{diary.title}</h5>
-                  <p className="content">{diary.content}</p>
-                  <span className="date">
+                <div className={styles.left_box}>
+                  <h5 className={styles.title}>{diary.title}</h5>
+                  <p className={styles.content}>{diary.content}</p>
+                  <span className={styles.date}>
                     {diary.postedAt.toDate().toLocaleDateString()}
                   </span>
                 </div>
                 <div
-                  className={`main_img ${
-                    diary.imgUrls.length > 1 ? 'multiple' : ''
+                  className={`${styles.main_img} ${
+                    diary.imgUrls.length > 1 ? styles.multiple : ''
                   }`}
                 >
                   {diary.imgUrls.length > 0 && (
@@ -64,22 +64,22 @@ const ListView = ({ diaryData, handleDelete }: ListViewProps) => {
                 </div>
               </Link>
               <button
-                className="more"
+                className={styles.more}
                 onClick={event => {
                   event.stopPropagation();
                   toggleModal(diary);
                 }}
               ></button>
               {isOpenModal && selectedDiary === diary && (
-                <div className="more_modal">
+                <div className={styles.more_modal}>
                   <div
-                    className="btn modify"
+                    className={`${styles.btn} ${styles.modify}`}
                     onClick={() => navigate(`${paths.diaryEdit}/${diary.id}`)}
                   >
                     게시글 수정
                   </div>
                   <div
-                    className="btn delete"
+                    className={`${styles.btn} ${styles.delete}`}
                     onClick={() => {
                       showConfirm('글을 삭제하시겠습니까?', () => {
                         handleDelete(diary.id);

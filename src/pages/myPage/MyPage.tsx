@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks';
 import { showAlert } from '@/utils/dialog';
 import { logout } from '@/api/auth';
 import paths from '@/constants/routePath';
-import './myPage.scss';
+import styles from './myPage.module.scss';
 import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
 import Progress from '@/components/progress/Progress';
@@ -38,46 +38,44 @@ const MyPage = () => {
   };
 
   return (
-    <div className="my_page layout">
+    <div className={`${styles.my_page} layout`}>
       <Header />
-      <main className="my_container">
-        <section className="my_info_box inner">
+      <main className={styles.container}>
+        <section className={`${styles.info_wrapper} inner`}>
           <h2>
             <em>{user?.displayName || '회원'}</em>님, 플랜토피아와 함께
             <br /> 슬기로운 식집사 생활을 시작하세요!
           </h2>
-          <div className="my_profile">
+          <div className={styles.profile}>
             <img src={user?.photoURL || PROFILE} alt="profile" />
-            <div className="my_info">
+            <div className={styles.info}>
               <strong>{user?.displayName}</strong>
               <p>{user?.email}</p>
             </div>
-            <Link to={paths.mypageInfo} className="edit_info">
+            <Link to={paths.mypageInfo} className={styles.edit_info}>
               내 정보 수정하기
             </Link>
           </div>
         </section>
-        <section className="list_box">
-          <span className="list_title">고객센터</span>
-          <ul className="list_contents">
+        <section className={styles.list_box}>
+          <span className={styles.list_title}>고객센터</span>
+          <ul className={styles.list_contents}>
             {Children.toArray(
               customerService.map(({ title, url }) => (
                 <li>
                   {url.startsWith('https') ? (
-                    <a href={url} target="_blank" className="move">
+                    <a href={url} target="_blank">
                       {title}
                     </a>
                   ) : (
-                    <Link to={url} className="move">
-                      {title}
-                    </Link>
+                    <Link to={url}>{title}</Link>
                   )}
                 </li>
               )),
             )}
           </ul>
-          <div className="logout_wrapper">
-            <button className="logout_btn" onClick={handleClick}>
+          <div className={styles.logout_wrapper}>
+            <button className={styles.logout_btn} onClick={handleClick}>
               로그아웃
             </button>
           </div>

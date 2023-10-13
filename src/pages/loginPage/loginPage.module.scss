@@ -1,10 +1,10 @@
-.login_page {
+.container {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background: #f6f6f6 url('../../assets/images/bg_login.png') no-repeat center /
+  background: #f6f6f6 url('@/assets/images/bg_login.png') no-repeat center /
     cover;
 
   .login_box {

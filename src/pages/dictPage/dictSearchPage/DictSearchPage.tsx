@@ -5,7 +5,7 @@ import { getPlantSearchResults } from '@/api/dictionary';
 import { showAlert } from '@/utils/dialog';
 import { PlantType } from '@/@types/dictionary.type';
 import paths from '@/constants/routePath';
-import './dictSearchPage.scss';
+import styles from './dictSearchPage.module.scss';
 import Progress from '@/components/progress/Progress';
 import PageHeader from '@/components/pageHeader/PageHeader';
 
@@ -13,9 +13,9 @@ import SEARCH_ICON from '@/assets/icons/search.png';
 
 const EmptyResult = () => {
   return (
-    <div className="no_search">
+    <div className={styles.no_search}>
       <p>검색 결과가 없습니다.</p>
-      <div className="notice">
+      <div className={styles.notice}>
         👷‍♂️ 식물도감에 없는 식물의 등록 기능을 준비중입니다.
         <a href="https://forms.gle/g4AjkNKqVDP48Xnc7" target="_blank">
           내가 찾는 식물이 없다면, 식물 등록 요청하기
@@ -64,24 +64,28 @@ const DictSearchPage = () => {
   }, [locationState]);
 
   return (
-    <div className="search_container layout">
+    <div className="layout">
       <PageHeader title="검색 결과" />
-      <main className="inner">
-        <section className="search_wrapper">
+      <main className={`${styles.container} inner`}>
+        <section className={styles.search_wrapper}>
           <form onSubmit={handleSubmit}>
-            <div className="input_wrapper">
+            <div className={styles.input_wrapper}>
               <input
                 value={searchValue}
                 placeholder="식물 이름으로 검색하기"
                 onChange={({ target }) => setSearchValue(target.value)}
               />
               <button type="submit">
-                <img src={SEARCH_ICON} className="search_img" alt="search" />
+                <img
+                  src={SEARCH_ICON}
+                  className={styles.search_img}
+                  alt="search"
+                />
               </button>
             </div>
           </form>
         </section>
-        <section className="plant_container">
+        <section className={styles.plant_container}>
           {results.length ? (
             Children.toArray(
               results.map(plant => (
@@ -89,11 +93,13 @@ const DictSearchPage = () => {
                   to={`${paths.dictDetail}?plantName=${plant.name}`}
                   state={plant}
                 >
-                  <div className="plant_wrapper">
+                  <div className={styles.plant_wrapper}>
                     <img src={plant.imageUrl} alt="plant" />
-                    <div className="name_wrapper">
-                      <h3 className="korean_name">{plant.name}</h3>
-                      <h3 className="english_name">{plant.scientificName}</h3>
+                    <div className={styles.name_wrapper}>
+                      <h3 className={styles.korean_name}>{plant.name}</h3>
+                      <h3 className={styles.english_name}>
+                        {plant.scientificName}
+                      </h3>
                     </div>
                   </div>
                   <hr />
@@ -103,7 +109,7 @@ const DictSearchPage = () => {
           ) : searchValue ? (
             <EmptyResult />
           ) : (
-            <div className="search_notice">
+            <div className={styles.search_notice}>
               <strong>🌱 식물 검색 TIP </strong>
               <p>
                 식물 이름의 첫번째 글자부터 입력하여

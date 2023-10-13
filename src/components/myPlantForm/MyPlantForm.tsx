@@ -8,7 +8,7 @@ import { UserPlant } from '@/@types/plant.type';
 import { valueof } from '@/@types';
 import paths from '@/constants/routePath';
 
-import './myPlantForm.scss';
+import styles from './myPlantForm.module.scss';
 import DEFAULT_IMG from '@/assets/images/default_plant.png';
 import EDIT_ICON from '@/assets/icons/edit.png';
 import SEARCH_ICON from '@/assets/icons/search.png';
@@ -133,22 +133,22 @@ const MyPlantForm = ({
         showConfirm(`${subject}하시겠습니까?`, handleSubmit);
       }}
     >
-      <div className="my_plant_registeration_container">
-        <div className="my_plant_register_img_box">
-          <div className="img_wrapper">
+      <div className={styles.container}>
+        <div className={styles.img_box}>
+          <div className={styles.img_wrapper}>
             <span>
               <img
-                className="main_img"
+                className={styles.main_img}
                 src={formValues.imgUrl || DEFAULT_IMG}
                 alt="plant"
               />
             </span>
-            <div className="edit_icon_wrapper">
-              <label htmlFor="photoInput" className="photo_label">
-                <img className="edit_icon" src={EDIT_ICON} alt="edit" />
+            <div className={styles.edit_icon_wrapper}>
+              <label htmlFor="photoInput" className={styles.photo_label}>
+                <img src={EDIT_ICON} className={styles.edit_icon} alt="edit" />
               </label>
               <input
-                className="photo_input"
+                className={styles.photo_input}
                 id="photoInput"
                 accept="image/*"
                 type="file"
@@ -157,66 +157,70 @@ const MyPlantForm = ({
             </div>
           </div>
         </div>
-        <div className="my_plant_input_box">
-          <p className="my_plant_input_title">식물선택</p>
+        <div className={styles.input_box}>
+          <p className={styles.input_title}>식물선택</p>
           <Link
             to={paths.dictSearch}
             state={{ inputValue: '' }}
-            className="my_plant_input_wrapper"
+            className={styles.input_wrapper}
           >
             <input
-              className="my_plant_input"
+              className={styles.my_plant_input}
               type="text"
               placeholder="클릭하여 식물 이름을 검색해보세요."
               value={formValues.plantName}
               readOnly
             />
-            <img className="input_glass" src={SEARCH_ICON} alt="search" />
+            <img
+              className={styles.input_glass}
+              src={SEARCH_ICON}
+              alt="search"
+            />
           </Link>
         </div>
-        <div className="my_plant_info_form">
-          <div className="my_plant_name_title required">
+        <div className={styles.info_form}>
+          <div className={`${styles.name_title} ${styles.required}`}>
             식물별명<p>(5글자 이내로 설정해주세요)</p>
           </div>
           <input
-            className="my_plant_name"
+            className={styles.my_plant_name}
             maxLength={5}
             value={formValues.nickname}
             onChange={e => handleInputField('nickname', e.target.value)}
           />
-          <div className="watering_frequency required">
+          <div className={`${styles.watering_frequency} ${styles.required}`}>
             물 주는 날<p>(주변 환경에 맞게 조절해주세요)</p>
           </div>
-          <div className="watering_frequency_input_box">
+          <div className={styles.watering_frequency_input_box}>
             <input
               type="number"
-              className="watering_frequency_input"
+              className={styles.watering_frequency_input}
               min={1}
               max={60}
               value={formValues.frequency}
               onChange={e => handleInputField('frequency', e.target.value)}
             />
-            <p className="watering_frequency_info">일에 한 번</p>
+            <p className={styles.watering_frequency_info}>일에 한 번</p>
           </div>
-          <p className="my_plant_register_small_title required">
+          <p className={`${styles.small_title} ${styles.required}`}>
             식물과 처음 함께한 날 <span>(달력을 클릭하여 설정해주세요)</span>
           </p>
-          <div className="my_plant_register_calender_value">
+          <div className={styles.calender_value}>
             <input
               type="date"
-              className="date_selector"
+              className={styles.date_selector}
               value={secondsToDateStr(formValues.purchasedDay.seconds)}
               max={formatFullDate(new Date())}
               onChange={e => handleInputField('purchasedDay', e.target.value)}
             />
           </div>
-          <p className="my_plant_register_small_title">
+          <p className={styles.small_title}>
             마지막 물준 날<span>(선택 입력)</span>
           </p>
-          <div className="my_plant_register_calender_value">
+          <div className={styles.calender_value}>
             <input
               type="date"
-              className="date_selector"
+              className={styles.date_selector}
               value={
                 lastWateredDay ? secondsToDateStr(lastWateredDay.seconds) : '0'
               }
@@ -228,7 +232,7 @@ const MyPlantForm = ({
       </div>
       <button
         type="submit"
-        className="my_plant_register_btn"
+        className={styles.register_btn}
         disabled={isLoading}
       >
         {isLoading ? `${subject} 중...` : `${subject}하기`}

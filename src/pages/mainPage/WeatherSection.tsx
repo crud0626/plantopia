@@ -4,6 +4,7 @@ import { fetchWeatherInfo } from '@/api/weatherApi';
 import { weatherContents } from '@/constants/weather';
 import { getGeolocation } from '@/utils/geolocation';
 
+import styles from './mainPage.module.scss';
 import LOCATION from '@/assets/icons/location.png';
 
 const WeatherSection = () => {
@@ -38,31 +39,41 @@ const WeatherSection = () => {
   const content = getWeatherContent(weatherInfo?.weather[0].id);
 
   return (
-    <div className="weather_wrapper">
+    <div className={styles.weather_wrapper}>
       {weatherInfo && content ? (
         <>
-          <div className="text_wrapper">
-            <div className="location_wrapper">
-              <img src={LOCATION} className="weather_icon" alt="location" />
-              <span className="text">{weatherInfo.name}</span>
+          <div className={styles.text_wrapper}>
+            <div className={styles.location_wrapper}>
+              <img
+                src={LOCATION}
+                className={styles.weather_icon}
+                alt="location"
+              />
+              <span className={styles.text}>{weatherInfo.name}</span>
             </div>
-            <div className="weather_text_box temperature_wrapper">
-              <span className="text_lg">
+            <div
+              className={`${styles.weather_text_box} ${styles.temperature_wrapper}`}
+            >
+              <span className={styles.text_lg}>
                 {content.title} {formatTemperature(weatherInfo.main.temp)}
               </span>
-              <span className="text_sm">
+              <span className={styles.text_sm}>
                 {formatTemperature(weatherInfo.main.temp_max)}
               </span>
-              <span className="text_sm">
+              <span className={styles.text_sm}>
                 {formatTemperature(weatherInfo.main.temp_min)}
               </span>
             </div>
-            <div className="weather_text_box">{content.description}</div>
+            <div className={styles.weather_text_box}>{content.description}</div>
           </div>
-          <img src={content.imgSrc} className="weather_icon" alt="weather" />
+          <img
+            src={content.imgSrc}
+            className={styles.weather_icon}
+            alt="weather"
+          />
         </>
       ) : (
-        <p className="info_text">{visibleText}</p>
+        <p className={styles.info_text}>{visibleText}</p>
       )}
     </div>
   );

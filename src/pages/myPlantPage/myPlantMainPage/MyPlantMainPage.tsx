@@ -6,7 +6,7 @@ import { showAlert } from '@/utils/dialog';
 import { UserPlant } from '@/@types/plant.type';
 import paths from '@/constants/routePath';
 
-import './myPlantMainPage.scss';
+import styles from './myPlantMainPage.module.scss';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 import MainPagePlantList from './MyPlantList';
@@ -88,14 +88,14 @@ const MyPlantMainPage = () => {
   return (
     <div className="layout">
       <Header />
-      <main className="my_plant_wrapper">
-        <h2 className="my_plant_info_message">
-          <span className="username">{user?.displayName}</span>님의 식물을 한
-          눈에 보기!
+      <main className={styles.container}>
+        <h2 className={styles.info_message}>
+          <span className={styles.username}>{user?.displayName}</span>님의
+          식물을 한 눈에 보기!
         </h2>
-        <div className="main_plant_info_box inner">
+        <div className={`${styles.info_box} inner`}>
           {mainPlant ? (
-            <div className="main_plant_main_data">
+            <div className={styles.main_data}>
               <span>
                 <img
                   className="main_plant_img"
@@ -103,32 +103,29 @@ const MyPlantMainPage = () => {
                   alt="mainPlantImg"
                 />
               </span>
-              <div className="main_plant_head">
+              <div className={styles.head}>
                 <img src={BOOKMARK_TRUE_ICON} alt="main plant" />{' '}
-                <p className="main_plant_title">메인 식물</p>
+                <p className={styles.main_plant_title}>메인 식물</p>
               </div>
-              <p className="main_plant_name">{mainPlant?.plantName}</p>
-              <p className="main_plant_nickname">{mainPlant?.nickname}</p>
-              <p className="plant_plus_btn" onClick={handleAddPlant}>
+              <p className={styles.main_plant_name}>{mainPlant?.plantName}</p>
+              <p className={styles.main_plant_nickname}>
+                {mainPlant?.nickname}
+              </p>
+              <p className={styles.plant_plus_btn} onClick={handleAddPlant}>
                 <img src={PLUS_ICON} className="plant_plus_icon" alt="add" />
                 식물 등록
               </p>
             </div>
           ) : (
-            <div className="main_plant_main_data">
+            <div className={styles.empty_wrapper}>
               <img
-                className="main_plant_sample_img"
+                className={styles.main_plant_sample_img}
                 src={SAMPLE_PLANT}
                 alt="samplePlantImg"
               />
-              <button
-                className="my_plant_main_add_btn_inner_contents"
-                onClick={handleAddPlant}
-              >
-                <div className="my_plant_main_add_btn_inner_contents_box">
-                  <img src={EDIT_ICON} alt="edit" />
-                  <p>내 식물 등록하기</p>
-                </div>
+              <button className={styles.register_btn} onClick={handleAddPlant}>
+                <img src={EDIT_ICON} alt="edit" />
+                <p>내 식물 등록하기</p>
               </button>
             </div>
           )}
