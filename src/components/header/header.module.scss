@@ -1,8 +1,9 @@
 @use '@/styles/mixins';
+@use '@/styles/sizes';
 
 .header {
   width: 100%;
-  height: 5.6rem;
+  height: sizes.$header-height;
   display: flex;
   justify-content: space-between;
   align-items: center;

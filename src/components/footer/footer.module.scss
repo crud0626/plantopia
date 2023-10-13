@@ -1,11 +1,12 @@
 @use '@/styles/colors';
+@use '@/styles/sizes';
 
 .footer {
   position: fixed;
   bottom: 0;
   width: 100%;
   max-width: 500px;
-  height: 5.6rem;
+  height: sizes.$main-footer-height;
   background: #fff;
   border: 1px solid colors.$main-border-color;
   border-bottom: none;

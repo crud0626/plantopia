@@ -1,8 +1,9 @@
 @use '@/styles/mixins';
+@use '@/styles/sizes';
 
 .container {
-  min-height: 100vh;
-  padding-bottom: 5.6rem;
+  min-height: calc(sizes.$body-min-height - sizes.$header-height);
+  padding-bottom: sizes.$main-footer-height;
   background-color: #ffffff;
 
   > section {
