@@ -70,7 +70,7 @@ const DiaryEditPage = () => {
   }, [user?.email]);
 
   return (
-    <div className="layout">
+    <>
       <PageHeader exitBtn title="수정하기" />
       <main className={styles.container}>
         {oldContents && docId && (
@@ -83,7 +83,7 @@ const DiaryEditPage = () => {
         )}
       </main>
       {isLoading && <Progress />}
-    </div>
+    </>
   );
 };
 

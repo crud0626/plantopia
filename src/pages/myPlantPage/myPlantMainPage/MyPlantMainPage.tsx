@@ -86,7 +86,7 @@ const MyPlantMainPage = () => {
   }, [user]);
 
   return (
-    <div className="layout">
+    <>
       <Header />
       <main className={styles.container}>
         <h2 className={styles.info_message}>
@@ -137,7 +137,7 @@ const MyPlantMainPage = () => {
       </main>
       <Footer />
       {isLoading && <Progress />}
-    </div>
+    </>
   );
 };
 

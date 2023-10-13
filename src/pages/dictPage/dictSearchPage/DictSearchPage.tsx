@@ -64,7 +64,7 @@ const DictSearchPage = () => {
   }, [locationState]);
 
   return (
-    <div className="layout">
+    <>
       <PageHeader title="검색 결과" />
       <main className={`${styles.container} inner`}>
         <section className={styles.search_wrapper}>
@@ -123,7 +123,7 @@ const DictSearchPage = () => {
         </section>
       </main>
       {isLoading && <Progress />}
-    </div>
+    </>
   );
 };
 

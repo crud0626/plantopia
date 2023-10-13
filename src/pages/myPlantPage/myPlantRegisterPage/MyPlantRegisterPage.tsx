@@ -57,7 +57,7 @@ const MyPlantRegisterPage = () => {
   }
 
   return (
-    <div className="layout">
+    <>
       <PageHeader exitBtn title="식물 등록" />
       <main>
         <MyPlantForm
@@ -67,7 +67,7 @@ const MyPlantRegisterPage = () => {
           onSubmit={handleRegister}
         />
       </main>
-    </div>
+    </>
   );
 };
 

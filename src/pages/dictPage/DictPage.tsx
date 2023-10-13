@@ -56,7 +56,7 @@ const DictPage = () => {
   const categories = Object.keys(cardsData) as Array<keyof typeof cardsData>;
 
   return (
-    <div className={`${styles.container} layout`}>
+    <div className={styles.container}>
       <Header />
       <main className={styles.wrapper}>
         <h2 className={styles.title}>

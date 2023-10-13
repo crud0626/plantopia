@@ -34,7 +34,7 @@ const NotiPage = () => {
   const contentNames = Object.keys(contents) as Array<keyof typeof contents>;
 
   return (
-    <div className="layout">
+    <>
       <PageHeader title="사용 가이드" />
       <main className={styles.container}>
         <h2 className={styles.title}>앱처럼 사용해 보세요!</h2>
@@ -70,7 +70,7 @@ const NotiPage = () => {
         </section>
       </main>
       <Footer />
-    </div>
+    </>
   );
 };
 

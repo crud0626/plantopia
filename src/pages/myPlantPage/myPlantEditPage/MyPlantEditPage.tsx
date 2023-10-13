@@ -65,7 +65,7 @@ const MyPlantEditPage = () => {
   }, []);
 
   return (
-    <div className="layout">
+    <>
       <PageHeader exitBtn title="식물 수정" />
       <main>
         {userPlant && (
@@ -78,7 +78,7 @@ const MyPlantEditPage = () => {
         )}
       </main>
       {isLoading && <Progress />}
-    </div>
+    </>
   );
 };
 

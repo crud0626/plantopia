@@ -58,7 +58,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="layout">
+    <>
       <main className={styles.container}>
         <div className={`${styles.login_box} inner`}>
           <h1>
@@ -113,7 +113,7 @@ const LoginPage = () => {
           </div>
         </div>
       </main>
-    </div>
+    </>
   );
 };
 

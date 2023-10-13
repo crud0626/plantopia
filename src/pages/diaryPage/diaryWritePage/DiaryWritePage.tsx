@@ -52,9 +52,9 @@ const DiaryWritePage = () => {
   }, [user?.email]);
 
   return (
-    <div className="layout">
+    <>
+      <PageHeader exitBtn title="글쓰기" />
       <main className={styles.container}>
-        <PageHeader exitBtn title="글쓰기" />
         {user?.email && (
           <DiaryForm
             callerType="write"
@@ -65,7 +65,7 @@ const DiaryWritePage = () => {
         )}
       </main>
       {isLoading && <Progress />}
-    </div>
+    </>
   );
 };
 

@@ -4,6 +4,20 @@
 @use 'reset';
 @use 'fonts';
 @use 'colors';
+@use 'sizes';
+
+* {
+  box-sizing: border-box;
+}
+
+#root {
+  margin: auto;
+  min-width: 320px;
+  max-width: 500px;
+  /* 뷰포트 모바일 대응 */
+  min-height: sizes.$body-min-height;
+  background: #fff;
+}
 
 body {
   font-family: 'Pretendard', Arial, sans-serif;
@@ -13,44 +27,26 @@ body {
   .scroll {
     overflow: auto;
   }
+
   &::-webkit-scrollbar {
     width: 5px;
     height: 5px;
   }
+
   &::-webkit-scrollbar-thumb {
     background-color: #6ecfcd;
     border-radius: 100px;
   }
+
   &::-webkit-scrollbar-track {
     background-color: rgb(99, 160, 160);
     border-radius: 100px;
     background-clip: padding-box;
     border: 3px solid transparent;
   }
+
   ::selection {
     background-color: #dfedec;
-  }
-}
-
-.layout {
-  margin: auto;
-  min-width: 320px;
-  max-width: 500px;
-  -webkit-text-size-adjust: 100%;
-  word-wrap: break-word;
-  word-break: break-all;
-  background: #fff;
-  /* 뷰포트 모바일 대응 */
-  min-height: calc(var(--vh, 1vh) * 100);
-
-  #root {
-    width: 100%;
-    min-height: inherit;
-  }
-
-  * {
-    box-sizing: border-box;
-    outline: none;
   }
 }
 
@@ -64,12 +60,6 @@ button {
 
 .hide {
   visibility: hidden;
-}
-
-/* REM rules */
-
-html {
-  font-size: 5px;
 }
 
 header,
@@ -87,6 +77,12 @@ main {
       font-family: 'Pretendard', Arial, sans-serif;
     }
   }
+}
+
+/* REM rules */
+
+html {
+  font-size: 5px;
 }
 
 @media screen and (min-width: 216px) {

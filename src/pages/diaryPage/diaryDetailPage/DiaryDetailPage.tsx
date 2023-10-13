@@ -76,7 +76,7 @@ const DiaryDetailPage = () => {
   const { content, postedAt, tags, title, imgUrls } = diaryDetailData;
 
   return (
-    <div className={`${styles.container} layout`}>
+    <div className={styles.container}>
       <PageHeader title="다이어리" />
       <div className={styles.more_btn_wrap}>
         <button

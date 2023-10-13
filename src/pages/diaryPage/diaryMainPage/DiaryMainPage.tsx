@@ -111,7 +111,7 @@ const DiaryPage = () => {
   }, [user?.email]);
 
   return (
-    <div className="layout">
+    <>
       <Header />
       <main className={styles.diary_page}>
         <div className={styles.diary_container}>
@@ -152,7 +152,7 @@ const DiaryPage = () => {
       </main>
       <Footer />
       {isLoading && <Progress />}
-    </div>
+    </>
   );
 };
 

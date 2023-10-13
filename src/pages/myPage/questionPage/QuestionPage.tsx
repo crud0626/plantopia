@@ -31,7 +31,7 @@ const QuestionPage = () => {
   );
 
   return (
-    <div className="layout">
+    <>
       <PageHeader title="자주 묻는 질문" />
       <main className={styles.container}>
         <h2 className={styles.title}>궁금한 점이 있으신가요?</h2>
@@ -65,7 +65,7 @@ const QuestionPage = () => {
         </section>
       </main>
       <Footer />
-    </div>
+    </>
   );
 };
 

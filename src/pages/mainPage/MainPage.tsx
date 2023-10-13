@@ -100,7 +100,7 @@ const MainPage = () => {
   }, [user]);
 
   return (
-    <div className="layout">
+    <>
       <Header isMainPage />
       <main className={styles.container}>
         <section>
@@ -121,7 +121,7 @@ const MainPage = () => {
       </main>
       <Footer />
       {isLoading && <Progress />}
-    </div>
+    </>
   );
 };
 

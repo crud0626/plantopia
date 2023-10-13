@@ -85,7 +85,7 @@ const MyInfo = () => {
   };
 
   return (
-    <div className="layout">
+    <>
       <PageHeader title="내 정보" />
       <main className={`${styles.container} inner`}>
         <section className={styles.profile_section}>
@@ -145,7 +145,7 @@ const MyInfo = () => {
       >
         {isLoading ? '수정 중...' : '수정하기'}
       </button>
-    </div>
+    </>
   );
 };
 

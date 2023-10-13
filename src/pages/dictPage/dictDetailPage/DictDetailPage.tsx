@@ -74,7 +74,7 @@ const DictDetailPage = () => {
   }, []);
 
   return (
-    <div className="layout">
+    <>
       <PageHeader title="식물 상세" />
       <main className={styles.container}>
         {plantData && (
@@ -137,7 +137,7 @@ const DictDetailPage = () => {
           </>
         )}
       </main>
-    </div>
+    </>
   );
 };
 

@@ -75,7 +75,7 @@ const MyPlantDetailPage = () => {
     (plantDetail?.wateredDays.at(-1)?.seconds || 0) * 1000;
 
   return (
-    <div className="layout">
+    <>
       <PageHeader title="내 식물 상세" />
       {plantDetail && (
         <main>
@@ -200,7 +200,7 @@ const MyPlantDetailPage = () => {
         </main>
       )}
       {isLoading && <Progress />}
-    </div>
+    </>
   );
 };
 

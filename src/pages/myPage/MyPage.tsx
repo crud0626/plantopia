@@ -38,7 +38,7 @@ const MyPage = () => {
   };
 
   return (
-    <div className={`${styles.my_page} layout`}>
+    <div className={styles.my_page}>
       <Header />
       <main className={styles.container}>
         <section className={`${styles.info_wrapper} inner`}>
