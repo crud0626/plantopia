@@ -11,7 +11,6 @@ import { getUserPlantList } from '@/api/userPlant';
 
 import Progress from '@/components/progress/Progress';
 import PageHeader from '@/components/pageHeader/PageHeader';
-
 import styles from './calendarPage.module.scss';
 
 type ValuePiece = Date | null;
@@ -51,14 +50,14 @@ const ContentSection = ({ contents, selectedDate }: ContentSectionProps) => {
         <div className={styles.date_list}>
           <div className={styles.list_line}></div>
           <ul>
-            {contents.map(({ time, plantName }, i) => (
-              <li key={nanoid()}>
-                <em>{time}</em>
-                <div className={`${styles.list_card} ${styles.color[i % 4]}`}>
-                  {plantName}
-                </div>
-              </li>
-            ))}
+            {contents.map(({ time, plantName }) => {
+              return (
+                <li key={nanoid()}>
+                  <em>{time}</em>
+                  <div className={styles.list_card}>{plantName}</div>
+                </li>
+              );
+            })}
           </ul>
         </div>
       ) : (
