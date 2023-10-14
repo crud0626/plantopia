@@ -78,7 +78,7 @@ const DiaryDetailPage = () => {
   return (
     <div className={styles.container}>
       <PageHeader title="다이어리" />
-      <div className={styles.more_btn_wrap}>
+      <div className={`${styles.more_btn_wrap} more_btn_wrap`}>
         <button
           className={styles.more}
           onClick={() => setIsModalOpen(prev => !prev)}
