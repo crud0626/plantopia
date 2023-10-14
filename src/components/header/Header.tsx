@@ -24,9 +24,11 @@ const Header = ({ isMainPage }: HeaderProps) => {
           <Link to={paths.calendar} className={styles.calendar_btn}>
             <img className={styles.calendar} src={CALENDAR} alt="calendar" />
           </Link>
-          {user?.photoURL && (
+          {user && (
             <Link to={paths.mypage} className={styles.profile_btn}>
-              <img className={styles.profile} src={user.photoURL} />
+              {user.photoURL && (
+                <img src={user.photoURL} className={styles.profile} />
+              )}
             </Link>
           )}
         </div>

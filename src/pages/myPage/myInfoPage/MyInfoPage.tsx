@@ -9,15 +9,13 @@ import PageHeader from '@/components/pageHeader/PageHeader';
 import paths from '@/constants/routePath';
 import styles from './myInfoPage.module.scss';
 
-import PROFILE from '@/assets/images/profile.png';
-
 const MyInfo = () => {
   const user = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [userInfo, setUserInfo] = useState({
     nickname: user?.displayName || '',
-    imgUrl: user?.photoURL || '',
+    imgUrl: user?.photoURL,
     password: '',
   });
 
@@ -90,7 +88,9 @@ const MyInfo = () => {
       <main className={`${styles.container} inner`}>
         <section className={styles.profile_section}>
           <div className={styles.profile}>
-            <img src={userInfo.imgUrl || PROFILE} alt="profile" />
+            <div className={styles.profile_img}>
+              {userInfo.imgUrl && <img src={userInfo.imgUrl} alt="profile" />}
+            </div>
             <label htmlFor="profile" className={styles.edit_btn} />
             <input
               id="profile"

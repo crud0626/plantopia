@@ -26,13 +26,20 @@
       }
     }
 
-    .profile {
+    .info_wrapper {
       display: flex;
       align-items: center;
       padding-bottom: 3rem;
 
-      > img {
-        @include mixins.avatar(50%, 6rem);
+      > .profile {
+        width: 6rem;
+        height: 6rem;
+        border-radius: 50%;
+        background-color: #f8f8fa;
+
+        > img {
+          @include mixins.avatar(50%, 6rem);
+        }
       }
 
       .info {
