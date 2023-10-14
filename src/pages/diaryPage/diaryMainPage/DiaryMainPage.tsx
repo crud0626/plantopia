@@ -20,7 +20,6 @@ type DiaryViewTypes = 'List' | 'Gallery';
 
 interface TabProps {
   label: DiaryViewTypes;
-  styleName: string;
   onImage: string;
   offImage: string;
 }
@@ -28,13 +27,11 @@ interface TabProps {
 const tabData: TabProps[] = [
   {
     label: 'List',
-    styleName: 'list_tab',
     onImage: DiaryImages.LISTON,
     offImage: DiaryImages.LISTOFF,
   },
   {
     label: 'Gallery',
-    styleName: 'gallery_tab',
     onImage: DiaryImages.GALLERYON,
     offImage: DiaryImages.GALLERYOFF,
   },
@@ -120,10 +117,10 @@ const DiaryPage = () => {
             남겨보세요.
           </h2>
           <section className={styles.tab_section}>
-            {tabData.map(({ label, styleName, onImage, offImage }, i) => (
+            {tabData.map(({ label, onImage, offImage }, i) => (
               <div
                 key={i}
-                className={`${styles.view_tab} ${styleName} ${
+                className={`${styles.view_tab} ${
                   currentTab === label ? styles.on : ''
                 }`}
                 onClick={() => handleTabChange(label)}

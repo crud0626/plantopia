@@ -40,7 +40,7 @@ export const logout = () => {
 export const updateUserInfo = async (
   pw: string,
   nickname: string,
-  imgUrl: string | null,
+  imgUrl?: string | null,
 ) => {
   const user = auth.currentUser;
   if (!user?.email) return;

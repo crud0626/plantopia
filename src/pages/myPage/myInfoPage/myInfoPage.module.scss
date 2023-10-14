@@ -1,3 +1,5 @@
+@use '@/styles/mixins';
+
 .container {
   height: 100vh;
   max-height: calc(100vh - 10.6rem);
@@ -11,10 +13,15 @@
   .profile {
     position: relative;
 
-    > img {
+    .profile_img {
       width: 6rem;
       height: 6rem;
       border-radius: 50%;
+      background-color: #f8f8fa;
+
+      > img {
+        @include mixins.avatar(50%);
+      }
     }
 
     .edit_btn {

@@ -22,7 +22,7 @@
     > .date_title {
       display: inline-block;
       padding: 0.2rem 0 0.2rem 2.2rem;
-      background: url('@/assets/icons/icon_calendar.png') no-repeat left center /
+      background: url('@/assets/icons/calendar.png') no-repeat left center /
         1.6rem;
       font-size: 1.3rem;
       font-weight: 700;
@@ -97,26 +97,26 @@
               height: 2.7rem;
               border-radius: 1.2rem;
             }
+          }
 
-            &.color0::before {
-              background-color: #f4efd3;
-            }
+          &:nth-child(5n + 1) > .list_card::before {
+            background-color: #f4efd3;
+          }
 
-            &.color1::before {
-              background-color: #d6e9e5;
-            }
+          &:nth-child(5n + 2) > .list_card::before {
+            background-color: #d6e9e5;
+          }
 
-            &.color2::before {
-              background-color: #ebdde4;
-            }
+          &:nth-child(5n + 3) > .list_card::before {
+            background-color: #ebdde4;
+          }
 
-            &.color3::before {
-              background-color: #e1ddeb;
-            }
+          &:nth-child(5n + 4) > .list_card::before {
+            background-color: #e1ddeb;
+          }
 
-            &.color4::before {
-              background-color: #bee5fa;
-            }
+          &:nth-child(5n + 5) > .list_card::before {
+            background-color: #bee5fa;
           }
         }
 
@@ -252,6 +252,7 @@
     .react-calendar__tile--active:enabled:hover,
     .react-calendar__tile--active {
       background: #ffffff;
+
       abbr {
         width: 1.6rem;
         height: 1.6rem;

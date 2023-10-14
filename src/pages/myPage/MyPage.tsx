@@ -9,8 +9,6 @@ import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
 import Progress from '@/components/progress/Progress';
 
-import PROFILE from '@/assets/images/profile.png';
-
 const customerService = [
   { title: '사용 가이드', url: '/mypage/guide' },
   {
@@ -46,8 +44,10 @@ const MyPage = () => {
             <em>{user?.displayName || '회원'}</em>님, 플랜토피아와 함께
             <br /> 슬기로운 식집사 생활을 시작하세요!
           </h2>
-          <div className={styles.profile}>
-            <img src={user?.photoURL || PROFILE} alt="profile" />
+          <div className={styles.info_wrapper}>
+            <div className={styles.profile}>
+              {user?.photoURL && <img src={user?.photoURL} alt="profile" />}
+            </div>
             <div className={styles.info}>
               <strong>{user?.displayName}</strong>
               <p>{user?.email}</p>
