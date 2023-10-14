@@ -1,7 +1,11 @@
 import { lazy } from 'react';
+import paths from '@/constants/routePath';
 
-const DiaryPage = lazy(
-  () => import('@/pages/diaryPage/diaryMainPage/DiaryPage'),
+const DiaryMainPage = lazy(
+  () => import('@/pages/diaryPage/diaryMainPage/DiaryMainPage'),
+);
+const DiaryDetailPage = lazy(
+  () => import('@/pages/diaryPage/diaryDetailPage/DiaryDetailPage'),
 );
 const DiaryWritePage = lazy(
   () => import('@/pages/diaryPage/diaryWritePage/DiaryWritePage'),
@@ -9,18 +13,15 @@ const DiaryWritePage = lazy(
 const DiaryEditPage = lazy(
   () => import('@/pages/diaryPage/diaryEditPage/DiaryEditPage'),
 );
-const DiaryDetailPage = lazy(
-  () => import('@/pages/diaryPage/diaryDetailPage/DiaryDetailPage'),
-);
 
 const diaryRoutes = [
-  { path: '/diary', element: <DiaryPage /> },
-  { path: '/diary/write', element: <DiaryWritePage /> },
-  { path: '/diary/:docId/edit', element: <DiaryEditPage /> },
+  { path: paths.diary, element: <DiaryMainPage /> },
   {
-    path: '/diary/:docId',
+    path: `${paths.diary}/:docId`,
     element: <DiaryDetailPage />,
   },
+  { path: paths.diaryWrite, element: <DiaryWritePage /> },
+  { path: `${paths.diaryEdit}/:docId`, element: <DiaryEditPage /> },
 ];
 
 export default diaryRoutes;

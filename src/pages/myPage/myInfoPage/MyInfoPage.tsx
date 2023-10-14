@@ -2,96 +2,105 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks';
 import { nicknameRe } from '@/constants/regEx';
-import { errorNoti, successNoti } from '@/utils/alarmUtil';
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
 import { updateUserInfo } from '@/api/auth';
 import { uploadImg } from '@/api/storage';
-import './myInfoPage.scss';
-
-import PROFILE from '@/assets/images/icons/default_profile.png';
+import { showAlert } from '@/utils/dialog';
+import PageHeader from '@/components/pageHeader/PageHeader';
+import paths from '@/constants/routePath';
+import styles from './myInfoPage.module.scss';
 
 const MyInfo = () => {
   const user = useAuth();
   const navigate = useNavigate();
-  const [nickname, setNickname] = useState(user?.displayName);
-  const [password, setPassword] = useState('');
-  const [uploadedImg, setUploadedImg] = useState<string>('');
-  const [imgUrl, setImgUrl] = useState<string | null>(null);
-  const [isBtnActive, setIsBtnActive] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [userInfo, setUserInfo] = useState({
+    nickname: user?.displayName || '',
+    imgUrl: user?.photoURL,
+    password: '',
+  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files === null) return;
+  const handleImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
 
     const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setUploadedImg(String(reader.result));
-    };
-    uploadProfileImg(file);
-  };
 
-  const uploadProfileImg = async (file: File) => {
     try {
+      setIsLoading(true);
+
       const imgPath = await uploadImg(file, 'profile');
 
-      setImgUrl(imgPath);
+      setUserInfo(prev => ({
+        ...prev,
+        imgUrl: imgPath,
+      }));
     } catch (error) {
-      errorNoti('이미지 등록에 실패하였습니다.');
+      showAlert('error', '이미지 등록에 실패하였습니다.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const nicknameValidation = (nickname: string | null | undefined) => {
-    if (!nickname) return true;
-    if (!nicknameRe.test(nickname)) {
-      errorNoti('닉네임을 확인해 주세요.');
+  const validateInput = (values: typeof userInfo): boolean => {
+    const { nickname, password } = values;
+
+    if (!nickname) {
+      showAlert('error', '닉네임을 입력해주세요.');
       return false;
     }
+
+    if (!nicknameRe.test(nickname)) {
+      showAlert('error', '닉네임이 규칙에 맞지 않습니다.');
+      return false;
+    }
+
+    if (!password) {
+      showAlert('error', '비밀번호를 입력해주세요.');
+      return false;
+    }
+
     return true;
   };
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (!nickname) {
-      errorNoti('닉네임이 비어있습니다.');
-      return;
-    }
-    if (!nicknameValidation(nickname)) return;
+    if (!validateInput(userInfo)) return;
+
+    const { nickname, password, imgUrl } = userInfo;
 
     try {
-      setIsBtnActive(false);
+      setIsLoading(true);
 
-      if (!user?.email) throw Error();
+      await updateUserInfo(password, nickname.trim(), imgUrl);
 
-      await updateUserInfo(password, nickname?.trim(), imgUrl);
-
-      successNoti('회원정보 수정에 성공했습니다.');
-      navigate('/mypage');
+      showAlert('success', '회원정보 수정에 성공했습니다.');
+      navigate(paths.mypage);
     } catch (error) {
-      errorNoti('회원정보 수정에 실패했습니다.');
+      showAlert('error', '회원정보 수정에 실패했습니다.');
     } finally {
-      setIsBtnActive(true);
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="my_info_page layout">
-      <HeaderBefore title="내 정보" />
-      <main className="my_info_container inner">
-        <section className="profile_section">
-          <div className="profile">
-            <img src={uploadedImg || user?.photoURL || PROFILE} alt="profile" />
-            <label htmlFor="profile" className="edit_btn" />
+    <>
+      <PageHeader title="내 정보" />
+      <main className={`${styles.container} inner`}>
+        <section className={styles.profile_section}>
+          <div className={styles.profile}>
+            <div className={styles.profile_img}>
+              {userInfo.imgUrl && <img src={userInfo.imgUrl} alt="profile" />}
+            </div>
+            <label htmlFor="profile" className={styles.edit_btn} />
             <input
-              onChange={handleChange}
               id="profile"
               type="file"
               accept="image/*"
+              onChange={handleImage}
             />
           </div>
         </section>
-        <section className="input_section">
+        <section className={styles.input_section}>
           <ul>
             <li>
               <label>이메일</label>
@@ -102,17 +111,27 @@ const MyInfo = () => {
                 닉네임<small> (2~8글자, 특수문자 불가)</small>
               </label>
               <input
-                onChange={e => setNickname(e.target.value)}
                 type="text"
-                defaultValue={user?.displayName || ''}
+                value={userInfo.nickname}
+                onChange={({ target }) => {
+                  setUserInfo({
+                    ...userInfo,
+                    nickname: target.value,
+                  });
+                }}
               />
             </li>
             {user?.emailVerified || (
               <li>
                 <label>비밀번호 확인</label>
                 <input
-                  onChange={e => setPassword(e.target.value)}
                   type="password"
+                  onChange={({ target }) => {
+                    setUserInfo({
+                      ...userInfo,
+                      password: target.value,
+                    });
+                  }}
                 />
               </li>
             )}
@@ -120,13 +139,13 @@ const MyInfo = () => {
         </section>
       </main>
       <button
-        className="info_post"
-        disabled={!isBtnActive}
+        className={styles.info_post}
+        disabled={isLoading}
         onClick={handleClick}
       >
-        {isBtnActive ? '수정하기' : '수정 중...'}
+        {isLoading ? '수정 중...' : '수정하기'}
       </button>
-    </div>
+    </>
   );
 };
 

@@ -1,120 +1,71 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Timestamp } from 'firebase/firestore';
 import { useAuth } from '@/hooks';
-import useDiaryData from '@/hooks/useDiaryData';
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
-import SectionPhoto from './SectionPhoto';
-import SectionBoard from './SectionBoard';
-import { errorNoti, successNoti } from '@/utils/alarmUtil';
 import { saveDiary } from '@/api/userDiary';
-import './diaryWritePage.scss';
+import { getUserPlantList } from '@/api/userPlant';
+import { showAlert } from '@/utils/dialog';
+import { InitialDiaryContent } from '@/@types/diary.type';
+import paths from '@/constants/routePath';
+
+import styles from './diaryWritePage.module.scss';
+import PageHeader from '@/components/pageHeader/PageHeader';
+import DiaryForm from '@/components/diaryForm/DiaryForm';
+import Progress from '@/components/progress/Progress';
 
 const DiaryWritePage = () => {
   const user = useAuth();
-  const userEmail = user?.email || '';
-  const { plantTag } = useDiaryData();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [plantNames, setPlantNames] = useState<string[]>([]);
 
-  const [state, setState] = useState({
-    title: '',
-    content: '',
-    saving: false,
-    isVisible: false,
-  });
+  const handleClickSave = async (contents: InitialDiaryContent) => {
+    try {
+      if (!contents.userEmail) throw Error();
 
-  const [chosenPlants, setChosenPlants] = useState<string[]>([]);
-  const [imgUrls, setImgUrls] = useState<string[]>([]);
+      await saveDiary(contents);
 
-  const toggleSelect = () =>
-    setState(prevState => ({ ...prevState, isVisible: !prevState.isVisible }));
-
-  const handleChosenPlantClick = (plant: string) =>
-    setChosenPlants(prev => prev.filter(p => p !== plant));
-
-  const handlePlantSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedPlant = event.target.value;
-
-    setChosenPlants(prev =>
-      prev.includes(selectedPlant)
-        ? prev.filter(p => p !== selectedPlant)
-        : [...prev, selectedPlant],
-    );
-  };
-
-  const handleSaveClick = async () => {
-    const { title, content } = state;
-
-    if (!title || chosenPlants.length === 0 || !content) {
-      errorNoti(
-        !title
-          ? '제목을 작성해주세요.'
-          : chosenPlants.length === 0
-          ? '관련 식물을 1가지 이상 선택해주세요.'
-          : '내용을 작성해주세요.',
-      );
-      return;
+      showAlert('success', '저장이 완료되었어요!');
+      navigate(paths.diary);
+    } catch (error) {
+      showAlert('error', '저장에 실패하였습니다.');
     }
-
-    setState(prev => ({ ...prev, saving: true }));
-
-    await saveDiary({
-      userEmail,
-      content,
-      postedAt: Timestamp.fromDate(new Date()),
-      tags: chosenPlants,
-      title,
-      imgUrls,
-    });
-
-    setState({ title: '', content: '', saving: false, isVisible: false });
-    setChosenPlants([]);
-
-    successNoti('저장이 완료되었어요!');
-    navigate('/diary');
   };
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const targetElement = event.target as HTMLElement;
+    (async () => {
+      if (!user?.email) return;
 
-      if (state.isVisible && !targetElement.closest('.plant_select_wrapper')) {
-        setState(prev => ({ ...prev, isVisible: false }));
+      try {
+        setIsLoading(true);
+
+        const plantNames = await getUserPlantList(user.email).then(plants =>
+          plants.map(({ nickname }) => nickname),
+        );
+
+        setPlantNames(plantNames);
+      } catch (error) {
+        showAlert('error', '유저 데이터를 가져오던 도중 에러가 발생했습니다.');
+      } finally {
+        setIsLoading(false);
       }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [state.isVisible]);
+    })();
+  }, [user?.email]);
 
   return (
-    <div className="layout">
-      <HeaderBefore ex={true} title="글쓰기" />
-      <main className="diary_main">
-        <SectionPhoto
-          userEmail={userEmail}
-          imgUrls={imgUrls}
-          setImgUrls={setImgUrls}
-        />
-        <SectionBoard
-          state={state}
-          setState={setState}
-          chosenPlants={chosenPlants}
-          toggleSelect={toggleSelect}
-          handleChosenPlantClick={handleChosenPlantClick}
-          handlePlantSelection={handlePlantSelection}
-          plantTag={plantTag}
-        />
+    <>
+      <PageHeader exitBtn title="글쓰기" />
+      <main className={styles.container}>
+        {user?.email && (
+          <DiaryForm
+            callerType="write"
+            plantNames={plantNames}
+            oldContents={{ userEmail: user.email }}
+            onSubmit={handleClickSave}
+          />
+        )}
       </main>
-      <button
-        className="save_button"
-        onClick={handleSaveClick}
-        disabled={state.saving}
-      >
-        {state.saving ? '저장 중...' : '저장하기'}
-      </button>
-    </div>
+      {isLoading && <Progress />}
+    </>
   );
 };
 

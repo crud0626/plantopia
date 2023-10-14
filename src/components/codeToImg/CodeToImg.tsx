@@ -1,9 +1,13 @@
 import { Children } from 'react';
-import './codeToImg.scss';
+import styles from './codeToImg.module.scss';
 
 const CodeToImg = (icons: string[]) => {
   return (
-    <>{Children.toArray(icons.map(icon => <img src={icon} alt="icon" />))}</>
+    <>
+      {Children.toArray(
+        icons.map(icon => <img src={icon} className={styles.img} alt="icon" />),
+      )}
+    </>
   );
 };
 

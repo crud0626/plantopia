@@ -1,103 +1,115 @@
-import { useState, useRef, useEffect, Children } from 'react';
+import { useState, useEffect, Children } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { PlantType } from '@/@types/dictionary.type';
 import { koreanRe } from '@/constants/regEx';
-import Progress from '@/components/progress/Progress';
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
 import { getPlantSearchResults } from '@/api/dictionary';
-import { errorNoti } from '@/utils/alarmUtil';
-import './dictSearchPage.scss';
+import { showAlert } from '@/utils/dialog';
+import { PlantType } from '@/@types/dictionary.type';
+import paths from '@/constants/routePath';
+import styles from './dictSearchPage.module.scss';
+import Progress from '@/components/progress/Progress';
+import PageHeader from '@/components/pageHeader/PageHeader';
 
-import SEARCH_ICON from '@/assets/images/icons/dict_search.png';
+import SEARCH_ICON from '@/assets/icons/search.png';
+
+const EmptyResult = () => {
+  return (
+    <div className={styles.no_search}>
+      <p>검색 결과가 없습니다.</p>
+      <div className={styles.notice}>
+        👷‍♂️ 식물도감에 없는 식물의 등록 기능을 준비중입니다.
+        <a href="https://forms.gle/g4AjkNKqVDP48Xnc7" target="_blank">
+          내가 찾는 식물이 없다면, 식물 등록 요청하기
+        </a>
+      </div>
+    </div>
+  );
+};
 
 const DictSearchPage = () => {
-  const location = useLocation();
-  const inputValue = location.state?.inputValue;
-  const [plant, setPlant] = useState<PlantType[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const locationState: { inputValue: string } | null = useLocation().state;
+  const [searchValue, setSearchValue] = useState(
+    locationState?.inputValue || '',
+  );
+  const [results, setResults] = useState<PlantType[]>([]); // results
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!inputRef?.current?.value) return;
-    getDouments(inputRef?.current?.value);
+
+    if (searchValue) {
+      getDouments(searchValue);
+    }
   };
 
-  const getDouments = async (plantName: string) => {
-    let fieldName = 'name';
-    if (!koreanRe.test(plantName)) {
-      fieldName = 'scientificName';
-      plantName =
-        plantName[0] &&
-        plantName.replace(plantName[0], plantName[0].toUpperCase());
-    }
+  const getDouments = async (value: string) => {
+    const fieldName = koreanRe.test(value) ? 'name' : 'scientificName';
+    const plantName = value.replace(value[0], value[0].toUpperCase());
 
     try {
       setIsLoading(true);
 
-      const results = await getPlantSearchResults(fieldName, plantName);
-      setPlant(results);
+      const plantList = await getPlantSearchResults(fieldName, plantName);
+      setResults(plantList);
     } catch (error) {
-      errorNoti('검색 도중 에러가 발생하였습니다!');
+      showAlert('error', '검색 도중 에러가 발생하였습니다!');
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    getDouments(inputValue);
-  }, [inputValue]);
+    if (locationState) {
+      getDouments(locationState.inputValue);
+    }
+  }, [locationState]);
 
   return (
-    <div className="search_container layout">
-      <HeaderBefore ex={false} title="검색 결과" />
-      <main className="inner">
-        <section className="search_wrapper">
+    <>
+      <PageHeader title="검색 결과" />
+      <main className={`${styles.container} inner`}>
+        <section className={styles.search_wrapper}>
           <form onSubmit={handleSubmit}>
-            <div className="input_wrapper">
+            <div className={styles.input_wrapper}>
               <input
-                ref={inputRef}
-                defaultValue={inputValue}
+                value={searchValue}
                 placeholder="식물 이름으로 검색하기"
+                onChange={({ target }) => setSearchValue(target.value)}
               />
-              <button>
+              <button type="submit">
                 <img
-                  className="search_img"
                   src={SEARCH_ICON}
-                  alt="search icon"
+                  className={styles.search_img}
+                  alt="search"
                 />
               </button>
             </div>
           </form>
         </section>
-        <section className="plant_container">
-          {plant.length ? (
+        <section className={styles.plant_container}>
+          {results.length ? (
             Children.toArray(
-              plant.map(item => (
-                <Link to={`/dict/detail?plantName=${item.name}`} state={item}>
-                  <div className="plant_wrapper">
-                    <img src={item.imageUrl} alt="plant image" />
-                    <div className="name_wrapper">
-                      <h3 className="korean_name">{item.name}</h3>
-                      <h3 className="english_name">{item.scientificName}</h3>
+              results.map(plant => (
+                <Link
+                  to={`${paths.dictDetail}?plantName=${plant.name}`}
+                  state={plant}
+                >
+                  <div className={styles.plant_wrapper}>
+                    <img src={plant.imageUrl} alt="plant" />
+                    <div className={styles.name_wrapper}>
+                      <h3 className={styles.korean_name}>{plant.name}</h3>
+                      <h3 className={styles.english_name}>
+                        {plant.scientificName}
+                      </h3>
                     </div>
                   </div>
                   <hr />
                 </Link>
               )),
             )
-          ) : inputValue ? (
-            <div className="no_search">
-              <p>검색 결과가 없습니다.</p>
-              <div className="notice">
-                👷‍♂️ 식물도감에 없는 식물의 등록 기능을 준비중입니다.
-                <a href="https://forms.gle/g4AjkNKqVDP48Xnc7" target="_blank">
-                  내가 찾는 식물이 없다면, 식물 등록 요청하기
-                </a>
-              </div>
-            </div>
+          ) : searchValue ? (
+            <EmptyResult />
           ) : (
-            <div className="search_notice">
+            <div className={styles.search_notice}>
               <strong>🌱 식물 검색 TIP </strong>
               <p>
                 식물 이름의 첫번째 글자부터 입력하여
@@ -111,7 +123,7 @@ const DictSearchPage = () => {
         </section>
       </main>
       {isLoading && <Progress />}
-    </div>
+    </>
   );
 };
 

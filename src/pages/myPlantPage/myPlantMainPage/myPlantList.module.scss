@@ -1,0 +1,64 @@
+@use '@/styles/mixins';
+
+.container {
+  width: 100%;
+  border-top: 1px solid #f8f8fa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 5.7rem;
+
+  > .list_box {
+    border-bottom: 1px solid #f8f8fa;
+    width: 100%;
+    height: 8.4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    > .main_data {
+      display: flex;
+      width: 15rem;
+      align-items: center;
+
+      span {
+        margin-right: 1.4rem;
+        width: 6rem;
+        height: 6rem;
+        border-radius: 50%;
+
+        > img {
+          @include mixins.avatar(50%);
+        }
+      }
+
+      > .nickname {
+        width: 7rem;
+        height: 1.7rem;
+        font-weight: 700;
+        font-size: 1.4rem;
+      }
+    }
+
+    > .btn_wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      > button {
+        padding: 0;
+        width: 1.8rem;
+        height: 1.8rem;
+
+        > img {
+          width: 100%;
+          height: 100%;
+        }
+
+        + button {
+          margin-left: 1.7rem;
+        }
+      }
+    }
+  }
+}

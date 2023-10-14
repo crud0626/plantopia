@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import paths from '@/constants/routePath';
 
 const MyPage = lazy(() => import('@/pages/myPage/MyPage'));
 const MyInfoPage = lazy(() => import('@/pages/myPage/myInfoPage/MyInfoPage'));
@@ -8,10 +9,10 @@ const QuestionPage = lazy(
 );
 
 const myPageRoutes = [
-  { path: '/mypage', element: <MyPage /> },
-  { path: '/mypage/info', element: <MyInfoPage /> },
-  { path: '/mypage/guide', element: <GuidePage /> },
-  { path: '/mypage/question', element: <QuestionPage /> },
+  { path: paths.mypage, element: <MyPage /> },
+  { path: paths.mypageInfo, element: <MyInfoPage /> },
+  { path: paths.mypageGuide, element: <GuidePage /> },
+  { path: paths.mypageQuestion, element: <QuestionPage /> },
 ];
 
 export default myPageRoutes;

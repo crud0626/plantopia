@@ -1,10 +1,10 @@
 import { useEffect, Suspense } from 'react';
-import { setBodyHeight } from './utils/setBodyHeight';
 import Progress from './components/progress/Progress';
-import Toast from './components/notification/ToastContainer';
+import Toast from './components/toast/Toast';
 import AppRoutes from './routes/AppRoutes';
+import { setBodyHeight } from './utils/setBodyHeight';
+
 import 'react-toastify/dist/ReactToastify.css';
-import '@/styles/customToastStyles.scss';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import '@/styles/alertStyle.scss';
 

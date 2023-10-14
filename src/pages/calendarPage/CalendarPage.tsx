@@ -6,13 +6,12 @@ import { useAuth } from '@/hooks';
 import { CALENDAR_ICONS, DAY_OF_WEEK_KR } from '@/constants/calendar';
 import { UserPlant } from '@/@types/plant.type';
 import { TileArgs } from 'node_modules/react-calendar/dist/esm/shared/types';
-import { errorNoti } from '@/utils/alarmUtil';
+import { showAlert } from '@/utils/dialog';
 import { getUserPlantList } from '@/api/userPlant';
 
 import Progress from '@/components/progress/Progress';
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
-
-import './calendarPage.scss';
+import PageHeader from '@/components/pageHeader/PageHeader';
+import styles from './calendarPage.module.scss';
 
 type ValuePiece = Date | null;
 interface RecordDataType {
@@ -43,22 +42,26 @@ const ContentSection = ({ contents, selectedDate }: ContentSectionProps) => {
   }, []);
 
   return (
-    <section className="date_list_wrap inner">
-      <strong className="date_title">{formatContentTitle(selectedDate)}</strong>
+    <section className={`${styles.date_list_wrap} inner`}>
+      <strong className={styles.date_title}>
+        {formatContentTitle(selectedDate)}
+      </strong>
       {contents ? (
-        <div className="date_list">
-          <div className="list_line"></div>
+        <div className={styles.date_list}>
+          <div className={styles.list_line}></div>
           <ul>
-            {contents.map(({ time, plantName }, i) => (
-              <li key={nanoid()}>
-                <em>{time}</em>
-                <div className={`list_card color${i % 4}`}>{plantName}</div>
-              </li>
-            ))}
+            {contents.map(({ time, plantName }) => {
+              return (
+                <li key={nanoid()}>
+                  <em>{time}</em>
+                  <div className={styles.list_card}>{plantName}</div>
+                </li>
+              );
+            })}
           </ul>
         </div>
       ) : (
-        <div className="no_data">
+        <div className={styles.no_data}>
           <span>물주기 기록이 없네요, 내 식물에게 물을 주세요</span>
         </div>
       )}
@@ -127,7 +130,10 @@ const CalendarPage = () => {
         const calendarData = formatCalendarData(userPlants);
         setCalendarData(calendarData);
       } catch (error) {
-        errorNoti('데이터를 받아오지 못했습니다! 잠시 후 다시 시도해주세요!');
+        showAlert(
+          'error',
+          '데이터를 받아오지 못했습니다! 잠시 후 다시 시도해주세요!',
+        );
       } finally {
         setIsLoading(false);
       }
@@ -139,10 +145,10 @@ const CalendarPage = () => {
     : null;
 
   return (
-    <div className="layout">
-      <HeaderBefore ex={true} title="물주기 기록" />
-      <main className="calendar_page">
-        <section className="calendar_wrap inner">
+    <>
+      <PageHeader exitBtn title="물주기 기록" />
+      <main className={styles.calendar_page}>
+        <section className={`${styles.calendar_wrap} inner`}>
           <Calendar
             value={selectedDate}
             formatDay={(_, date) => format(date, 'd')}
@@ -161,7 +167,7 @@ const CalendarPage = () => {
         />
       </main>
       {isLoading && <Progress />}
-    </div>
+    </>
   );
 };
 

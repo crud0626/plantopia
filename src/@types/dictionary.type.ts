@@ -16,4 +16,8 @@ interface PlantType {
   classificationInfo: string[];
 }
 
-export type { PlantType };
+type CategoryNames = 'beginner' | 'growWell' | 'lessWater' | 'dark';
+
+type PlantCodeName = 'recommendCode' | 'growCode' | 'waterCode' | 'lightCode';
+
+export type { PlantType, CategoryNames, PlantCodeName };

@@ -1,10 +1,42 @@
-@mixin avatar($radius: 0px) {
-  border-radius: $radius;
-  overflow: hidden;
+@use 'sass:map';
 
-  > img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+$arrow-degree: (
+  'top': rotate(0deg),
+  'right': rotate(90deg),
+  'bottom': rotate(180deg),
+  'left': rotate(270deg),
+);
+
+$arrow-type: (
+  'black': url(@/assets/icons/arrow.png),
+  'blackLight': url(@/assets/icons/arrow_light.png),
+  'gray': url(@/assets/icons/arrow_gray.png),
+  'grayLight': url(@/assets/icons/arrow_gray_light.png),
+);
+
+@mixin arrow-icon($type: 'black', $direction: 'top') {
+  background-image: map.get($arrow-type, $type);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  transform: map.get($arrow-degree, $direction);
+}
+
+@mixin avatar($radius: 0px, $size: 100%) {
+  width: $size;
+  height: $size;
+  border-radius: $radius;
+  object-fit: cover;
+}
+
+@mixin multiple-icon($distance: 0px, $size: 1rem) {
+  content: '';
+  display: block;
+  position: absolute;
+  right: $distance;
+  top: $distance;
+  width: $size;
+  height: $size;
+  background: url('@/assets/icons/popup.png') no-repeat center / contain;
+  opacity: 0.9;
 }

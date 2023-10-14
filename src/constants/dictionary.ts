@@ -1,14 +1,8 @@
-import { OrderByDirection } from 'firebase/firestore';
 import { CodeToImg } from '@/components/codeToImg/CodeToImg';
-
-import SUN_ON_ICON from '@/assets/images/icons/dict_sun_on.png';
-import SUN_OFF_ICON from '@/assets/images/icons/dict_sun_off.png';
-import WATER_ON_ICON from '@/assets/images/icons/water_on_icon.png';
-import WATER_OFF_ICON from '@/assets/images/icons/dict_water_off.png';
-import PLANT1_ICON from '@/assets/images/icons/dict_plant1.png';
-import PLANT2_ICON from '@/assets/images/icons/dict_plant2.png';
-import WATER_ICON from '@/assets/images/icons/dict_water2.png';
-import MOON_ICON from '@/assets/images/icons/dict_moon.png';
+import SUN_ON_ICON from '@/assets/icons/sun_on.png';
+import SUN_OFF_ICON from '@/assets/icons/sun_off.png';
+import WATER_ON_ICON from '@/assets/icons/water_on.png';
+import WATER_OFF_ICON from '@/assets/icons/water_off.png';
 
 const codeInfo = {
   HC: '',
@@ -34,39 +28,12 @@ const codeInfo = {
   WC03: CodeToImg([WATER_ON_ICON, WATER_OFF_ICON, WATER_OFF_ICON]),
 };
 
-const targetQuery = {
-  beginner: ['recommendCode', 'RC01'],
-  growWell: ['growCode', 'GC01'],
-  lessWater: ['waterCode', 'WC03'],
-  dark: ['lightCode', 'LC01'],
+const slideCategories = ['beginner', 'growWell', 'lessWater', 'dark'];
+
+const waterCodeMap = {
+  WC03: 14,
+  WC02: 11,
+  WC01: 7,
 };
 
-const recommend: {
-  icon: string;
-  title: string;
-  target: keyof typeof targetQuery;
-}[] = [
-  { icon: PLANT1_ICON, title: '식린이를 위한 추천 식물!', target: 'beginner' },
-  {
-    icon: PLANT2_ICON,
-    title: '쑥쑥 자라는 식물만 모았어요.',
-    target: 'growWell',
-  },
-  {
-    icon: WATER_ICON,
-    title: '물을 조금만 줘도 잘 자라요.',
-    target: 'lessWater',
-  },
-  { icon: MOON_ICON, title: '어두운 집에서도 OK!', target: 'dark' },
-];
-
-const targetClassName = {
-  beginner: 'img_wrapper_white',
-  growWell: 'img_wrapper_navy',
-  lessWater: 'img_wrapper_blue',
-  dark: 'img_wrapper_gray',
-};
-
-const orderDirection: OrderByDirection[] = ['asc', 'desc'];
-
-export { codeInfo, targetQuery, recommend, targetClassName, orderDirection };
+export { codeInfo, waterCodeMap, slideCategories };

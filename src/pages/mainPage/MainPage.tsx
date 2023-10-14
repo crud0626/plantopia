@@ -4,7 +4,7 @@ import { nanoid } from 'nanoid';
 import { useAuth } from '@/hooks';
 import { UserPlant } from '@/@types/plant.type';
 import { getUserPlantList, updateUserPlant } from '@/api/userPlant';
-import { errorNoti, successNoti } from '@/utils/alarmUtil';
+import { showAlert } from '@/utils/dialog';
 import { Timestamp } from 'firebase/firestore';
 
 import Header from '@/components/header/Header';
@@ -12,7 +12,8 @@ import Footer from '@/components/footer/Footer';
 import Progress from '@/components/progress/Progress';
 import MainPlantSection from './MainPlantSection';
 import WeatherSection from './WeatherSection';
-import './mainPage.scss';
+import 'swiper/scss';
+import styles from './mainPage.module.scss';
 
 interface PlantListProps {
   plants: UserPlant[];
@@ -22,15 +23,18 @@ interface PlantListProps {
 const PlantList = ({ plants, onClickItem }: PlantListProps) => {
   if (plants.length > 0) {
     return (
-      <div className="slide_wrapper">
-        <Swiper slidesPerView={3.5} className="swiper">
+      <div className={styles.slide_wrapper}>
+        <Swiper slidesPerView={3.5} className={styles.swiper}>
           {plants.map(plant => (
             <SwiperSlide key={nanoid()}>
-              <button className="slide" onClick={() => onClickItem(plant)}>
-                <div className="avatar">
+              <button
+                className={styles.slide}
+                onClick={() => onClickItem(plant)}
+              >
+                <div className={styles.avatar}>
                   <img src={plant.imgUrl} alt="plant" />
                 </div>
-                <span className="name">{plant.nickname}</span>
+                <span className={styles.name}>{plant.nickname}</span>
               </button>
             </SwiperSlide>
           ))}
@@ -66,9 +70,9 @@ const MainPage = () => {
 
       setFocusPlant(mainVisiblePlant);
       setPlantList(userPlantList);
-      successNoti('물을 잘 먹었어요!');
+      showAlert('success', '물을 잘 먹었어요!');
     } catch (error) {
-      errorNoti('에러가 발생하였습니다. 잠시 후 다시 시도해주세요!');
+      showAlert('error', '에러가 발생하였습니다. 잠시 후 다시 시도해주세요!');
     } finally {
       setIsLoading(false);
     }
@@ -87,7 +91,7 @@ const MainPage = () => {
         setFocusPlant(mainVisiblePlant || userPlantList[0]);
         setPlantList(userPlantList);
       } catch (error) {
-        errorNoti('에러가 발생하였습니다. 새로고침을 해주세요!');
+        showAlert('error', '에러가 발생하였습니다. 새로고침을 해주세요!');
         setPlantList(null);
       } finally {
         setIsLoading(false);
@@ -96,9 +100,9 @@ const MainPage = () => {
   }, [user]);
 
   return (
-    <div className="layout">
+    <>
       <Header isMainPage />
-      <main className="main_page">
+      <main className={styles.container}>
         <section>
           <WeatherSection />
           {plantList && (
@@ -117,7 +121,7 @@ const MainPage = () => {
       </main>
       <Footer />
       {isLoading && <Progress />}
-    </div>
+    </>
   );
 };
 

@@ -1,14 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { format } from 'date-fns';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { differenceInMonths } from 'date-fns';
 import { useAuth } from '@/hooks';
-import HeaderBefore from '@/components/headerBefore/HeaderBefore';
-import Progress from '@/components/progress/Progress';
-import { monthDifference, secondsToDate } from '@/utils/dateUtil';
-import { errorNoti, showAlert, successNoti } from '@/utils/alarmUtil';
+import { formatFullDate, secondsToDateStr } from '@/utils/date';
+import { showAlert, showConfirm } from '@/utils/dialog';
 import { PlantType } from '@/@types/dictionary.type';
 import { UserPlant } from '@/@types/plant.type';
-import './myPlantDetailPage.scss';
+import { codeInfo } from '@/constants/dictionary';
 import {
   getUserPlant,
   getUserPlantList,
@@ -16,39 +14,20 @@ import {
   updateUserPlant,
 } from '@/api/userPlant';
 import { getPlantInfo } from '@/api/dictionary';
+import paths from '@/constants/routePath';
 
-import editIcon from '@/assets/images/icons/my_plant_detail_edit_icon.png';
-import sunOn from '@/assets/images/icons/sun_on_icon.png';
-import sunOff from '@/assets/images/icons/sun_off_icon.png';
-import waterOn from '@/assets/images/icons/water_on_icon.png';
-import waterOff from '@/assets/images/icons/water_off_icon.png';
+import styles from './myPlantDetailPage.module.scss';
+import PageHeader from '@/components/pageHeader/PageHeader';
+import Progress from '@/components/progress/Progress';
+import EDIT_ICON from '@/assets/icons/add_popup.png';
 
 const MyPlantDetailPage = () => {
   const user = useAuth();
   const navigate = useNavigate();
   const { docId } = useParams();
   const [isLoading, setIsLoading] = useState(true);
-  const [plantDetail, setPlantDetail] = useState<UserPlant>();
+  const [plantDetail, setPlantDetail] = useState<UserPlant | null>(null);
   const [plantDictDetail, setPlantDictDetail] = useState<PlantType>();
-
-  const navigateDictDetail = () => {
-    navigate(`/dict/detail?plantName=${plantDictDetail?.name}`, {
-      state: plantDictDetail,
-    });
-  };
-
-  const navigateEdit = () => {
-    navigate(`/myplant/${docId}/edit`, {
-      state: {
-        imgUrlFromDetail: plantDetail?.imgUrl,
-        nicknameFromDetail: plantDetail?.nickname,
-        plantNameFromDetail: plantDetail?.plantName,
-        purchasedDayFromDetail: plantDetail?.purchasedDay,
-        wateredDayFromDetail: plantDetail?.wateredDays.at(-1),
-        frequencyFromDetail: plantDetail?.frequency,
-      },
-    });
-  };
 
   const deletePlant = async () => {
     if (!docId || !plantDetail || !user?.email) return;
@@ -57,23 +36,18 @@ const MyPlantDetailPage = () => {
       await deleteUserPlant(docId);
 
       const userPlants = await getUserPlantList(user.email);
-      if (userPlants.length === 0) {
-        successNoti('내 식물이 삭제 되었습니다.');
-        navigate('/myplant');
-        return;
-      }
-
       const hasMainPlant = userPlants.find(plant => plant.isMain);
-      if (!hasMainPlant) {
+
+      if (userPlants.length > 0 && !hasMainPlant) {
         const nextMainPlant = userPlants[0];
         nextMainPlant.isMain = true;
         await updateUserPlant(nextMainPlant);
       }
 
-      successNoti('내 식물이 삭제 되었습니다.');
-      navigate('/myplant');
+      showAlert('success', '내 식물이 삭제 되었습니다.');
+      navigate(paths.myplant);
     } catch (error) {
-      errorNoti('에러가 발생했습니다.');
+      showAlert('error', '에러가 발생했습니다.');
     }
   };
 
@@ -83,13 +57,14 @@ const MyPlantDetailPage = () => {
 
       try {
         const plantInfo = await getUserPlant(docId);
-        if (!plantInfo) return;
+        if (!plantInfo) throw new Error();
+
         setPlantDetail(plantInfo);
 
-        const plantInfos = await getPlantInfo(plantInfo.plantName);
-        setPlantDictDetail(plantInfos[0]);
+        const plantsInfo = await getPlantInfo(plantInfo.plantName);
+        setPlantDictDetail(plantsInfo[0]);
       } catch (error) {
-        errorNoti('식물 정보를 가져오는 도중 에러가 발생했습니다.');
+        showAlert('error', '식물 정보를 가져오는 도중 에러가 발생했습니다.');
       } finally {
         setIsLoading(false);
       }
@@ -100,182 +75,132 @@ const MyPlantDetailPage = () => {
     (plantDetail?.wateredDays.at(-1)?.seconds || 0) * 1000;
 
   return (
-    <div className="layout">
-      <HeaderBefore ex={false} title="내 식물 상세" />
-      <main>
-        <div className="my_plant_detail_upper_container">
-          <span className="detail_img_wrap">
+    <>
+      <PageHeader title="내 식물 상세" />
+      {plantDetail && (
+        <main>
+          <div className={styles.upper_container}>
             <img
-              className="detail_plant_img"
-              src={plantDetail?.imgUrl}
+              className={styles.plant_img}
+              src={plantDetail.imgUrl}
               alt="mainPlantImg"
             />
-          </span>
-          <p className="detail_plant_name">{plantDictDetail?.scientificName}</p>
-          <div className="detail_nickname_box">
-            <p
-              className={` ${
-                plantDetail?.isMain
-                  ? 'detail_plant_nickname_main'
-                  : 'detail_plant_nickname'
-              }`}
-            >
-              {plantDetail?.nickname}
+            <p className={styles.plant_name}>
+              {plantDictDetail?.scientificName}
             </p>
-          </div>
-          <div className="my_plant_detail_edit_btn" onClick={navigateEdit}>
-            <div className="my_plant_detail_edit_btn_inner_contents">
-              <img src={editIcon} alt="editIcon" />
-              <p>식물 정보 수정하기</p>
-            </div>
-          </div>
-        </div>
-        <div className="my_plant_detail_lower_container">
-          <div className="my_plant_detail_info_box">
-            <div className="my_plant_detail_info_head">
-              <p>
-                ⏰ {plantDetail?.nickname} 식물과 함께한지{' '}
-                <span>
-                  {monthDifference(plantDetail?.purchasedDay?.seconds || 0)}
-                  개월
-                </span>
-                이 지났어요
+            <div className={styles.nickname_box}>
+              <p
+                className={`${styles.nickname} ${
+                  plantDetail.isMain ? styles.main : ''
+                }`}
+              >
+                {plantDetail.nickname}
               </p>
             </div>
-            <div className="my_plant_detail_info_metadata">
-              <div className="watering_info">
-                <span>물주기</span>
-                <span>{plantDetail?.frequency} Days</span>
-              </div>
-              <div className="last_watering_info">
-                <span>마지막 물준 날</span>
-                <span>
-                  {lastWateringDate
-                    ? format(lastWateringDate, 'yyyy-MM-dd')
-                    : '-'}
-                </span>
-              </div>
-              <div className="first_day_info">
-                <span>처음 함께한 날</span>
-                <span>
-                  {secondsToDate(plantDetail?.purchasedDay?.seconds || 0)}
-                </span>
-              </div>
-            </div>
+            <Link
+              to={`${paths.myplantEdit}/${docId}`}
+              state={plantDetail}
+              className={styles.edit_btn}
+            >
+              <img src={EDIT_ICON} alt="edit" />
+              <p>식물 정보 수정하기</p>
+            </Link>
           </div>
-          <div className="my_plant_detail_info_box">
-            <div className="my_plant_detail_info_head">
-              <p>👍 잘 자라는 환경</p>
-            </div>
-            <div className="my_plant_detail_info_metadata gridset">
-              <div>
-                <span>햇빛</span>
-                <span className="sun_on_off">
-                  {(() => {
-                    if (plantDictDetail?.lightCode === 'LC01') {
-                      return (
-                        <>
-                          <img src={sunOn} alt="" />
-                          <img src={sunOff} alt="" />
-                          <img src={sunOff} alt="" />
-                        </>
-                      );
-                    } else if (plantDictDetail?.lightCode === 'LC02') {
-                      return (
-                        <>
-                          <img src={sunOn} alt="" />
-                          <img src={sunOn} alt="" />
-                          <img src={sunOff} alt="" />
-                        </>
-                      );
-                    } else {
-                      return (
-                        <>
-                          <img src={sunOn} alt="" />
-                          <img src={sunOn} alt="" />
-                          <img src={sunOn} alt="" />
-                        </>
-                      );
-                    }
-                  })()}
-                </span>
+          <div className={styles.lower_container}>
+            <div className={styles.info_box}>
+              <div className={styles.info_head}>
+                <p>
+                  ⏰ {plantDetail.nickname} 식물과 함께한지{' '}
+                  <span>
+                    {differenceInMonths(
+                      plantDetail.purchasedDay.seconds * 1000,
+                      new Date(),
+                    )}
+                    개월
+                  </span>
+                  이 지났어요
+                </p>
               </div>
-              <div>
-                <span>물</span>
-                <span className="water_on_off">
-                  {(() => {
-                    if (plantDictDetail?.waterCode === 'WC01') {
-                      return (
-                        <>
-                          <img src={waterOn} alt="" />
-                          <img src={waterOff} alt="" />
-                          <img src={waterOff} alt="" />
-                        </>
-                      );
-                    } else if (plantDictDetail?.lightCode === 'WC02') {
-                      return (
-                        <>
-                          <img src={waterOn} alt="" />
-                          <img src={waterOn} alt="" />
-                          <img src={waterOff} alt="" />
-                        </>
-                      );
-                    } else {
-                      return (
-                        <>
-                          <img src={waterOn} alt="" />
-                          <img src={waterOn} alt="" />
-                          <img src={waterOn} alt="" />
-                        </>
-                      );
-                    }
-                  })()}
-                </span>
-              </div>
-              <div>
-                <span>생육 적정 온도</span>
-                <span className="optimal_temp">
-                  {(() => {
-                    if (plantDictDetail?.temperatureCode === 'TC01') {
-                      return '10 ~ 15℃';
-                    } else if (plantDictDetail?.temperatureCode === 'TC02') {
-                      return '16 ~ 20℃';
-                    } else if (plantDictDetail?.temperatureCode === 'TC03') {
-                      return '21 ~ 25℃';
-                    } else {
-                      return '26 ~ 30℃';
-                    }
-                  })()}
-                </span>
+              <div className={styles.info_metadata}>
+                <div className={styles.watering_info}>
+                  <span>물주기</span>
+                  <span>{plantDetail.frequency} Days</span>
+                </div>
+                <div className={styles.last_watering_info}>
+                  <span>마지막 물준 날</span>
+                  <span>
+                    {lastWateringDate
+                      ? formatFullDate(new Date(lastWateringDate))
+                      : '-'}
+                  </span>
+                </div>
+                <div className={styles.first_day_info}>
+                  <span>처음 함께한 날</span>
+                  <span>
+                    {secondsToDateStr(plantDetail.purchasedDay.seconds)}
+                  </span>
+                </div>
               </div>
             </div>
+            <div className={styles.info_box}>
+              <div className={styles.info_head}>
+                <p>👍 잘 자라는 환경</p>
+              </div>
+              <div className={`${styles.info_metadata} ${styles.gridset}`}>
+                <div>
+                  <span>햇빛</span>
+                  <span className={styles.sun_on_off}>
+                    {codeInfo[plantDictDetail?.lightCode || 'LC']}
+                  </span>
+                </div>
+                <div>
+                  <span>물</span>
+                  <span className={styles.water_on_off}>
+                    {codeInfo[plantDictDetail?.waterCode || 'WC']}
+                  </span>
+                </div>
+                <div>
+                  <span>생육 적정 온도</span>
+                  <span className={styles.optimal_temp}>
+                    {codeInfo[plantDictDetail?.temperatureCode || 'TC']}
+                  </span>
+                </div>
+              </div>
+            </div>
+            {plantDictDetail?.adviseInfo && (
+              <div className={styles.info_box}>
+                <div className={styles.info_head}>
+                  <p>📌 관리 Tip</p>
+                </div>
+                <div
+                  className={`${styles.info_metadata} ${styles.management_tip_box}`}
+                >
+                  <p className={styles.management_tip}>
+                    {plantDictDetail?.adviseInfo}
+                  </p>
+                </div>
+              </div>
+            )}
+            <Link
+              to={`${paths.dictDetail}?plantName=${plantDictDetail?.name}`}
+              state={plantDictDetail}
+              className={styles.more_info_btn}
+            >
+              식물 도감에서 이 식물 정보 더 알아보기!
+            </Link>
           </div>
-          {!plantDictDetail?.adviseInfo ? null : (
-            <div className="my_plant_detail_info_box">
-              <div className="my_plant_detail_info_head">
-                <p>📌 관리 Tip</p>
-              </div>
-              <div className="my_plant_detail_info_metadata management_tip_box">
-                <p className="management_tip">{plantDictDetail?.adviseInfo}</p>
-              </div>
-            </div>
-          )}
-          <p className="more_info_btn" onClick={navigateDictDetail}>
-            식물 도감에서 이 식물 정보 더 알아보기!
-          </p>
-        </div>
-
-        <button
-          className="delete_my_plant"
-          onClick={() =>
-            showAlert('삭제 확인', '정말로 삭제 하시겠습니까?', deletePlant)
-          }
-        >
-          내 식물에서 삭제하기
-        </button>
-      </main>
+          <button
+            className={styles.delete_btn}
+            onClick={() =>
+              showConfirm('정말로 삭제 하시겠습니까?', deletePlant)
+            }
+          >
+            내 식물에서 삭제하기
+          </button>
+        </main>
+      )}
       {isLoading && <Progress />}
-    </div>
+    </>
   );
 };
 

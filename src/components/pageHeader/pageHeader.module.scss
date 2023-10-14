@@ -1,0 +1,51 @@
+@use '@/styles/sizes';
+
+.container {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: sizes.$header-height;
+  border-bottom: 1px solid #f7f8f7;
+  background-color: #ffffff;
+  z-index: 10;
+
+  > .title {
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #22264c;
+  }
+
+  > * {
+    padding: 0;
+    flex-basis: 33.3%;
+
+    &:first-child {
+      text-align: left;
+    }
+
+    &:last-child {
+      text-align: right;
+    }
+
+    > .ex_btn {
+      width: 1.3rem;
+      height: 1.3rem;
+      background: url('@/assets/icons/close.png') no-repeat center / contain;
+    }
+
+    > .back_btn {
+      padding: 0;
+      width: 2.4rem;
+      height: 2.4rem;
+      background: url('@/assets/icons/back.png') no-repeat center / contain;
+    }
+  }
+
+  .hidden {
+    visibility: hidden;
+  }
+}

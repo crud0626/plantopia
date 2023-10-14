@@ -1,6 +1,6 @@
-import { orderDirection, targetQuery } from '@/constants/dictionary';
 import { db } from '@/firebaseApp';
 import {
+  OrderByDirection,
   collection,
   endAt,
   getDocs,
@@ -10,8 +10,13 @@ import {
   startAt,
   where,
 } from 'firebase/firestore';
-import { PlantType } from '@/@types/dictionary.type';
-import { getRandomIndex } from '@/utils/arrayUtil';
+
+import {
+  CategoryNames,
+  PlantCodeName,
+  PlantType,
+} from '@/@types/dictionary.type';
+import { getRandomIndex, shuffleArray } from '@/utils/array';
 
 export const getPlantSearchResults = (fieldName: string, keyword: string) => {
   const ref = collection(db, 'dictionary');
@@ -38,19 +43,58 @@ export const getPlantInfo = (plantName: string) => {
   );
 };
 
-export const getPlantInfoList = (target: keyof typeof targetQuery) => {
+/* 식물 도감의 슬라이드 데이터 */
+const orderDirection: OrderByDirection[] = ['asc', 'desc'];
+
+const targetQuery: {
+  [key in CategoryNames]: {
+    key: PlantCodeName;
+    value: string;
+  };
+} = {
+  beginner: { key: 'recommendCode', value: 'RC01' },
+  growWell: { key: 'growCode', value: 'GC01' },
+  lessWater: { key: 'waterCode', value: 'WC03' },
+  dark: { key: 'lightCode', value: 'LC01' },
+};
+
+const plantCodes: PlantCodeName[] = [
+  'recommendCode',
+  'growCode',
+  'waterCode',
+  'lightCode',
+];
+
+const generateQuery = (name: CategoryNames) => {
   const ref = collection(db, 'dictionary');
-  const q = query(
+  return query(
     ref,
-    where(targetQuery[target][0], '==', targetQuery[target][1]),
+    where(targetQuery[name].key, '==', targetQuery[name].value),
     orderBy(
-      Object.values(targetQuery)[getRandomIndex(4)][0],
-      orderDirection[getRandomIndex(2)],
+      plantCodes[getRandomIndex(plantCodes.length)],
+      orderDirection[getRandomIndex(orderDirection.length)],
     ),
     limit(8),
   );
+};
 
-  return getDocs(q).then(snapshot =>
-    snapshot.docs.map(doc => doc.data() as PlantType),
-  );
+export const getPlantInfoList = async () => {
+  const keys: CategoryNames[] = ['beginner', 'growWell', 'lessWater', 'dark'];
+  const result: { [key in CategoryNames]: PlantType[] } = {
+    beginner: [],
+    growWell: [],
+    lessWater: [],
+    dark: [],
+  };
+
+  for await (const category of keys) {
+    const q = generateQuery(category);
+    const plantsData = await getDocs(q).then(snapshot =>
+      snapshot.docs.map(doc => doc.data() as PlantType),
+    );
+
+    result[category] = shuffleArray(plantsData);
+  }
+
+  return result;
 };
