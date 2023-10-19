@@ -57,3 +57,13 @@ export const updateUserInfo = async (
 
   return updateProfile(user, updatedUserInfo);
 };
+
+export const deletionUser = () => {
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error('확인되지 않은 사용자입니다.');
+  }
+
+  return user.delete();
+};
