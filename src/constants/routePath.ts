@@ -2,6 +2,7 @@ const paths = {
   main: '/',
   calendar: '/calendar',
   login: '/login',
+  register: '/register',
   diary: '/diary',
   diaryWrite: '/diary/write',
   diaryEdit: '/diary/edit',
