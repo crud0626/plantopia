@@ -5,11 +5,13 @@ import { showAlert } from '@/utils/dialog';
 import paths from '@/constants/routePath';
 
 import styles from './loginPage.module.scss';
+import ForgotPw from './ForgotPw';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isChecked, setIsChecked] = useState(false);
+  const [isOpenForgotModal, setIsOpenForgotModal] = useState(true);
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,9 +83,18 @@ const LoginPage = () => {
               placeholder="이메일을 입력해주세요."
               id="inpEmail"
             />
-            <label htmlFor="inpPwd" className={styles.mar_top32}>
-              비밀번호
-            </label>
+            <div className={styles.pw_label_wrapper}>
+              <label htmlFor="inpPwd" className={styles.mar_top32}>
+                비밀번호
+              </label>
+              <button
+                type="button"
+                className={styles.forgot_pw}
+                onClick={() => setIsOpenForgotModal(true)}
+              >
+                비밀번호를 잃어버리셨나요?
+              </button>
+            </div>
             <input
               type="password"
               name="password"
@@ -112,6 +123,11 @@ const LoginPage = () => {
             </button>
           </div>
         </div>
+        {isOpenForgotModal && (
+          <ForgotPw
+            handleOpenModal={() => setIsOpenForgotModal(prev => !prev)}
+          />
+        )}
       </main>
     </>
   );

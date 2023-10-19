@@ -50,6 +50,21 @@
       }
     }
 
+    form > .pw_label_wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+
+      > .forgot_pw {
+        display: inline-block;
+        padding: 0;
+        height: min-content;
+        color: #9b9fb1;
+        font-size: 0.9rem;
+        text-decoration: underline;
+      }
+    }
+
     label {
       display: block;
       font-size: 1.2rem;
