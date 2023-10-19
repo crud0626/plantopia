@@ -9,6 +9,7 @@ import {
   signInWithPopup,
   signOut,
   updateProfile,
+  sendPasswordResetEmail,
 } from 'firebase/auth';
 
 export const loginWithEmail = async (
@@ -67,3 +68,6 @@ export const deletionUser = () => {
 
   return user.delete();
 };
+
+export const resetPassword = (email: string) =>
+  sendPasswordResetEmail(auth, email);

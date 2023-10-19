@@ -11,7 +11,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isChecked, setIsChecked] = useState(false);
-  const [isOpenForgotModal, setIsOpenForgotModal] = useState(true);
+  const [isOpenForgotModal, setIsOpenForgotModal] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,17 +26,18 @@ const LoginPage = () => {
       {
         key: email,
         message: '이메일 형식을 확인해주세요.',
-        re: /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/,
+        regex:
+          /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/,
       },
       {
         key: password,
         message: '8~20자 사이의 비밀번호를 입력해주세요.',
-        re: /^[A-Za-z0-9]{8,20}$/,
+        regex: /^[A-Za-z0-9]{8,20}$/,
       },
     ];
 
-    for (const { key, message, re } of targets) {
-      if (!re.test(key)) {
+    for (const { key, message, regex } of targets) {
+      if (!regex.test(key)) {
         showAlert('error', message);
         return;
       }
