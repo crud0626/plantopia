@@ -1,15 +1,17 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { loginWithEmail, loginWithSocial } from '@/api/auth';
 import { showAlert } from '@/utils/dialog';
 import paths from '@/constants/routePath';
-
+import { emailPattern, passwordPattern } from '@/constants/regex';
 import styles from './loginPage.module.scss';
+import ForgotPw from './ForgotPw';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isChecked, setIsChecked] = useState(false);
+  const [isOpenForgotModal, setIsOpenForgotModal] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,17 +26,17 @@ const LoginPage = () => {
       {
         key: email,
         message: '이메일 형식을 확인해주세요.',
-        re: /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/,
+        regex: emailPattern,
       },
       {
         key: password,
         message: '8~20자 사이의 비밀번호를 입력해주세요.',
-        re: /^[A-Za-z0-9]{8,20}$/,
+        regex: passwordPattern,
       },
     ];
 
-    for (const { key, message, re } of targets) {
-      if (!re.test(key)) {
+    for (const { key, message, regex } of targets) {
+      if (!regex.test(key)) {
         showAlert('error', message);
         return;
       }
@@ -81,9 +83,19 @@ const LoginPage = () => {
               placeholder="이메일을 입력해주세요."
               id="inpEmail"
             />
-            <label htmlFor="inpPwd" className={styles.mar_top32}>
-              비밀번호
-            </label>
+            <div className={styles.pw_label_wrapper}>
+              <label htmlFor="inpPwd" className={styles.mar_top32}>
+                비밀번호
+              </label>
+              <button
+                type="button"
+                className={styles.forgot_pw}
+                tabIndex={-1}
+                onClick={() => setIsOpenForgotModal(true)}
+              >
+                비밀번호를 잃어버리셨나요?
+              </button>
+            </div>
             <input
               type="password"
               name="password"
@@ -101,9 +113,18 @@ const LoginPage = () => {
                 자동 로그인
               </label>
             </div>
-            <button type="submit" className={styles.submit_btn}>
+            <button
+              type="submit"
+              className={`${styles.round_btn} ${styles.submit_btn}`}
+            >
               로그인
             </button>
+            <Link
+              to={paths.register}
+              className={`${styles.round_btn} ${styles.register_btn}`}
+            >
+              가입하기
+            </Link>
           </form>
           <div className={styles.oauth_box}>
             <p>SNS 계정으로 로그인하기</p>
@@ -112,6 +133,11 @@ const LoginPage = () => {
             </button>
           </div>
         </div>
+        {isOpenForgotModal && (
+          <ForgotPw
+            handleOpenModal={() => setIsOpenForgotModal(prev => !prev)}
+          />
+        )}
       </main>
     </>
   );

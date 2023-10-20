@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks';
-import { nicknameRe } from '@/constants/regEx';
-import { updateUserInfo } from '@/api/auth';
+import { nicknamePattern } from '@/constants/regex';
+import { deletionUser, updateUserInfo } from '@/api/auth';
 import { uploadImg } from '@/api/storage';
-import { showAlert } from '@/utils/dialog';
+import { showAlert, showConfirm } from '@/utils/dialog';
 import PageHeader from '@/components/pageHeader/PageHeader';
 import paths from '@/constants/routePath';
 import styles from './myInfoPage.module.scss';
+import Progress from '@/components/progress/Progress';
 
 const MyInfo = () => {
   const user = useAuth();
@@ -48,7 +49,7 @@ const MyInfo = () => {
       return false;
     }
 
-    if (!nicknameRe.test(nickname)) {
+    if (!nicknamePattern.test(nickname)) {
       showAlert('error', '닉네임이 규칙에 맞지 않습니다.');
       return false;
     }
@@ -77,6 +78,20 @@ const MyInfo = () => {
       navigate(paths.mypage);
     } catch (error) {
       showAlert('error', '회원정보 수정에 실패했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDeletion = async () => {
+    try {
+      setIsLoading(true);
+
+      await deletionUser();
+      showAlert('success', '이용해주셔서 감사합니다.');
+      navigate(paths.login);
+    } catch (error) {
+      showAlert('error', '에러가 발생했습니다. 잠시 후 다시 시도해주세요.');
     } finally {
       setIsLoading(false);
     }
@@ -136,6 +151,14 @@ const MyInfo = () => {
               </li>
             )}
           </ul>
+          <button
+            className={styles.signout_btn}
+            onClick={() => {
+              showConfirm('회원탈퇴를 진행하시겠습니까?', handleDeletion);
+            }}
+          >
+            회원탈퇴
+          </button>
         </section>
       </main>
       <button
@@ -145,6 +168,7 @@ const MyInfo = () => {
       >
         {isLoading ? '수정 중...' : '수정하기'}
       </button>
+      {isLoading && <Progress />}
     </>
   );
 };
