@@ -104,7 +104,6 @@
   background-color: #1fb0ad;
 
   &:disabled {
-    background-color: #c4c4c4;
-    cursor: not-allowed;
+    @include mixins.disabled-btn();
   }
 }
