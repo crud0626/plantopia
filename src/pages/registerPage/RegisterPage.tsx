@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { signUpUser } from '@/api/auth';
 import { emailRe, nicknameRe, passwordRe } from '@/constants/regEx';
 import { showAlert } from '@/utils/dialog';
 import styles from './registerPage.module.scss';
+import paths from '@/constants/routePath';
 
 interface InputValueTypes {
   email: string;
@@ -103,7 +104,9 @@ const RegisterPage = () => {
               }
               placeholder="이메일을 입력해주세요."
             />
-            <label id="input_nickname">닉네임</label>
+            <label id="input_nickname">
+              닉네임<small>(2~8글자, 특수문자 불가)</small>
+            </label>
             <input
               id="input_nickname"
               type="text"
@@ -113,7 +116,9 @@ const RegisterPage = () => {
               }
               placeholder="닉네임을 입력해주세요."
             />
-            <label htmlFor="input_pw">비밀번호</label>
+            <label htmlFor="input_pw">
+              비밀번호<small>(8~20자 영문 대 소문자, 숫자)</small>
+            </label>
             <input
               id="input_pw"
               type="password"
@@ -133,11 +138,17 @@ const RegisterPage = () => {
             />
             <button
               type="submit"
-              className={styles.submit_btn}
+              className={`${styles.btn} ${styles.submit_btn}`}
               disabled={isLoading}
             >
               회원가입 하기
             </button>
+            <Link
+              to={paths.login}
+              className={`${styles.btn} ${styles.login_btn}`}
+            >
+              로그인 페이지로 이동하기
+            </Link>
           </form>
         </div>
       </main>
