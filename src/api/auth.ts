@@ -10,6 +10,7 @@ import {
   signOut,
   updateProfile,
   sendPasswordResetEmail,
+  createUserWithEmailAndPassword,
 } from 'firebase/auth';
 
 export const loginWithEmail = async (
@@ -71,3 +72,9 @@ export const deletionUser = () => {
 
 export const resetPassword = (email: string) =>
   sendPasswordResetEmail(auth, email);
+
+export const signUpUser = (email: string, pw: string, nickname: string) => {
+  return createUserWithEmailAndPassword(auth, email, pw).then(() =>
+    updateUserInfo(pw, nickname),
+  );
+};
