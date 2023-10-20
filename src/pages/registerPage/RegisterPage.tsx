@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signUpUser } from '@/api/auth';
-import { emailRe, nicknameRe, passwordRe } from '@/constants/regEx';
+import {
+  emailPattern,
+  nicknamePattern,
+  passwordPattern,
+} from '@/constants/regex';
 import { showAlert } from '@/utils/dialog';
 import styles from './registerPage.module.scss';
 import paths from '@/constants/routePath';
@@ -20,11 +24,11 @@ const validateInput = (values: InputValueTypes) => {
     }
   }
 
-  if (!emailRe.test(values.email)) {
+  if (!emailPattern.test(values.email)) {
     return '이메일 형식을 확인해주세요.';
   }
 
-  if (!nicknameRe.test(values.nickname)) {
+  if (!nicknamePattern.test(values.nickname)) {
     return '닉네임이 규칙에 맞지 않습니다.';
   }
 
@@ -32,7 +36,7 @@ const validateInput = (values: InputValueTypes) => {
     return '비밀번호가 일치하지 않습니다.';
   }
 
-  if (!passwordRe.test(values.pw)) {
+  if (!passwordPattern.test(values.pw)) {
     return '비밀번호가 규칙에 맞지 않습니다.';
   }
 };

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FirebaseError } from 'firebase/app';
 import { resetPassword } from '@/api/auth';
-import { emailRe } from '@/constants/regEx';
+import { emailPattern } from '@/constants/regex';
 import { showAlert } from '@/utils/dialog';
 import styles from './forgotPw.module.scss';
 
@@ -14,7 +14,7 @@ const validateInput = (value: string) => {
     return '가입하신 이메일을 입력해주세요!';
   }
 
-  if (!emailRe.test(value)) {
+  if (!emailPattern.test(value)) {
     return '이메일 형식을 확인해주세요.';
   }
 };

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks';
-import { nicknameRe } from '@/constants/regEx';
+import { nicknamePattern } from '@/constants/regex';
 import { deletionUser, updateUserInfo } from '@/api/auth';
 import { uploadImg } from '@/api/storage';
 import { showAlert, showConfirm } from '@/utils/dialog';
@@ -49,7 +49,7 @@ const MyInfo = () => {
       return false;
     }
 
-    if (!nicknameRe.test(nickname)) {
+    if (!nicknamePattern.test(nickname)) {
       showAlert('error', '닉네임이 규칙에 맞지 않습니다.');
       return false;
     }

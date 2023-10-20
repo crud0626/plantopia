@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { loginWithEmail, loginWithSocial } from '@/api/auth';
 import { showAlert } from '@/utils/dialog';
 import paths from '@/constants/routePath';
-
+import { emailPattern, passwordPattern } from '@/constants/regex';
 import styles from './loginPage.module.scss';
 import ForgotPw from './ForgotPw';
 
@@ -26,13 +26,12 @@ const LoginPage = () => {
       {
         key: email,
         message: '이메일 형식을 확인해주세요.',
-        regex:
-          /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/,
+        regex: emailPattern,
       },
       {
         key: password,
         message: '8~20자 사이의 비밀번호를 입력해주세요.',
-        regex: /^[A-Za-z0-9]{8,20}$/,
+        regex: passwordPattern,
       },
     ];
 

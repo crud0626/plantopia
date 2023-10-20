@@ -1,6 +1,6 @@
 import { useState, useEffect, Children } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { koreanRe } from '@/constants/regEx';
+import { koreanPattern } from '@/constants/regex';
 import { getPlantSearchResults } from '@/api/dictionary';
 import { showAlert } from '@/utils/dialog';
 import { PlantType } from '@/@types/dictionary.type';
@@ -42,7 +42,7 @@ const DictSearchPage = () => {
   };
 
   const getDouments = async (value: string) => {
-    const fieldName = koreanRe.test(value) ? 'name' : 'scientificName';
+    const fieldName = koreanPattern.test(value) ? 'name' : 'scientificName';
     const plantName = value.replace(value[0], value[0].toUpperCase());
 
     try {
