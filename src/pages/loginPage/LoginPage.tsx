@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { loginWithEmail, loginWithSocial } from '@/api/auth';
 import { showAlert } from '@/utils/dialog';
 import paths from '@/constants/routePath';
@@ -91,6 +91,7 @@ const LoginPage = () => {
               <button
                 type="button"
                 className={styles.forgot_pw}
+                tabIndex={-1}
                 onClick={() => setIsOpenForgotModal(true)}
               >
                 비밀번호를 잃어버리셨나요?
@@ -113,9 +114,18 @@ const LoginPage = () => {
                 자동 로그인
               </label>
             </div>
-            <button type="submit" className={styles.submit_btn}>
+            <button
+              type="submit"
+              className={`${styles.round_btn} ${styles.submit_btn}`}
+            >
               로그인
             </button>
+            <Link
+              to={paths.register}
+              className={`${styles.round_btn} ${styles.register_btn}`}
+            >
+              가입하기
+            </Link>
           </form>
           <div className={styles.oauth_box}>
             <p>SNS 계정으로 로그인하기</p>
