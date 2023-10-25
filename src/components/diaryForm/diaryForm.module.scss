@@ -1,4 +1,5 @@
 @use 'swiper/css';
+@use '@/styles/mixins';
 
 .container {
   width: 100%;
@@ -20,8 +21,7 @@
     }
 
     &:disabled {
-      background: #c4c4c4;
-      cursor: not-allowed;
+      @include mixins.disabled-btn();
     }
   }
 }

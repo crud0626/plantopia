@@ -40,3 +40,9 @@ $arrow-type: (
   background: url('@/assets/icons/popup.png') no-repeat center / contain;
   opacity: 0.9;
 }
+
+@mixin disabled-btn($bg: #cccccc, $color: #888888) {
+  background-color: $bg;
+  color: $color;
+  cursor: not-allowed;
+}

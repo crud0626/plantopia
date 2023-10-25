@@ -76,6 +76,20 @@
       font-size: 1.4rem;
     }
   }
+
+  .signout_btn {
+    display: block;
+    margin-left: auto;
+    padding: 0;
+    font-size: 1.2rem;
+    font-family: inherit;
+    color: #2490fc;
+
+    &:hover {
+      color: #247af3;
+      text-decoration: underline;
+    }
+  }
 }
 
 .info_post {
@@ -90,7 +104,6 @@
   background-color: #1fb0ad;
 
   &:disabled {
-    background-color: #c4c4c4;
-    cursor: not-allowed;
+    @include mixins.disabled-btn();
   }
 }

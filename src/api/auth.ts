@@ -9,6 +9,8 @@ import {
   signInWithPopup,
   signOut,
   updateProfile,
+  sendPasswordResetEmail,
+  createUserWithEmailAndPassword,
 } from 'firebase/auth';
 
 export const loginWithEmail = async (
@@ -56,4 +58,23 @@ export const updateUserInfo = async (
   }
 
   return updateProfile(user, updatedUserInfo);
+};
+
+export const deletionUser = () => {
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error('확인되지 않은 사용자입니다.');
+  }
+
+  return user.delete();
+};
+
+export const resetPassword = (email: string) =>
+  sendPasswordResetEmail(auth, email);
+
+export const signUpUser = (email: string, pw: string, nickname: string) => {
+  return createUserWithEmailAndPassword(auth, email, pw).then(() =>
+    updateUserInfo(pw, nickname),
+  );
 };
