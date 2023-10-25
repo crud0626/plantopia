@@ -8,7 +8,7 @@ import styles from './loginPage.module.scss';
 import ForgotPw from './ForgotPw';
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(import.meta.env.VITE_TEST_ID || '');
   const [password, setPassword] = useState('');
   const [isChecked, setIsChecked] = useState(false);
   const [isOpenForgotModal, setIsOpenForgotModal] = useState(false);
