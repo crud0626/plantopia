@@ -154,5 +154,13 @@ src
 
 ---
 ### 마이 페이지
+
+<div align=center>
+   
+|<img width="250" src="https://github.com/crud0626/plantopia/assets/72868495/3d6ac90f-7984-4be4-bb87-aac06186d3fd" />|
+|---|
+
+</div>
+
 * 사용자가 자신에 대한 정보를 확인하고 수정할 수 있는 페이지입니다.
 * PWA로 사용하는 방법과 자주 묻는 질문, 식물 추가 요청 구글 폼, 로그아웃 등의 기능이 포함되어 있습니다.
