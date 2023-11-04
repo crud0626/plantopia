@@ -10,7 +10,7 @@ const fetchWeatherInfo = ({
     baseURL: 'https://api.openweathermap.org/data/2.5',
     params: {
       units: 'metric',
-      appid: import.meta.env.VITE_WEATHER_API_KEY,
+      appid: process.env.NEXT_PUBLIC_WEATHER_API_KEY,
       lat: latitude,
       lon: longitude,
     },
