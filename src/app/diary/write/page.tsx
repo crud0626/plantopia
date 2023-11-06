@@ -1,5 +1,7 @@
+'use client';
+
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks';
 import { saveDiary } from '@/api/userDiary';
 import { getUserPlantList } from '@/api/userPlant';
@@ -14,7 +16,7 @@ import Progress from '@/components/progress/Progress';
 
 const DiaryWritePage = () => {
   const user = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [plantNames, setPlantNames] = useState<string[]>([]);
 
@@ -25,7 +27,7 @@ const DiaryWritePage = () => {
       await saveDiary(contents);
 
       showAlert('success', '저장이 완료되었어요!');
-      navigate(paths.diary);
+      router.push(paths.diary);
     } catch (error) {
       showAlert('error', '저장에 실패하였습니다.');
     }

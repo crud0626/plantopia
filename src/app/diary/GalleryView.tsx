@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { DiaryContentTypes } from '@/@types/diary.type';
 import paths from '@/constants/routePath';
 
@@ -20,7 +20,7 @@ const GalleryView = ({ diaryData }: GalleryViewProps) => {
     <div className={styles.gallery_view}>
       {filteredDiary.map(({ id, imgUrls }) => (
         <Link
-          to={`${paths.diaryEdit}/${id}`}
+          href={`${paths.diaryEdit}/${id}`}
           key={id}
           className={`${styles.card} ${
             imgUrls.length > 1 ? styles.multiple : ''

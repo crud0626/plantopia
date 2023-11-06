@@ -1,5 +1,7 @@
+'use client';
+
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { deleteDiary, getUserDiary } from '@/api/userDiary';
 import { useAuth } from '@/hooks';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
@@ -14,8 +16,8 @@ import styles from './page.module.scss';
 
 const DiaryDetailPage = () => {
   const user = useAuth();
-  const navigate = useNavigate();
-  const { docId } = useParams();
+  const router = useRouter();
+  const docId = useSearchParams().get('docId');
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [diaryDetailData, setDiaryDetailData] =
@@ -30,7 +32,7 @@ const DiaryDetailPage = () => {
       await deleteDiary(diaryId);
 
       showAlert('success', '삭제가 완료되었어요!');
-      navigate(paths.diary);
+      router.push(paths.diary);
     } catch (error) {
       showAlert('error', '다이어리 삭제 도중 에러가 발생했습니다.');
     } finally {
@@ -51,7 +53,7 @@ const DiaryDetailPage = () => {
   useEffect(() => {
     (async () => {
       if (!docId) {
-        navigate(paths.diary);
+        router.push(paths.diary);
         return;
       }
 
@@ -64,7 +66,7 @@ const DiaryDetailPage = () => {
         setDiaryDetailData(diaryData);
       } catch (error) {
         showAlert('error', '존재하지 않는 다이어리입니다.');
-        navigate(paths.diary);
+        router.push(paths.diary);
       } finally {
         setIsLoading(false);
       }
@@ -87,7 +89,7 @@ const DiaryDetailPage = () => {
           <div className={styles.more_modal}>
             <button
               className={`${styles.btn} ${styles.modify}`}
-              onClick={() => navigate(`${paths.diaryEdit}/${docId}`)}
+              onClick={() => router.push(`${paths.diaryEdit}/${docId}`)}
             >
               게시글 수정
             </button>

@@ -22,7 +22,7 @@
     > .date_title {
       display: inline-block;
       padding: 0.2rem 0 0.2rem 2.2rem;
-      background: url('@/assets/icons/calendar.png') no-repeat left center /
+      background: url('/assets/icons/calendar.png') no-repeat left center /
         1.6rem;
       font-size: 1.3rem;
       font-weight: 700;
@@ -137,7 +137,7 @@
         padding-top: 5.4rem;
         color: #9b9fb1;
         font-size: 1.2rem;
-        background: url('@/assets/icons/exclamation.png') no-repeat center top /
+        background: url('/assets/icons/exclamation.png') no-repeat center top /
           4.2rem;
       }
     }

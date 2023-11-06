@@ -1,5 +1,7 @@
+'use client';
+
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { DiaryImages } from '@/constants/diary';
 import { useAuth } from '@/hooks';
 import { showAlert, showConfirm } from '@/utils/dialog';
@@ -13,8 +15,7 @@ import Progress from '@/components/progress/Progress';
 import ListView from './ListView';
 import GalleryView from './GalleryView';
 
-import styles from './diaryMainPage.module.scss';
-import ADD_BTN from '@/assets/icons/add_white.png';
+import styles from './page.module.scss';
 
 type DiaryViewTypes = 'List' | 'Gallery';
 
@@ -39,7 +40,7 @@ const tabData: TabProps[] = [
 
 const DiaryPage = () => {
   const user = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [diaryData, setDiaryData] = useState<DiaryContentTypes[] | null>(null);
   const [hasPlantsUser, setHasPlantsUser] = useState(false);
   const [currentTab, setCurrentTab] = useState<DiaryViewTypes>('List');
@@ -56,7 +57,7 @@ const DiaryPage = () => {
 
       setDiaryData(newDiaryData);
       showAlert('success', '삭제가 완료되었어요!');
-      navigate(paths.diary);
+      router.push(paths.diary);
     } catch (error) {
       showAlert('error', '다이어리 삭제 도중 에러가 발생했습니다.');
     } finally {
@@ -72,14 +73,14 @@ const DiaryPage = () => {
 
   const handleAddBtn = () => {
     if (hasPlantsUser) {
-      navigate(paths.diaryWrite);
+      router.push(paths.diaryWrite);
       return;
     }
 
     showConfirm(
       ['등록된 식물이 없습니다.', '내 식물을 등록하시겠습니까?'],
       () => {
-        navigate(paths.myplantRegister);
+        router.push(paths.myplantRegister);
       },
     );
   };
@@ -143,7 +144,7 @@ const DiaryPage = () => {
         </div>
         <div className={styles.write_btn_wrap}>
           <button className={styles.write_btn} onClick={handleAddBtn}>
-            <img src={ADD_BTN} alt="add" />
+            <img src="/assets/icons/add_white.png" alt="add" />
           </button>
         </div>
       </main>

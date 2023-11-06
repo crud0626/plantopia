@@ -1,10 +1,8 @@
-@use 'react-toastify/dist/ReactToastify.css';
-@use 'react-confirm-alert/src/react-confirm-alert.css';
-@use '@/styles/alertStyle.scss';
-@use 'reset';
-@use 'fonts';
-@use 'colors';
-@use 'sizes';
+@use '/src/styles/alertStyle.scss';
+@use '/src/styles/reset';
+@use '/src/styles/fonts';
+@use '/src/styles/colors';
+@use '/src/styles/sizes';
 
 * {
   box-sizing: border-box;
@@ -21,7 +19,7 @@
 
 body {
   font-family: 'Pretendard', Arial, sans-serif;
-  background: url('@/assets/images/bg.png') no-repeat center fixed;
+  background: url('/assets/images/bg.png') no-repeat center fixed;
   background-size: cover;
 
   .scroll {

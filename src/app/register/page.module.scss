@@ -7,7 +7,7 @@
   align-items: center;
   justify-content: center;
   min-height: sizes.$body-min-height;
-  background: #f6f6f6 url('@/assets/images/bg_login.png') no-repeat center /
+  background: #f6f6f6 url('/assets/images/bg_login.png') no-repeat center /
     cover;
 
   > .login_box {
@@ -31,7 +31,7 @@
         align-items: center;
         height: 4rem;
         padding-left: 4.8rem;
-        background: url('@/assets/images/main_logo.png') no-repeat left center /
+        background: url('/assets/images/main_logo.png') no-repeat left center /
           4rem;
       }
     }

@@ -1,12 +1,10 @@
 'use client';
 
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useAuth } from '@/hooks';
 import paths from '@/constants/routePath';
 
 import styles from './page.module.scss';
-import MAIN_PLANT from '@/assets/images/plants/main_plant.png';
-import EDIT_ICON from '@/assets/icons/add_popup.png';
 
 const EmptyPlant = () => {
   const user = useAuth();
@@ -15,15 +13,15 @@ const EmptyPlant = () => {
     <div className="inner">
       <div className={styles.main_plant}>
         <div className={styles.inner_circle}>
-          <img src={MAIN_PLANT} alt="plant" />
+          <img src="/assets/images/plants/main_plant.png" alt="plant" />
         </div>
       </div>
       <p className={styles.welcome_text}>
         <strong>{user?.displayName || '회원'}</strong>님, 플랜토피아와 함께
         슬기로운 식집사 생활을 시작하세요!
       </p>
-      <Link to={paths.myplantRegister} className={styles.register_btn}>
-        <img src={EDIT_ICON} alt="edit" />
+      <Link href={paths.myplantRegister} className={styles.register_btn}>
+        <img src="/assets/icons/add_popup.png" alt="edit" />
         <p>내 식물 등록하기</p>
       </Link>
     </div>

@@ -36,7 +36,7 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        background: url('@/assets/icons/add_photo.png') no-repeat center 40% /
+        background: url('/assets/icons/add_photo.png') no-repeat center 40% /
           2.5rem;
 
         > .photo_counter {
@@ -109,7 +109,7 @@
         height: 2.4rem;
         border: none;
         border-radius: 50%;
-        background: #000 url('@/assets/icons/close_white.png') no-repeat center /
+        background: #000 url('/assets/icons/close_white.png') no-repeat center /
           1rem;
         color: #fff;
         font-size: 1.6rem;

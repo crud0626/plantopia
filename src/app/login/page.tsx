@@ -1,5 +1,8 @@
+'use client';
+
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { loginWithEmail, loginWithSocial } from '@/api/auth';
 import { showAlert } from '@/utils/dialog';
 import paths from '@/constants/routePath';
@@ -12,7 +15,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [isChecked, setIsChecked] = useState(false);
   const [isOpenForgotModal, setIsOpenForgotModal] = useState(false);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -44,7 +47,7 @@ const LoginPage = () => {
 
     try {
       await loginWithEmail(email, password, isChecked);
-      navigate(paths.main);
+      router.push(paths.main);
     } catch (error) {
       showAlert('error', '이메일 또는 비밀번호가 일치하지 않습니다.');
     }
@@ -53,7 +56,7 @@ const LoginPage = () => {
   const handleClick = async () => {
     try {
       await loginWithSocial(isChecked);
-      navigate(paths.main);
+      router.push(paths.main);
     } catch (error) {
       showAlert('error', '로그인에 실패하였습니다.');
     }

@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { showConfirm } from '@/utils/dialog';
 import { DiaryContentTypes } from '@/@types/diary.type';
@@ -14,7 +15,7 @@ interface ListViewProps {
 }
 
 const ListView = ({ diaryData, handleDelete }: ListViewProps) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [selectedDiary, setSelectedDiary] = useState<DiaryContentTypes | null>(
     null,
@@ -45,7 +46,7 @@ const ListView = ({ diaryData, handleDelete }: ListViewProps) => {
         <ul className={styles.diary_list_wrap}>
           {diaryData.map(diary => (
             <li className={styles.diary_list} key={diary.id}>
-              <Link to={`${paths.diary}/${diary.id}`}>
+              <Link href={`${paths.diary}/${diary.id}`}>
                 <div className={styles.left_box}>
                   <h5 className={styles.title}>{diary.title}</h5>
                   <p className={styles.content}>{diary.content}</p>
@@ -74,7 +75,9 @@ const ListView = ({ diaryData, handleDelete }: ListViewProps) => {
                 <div className={styles.more_modal}>
                   <div
                     className={`${styles.btn} ${styles.modify}`}
-                    onClick={() => navigate(`${paths.diaryEdit}/${diary.id}`)}
+                    onClick={() =>
+                      router.push(`${paths.diaryEdit}/${diary.id}`)
+                    }
                   >
                     게시글 수정
                   </div>

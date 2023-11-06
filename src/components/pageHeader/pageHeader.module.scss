@@ -34,14 +34,14 @@
     > .ex_btn {
       width: 1.3rem;
       height: 1.3rem;
-      background: url('@/assets/icons/close.png') no-repeat center / contain;
+      background: url('/assets/icons/close.png') no-repeat center / contain;
     }
 
     > .back_btn {
       padding: 0;
       width: 2.4rem;
       height: 2.4rem;
-      background: url('@/assets/icons/back.png') no-repeat center / contain;
+      background: url('/assets/icons/back.png') no-repeat center / contain;
     }
   }
 

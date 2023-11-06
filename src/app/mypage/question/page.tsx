@@ -1,3 +1,5 @@
+'use client';
+
 import { Children, useState } from 'react';
 import PageHeader from '@/components/pageHeader/PageHeader';
 import Footer from '@/components/footer/Footer';

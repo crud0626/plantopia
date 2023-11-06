@@ -1,5 +1,8 @@
+'use client';
+
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import Link from 'next/link';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { differenceInMonths } from 'date-fns';
 import { useAuth } from '@/hooks';
 import { formatFullDate, secondsToDateStr } from '@/utils/date';
@@ -19,12 +22,12 @@ import paths from '@/constants/routePath';
 import styles from './page.module.scss';
 import PageHeader from '@/components/pageHeader/PageHeader';
 import Progress from '@/components/progress/Progress';
-import EDIT_ICON from '@/assets/icons/add_popup.png';
+import EDIT_ICON from '/assets/icons/add_popup.png';
 
 const MyPlantDetailPage = () => {
   const user = useAuth();
-  const navigate = useNavigate();
-  const { docId } = useParams();
+  const router = useRouter();
+  const docId = useSearchParams().get('docId');
   const [isLoading, setIsLoading] = useState(true);
   const [plantDetail, setPlantDetail] = useState<UserPlant | null>(null);
   const [plantDictDetail, setPlantDictDetail] = useState<PlantType>();
@@ -45,7 +48,7 @@ const MyPlantDetailPage = () => {
       }
 
       showAlert('success', '내 식물이 삭제 되었습니다.');
-      navigate(paths.myplant);
+      router.push(paths.myplant);
     } catch (error) {
       showAlert('error', '에러가 발생했습니다.');
     }

@@ -1,5 +1,7 @@
+'use client';
+
 import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks';
 import { addUserPlant } from '@/api/userPlant';
 import { existPlant } from '@/api/userDiary';
@@ -18,8 +20,8 @@ interface DictPlantInfo {
 
 const MyPlantRegisterPage = () => {
   const user = useAuth();
-  const navigate = useNavigate();
-  const dictInfo: DictPlantInfo | null = useLocation().state;
+  const router = useRouter();
+  const dictInfo: DictPlantInfo | null = null;
   const [isSaving, setIsSaving] = useState(false);
 
   const handleRegister = async (
@@ -38,7 +40,7 @@ const MyPlantRegisterPage = () => {
       });
 
       showAlert('success', '새 식물 등록에 성공하였습니다');
-      navigate('/myplant');
+      router.push('/myplant');
     } catch (error) {
       showAlert('error', '식물 등록에 실패하였습니다.');
     } finally {

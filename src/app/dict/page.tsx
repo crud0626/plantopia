@@ -1,5 +1,5 @@
 import { useState, Children, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks';
 import { getPlantInfoList } from '@/api/dictionary';
 import { CategoryNames, PlantType } from '@/@types/dictionary.type';
@@ -11,7 +11,7 @@ import Footer from '@/components/footer/Footer';
 import Progress from '@/components/progress/Progress';
 
 import styles from './page.module.scss';
-import SEARCH_ICON from '@/assets/icons/search.png';
+import SEARCH_ICON from '/assets/icons/search.png';
 
 type CardsDataTypes = {
   [key in CategoryNames]: PlantType[];
@@ -19,7 +19,7 @@ type CardsDataTypes = {
 
 const DictPage = () => {
   const user = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [searchValue, setSearchValue] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [cardsData, setCardsData] = useState<CardsDataTypes>({
@@ -31,11 +31,7 @@ const DictPage = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    navigate(paths.dictSearch, {
-      state: {
-        inputValue: searchValue,
-      },
-    });
+    router.push(paths.dictSearch);
   };
 
   useEffect(() => {

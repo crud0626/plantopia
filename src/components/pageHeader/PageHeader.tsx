@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import styles from './pageHeader.module.scss';
 
 interface HeaderBeforeProps {
@@ -7,14 +7,14 @@ interface HeaderBeforeProps {
 }
 
 const PageHeader = ({ exitBtn, title }: HeaderBeforeProps) => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return (
     <header className={`${styles.container} inner`}>
       <div className={`${styles.btn_wrapper} ${exitBtn ? styles.hidden : ''}`}>
         <button
           className={styles.back_btn}
-          onClick={() => navigate(-1)}
+          onClick={() => router.back()}
           aria-label="back"
         ></button>
       </div>
@@ -22,7 +22,7 @@ const PageHeader = ({ exitBtn, title }: HeaderBeforeProps) => {
       <div className={`${styles.btn_wrapper} ${exitBtn ? '' : styles.hidden}`}>
         <button
           className={styles.ex_btn}
-          onClick={() => navigate(-1)}
+          onClick={() => router.back()}
           aria-label="exit"
         ></button>
       </div>

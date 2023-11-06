@@ -1,5 +1,7 @@
+'use client';
+
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks';
 import { getUserPlantList, updateUserPlant } from '@/api/userPlant';
 import { showAlert } from '@/utils/dialog';
@@ -12,16 +14,16 @@ import Footer from '@/components/footer/Footer';
 import MainPagePlantList from './MyPlantList';
 import Progress from '@/components/progress/Progress';
 
-import PLUS_ICON from '@/assets/icons/add_white.png';
-import EDIT_ICON from '@/assets/icons/add_popup.png';
-import SAMPLE_PLANT from '@/assets/images/default_plant.png';
-import BOOKMARK_TRUE_ICON from '@/assets/icons/bookmark.png';
+import PLUS_ICON from '/assets/icons/add_white.png';
+import EDIT_ICON from '/assets/icons/add_popup.png';
+import SAMPLE_PLANT from '/assets/images/default_plant.png';
+import BOOKMARK_TRUE_ICON from '/assets/icons/bookmark.png';
 
 const PLANTS_LIMIT = 10;
 
 const MyPlantMainPage = () => {
   const user = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [mainPlant, setMainPlant] = useState<UserPlant>();
   const [plantList, setPlantList] = useState<UserPlant[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -32,7 +34,7 @@ const MyPlantMainPage = () => {
       return;
     }
 
-    navigate(paths.myplantRegister);
+    router.push(paths.myplantRegister);
   };
 
   const changeMainPlant = async (nextMainPlant: UserPlant) => {

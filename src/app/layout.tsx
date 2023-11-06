@@ -1,4 +1,8 @@
 import type { Metadata, Viewport } from 'next';
+import Toast from '@/components/toast/Toast';
+import './global.scss';
+import 'react-toastify/dist/ReactToastify.css';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -35,7 +39,10 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <div id="root">{children}</div>
+        <div id="root">
+          <Toast />
+          {children}
+        </div>
       </body>
     </html>
   );

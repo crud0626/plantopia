@@ -1,5 +1,8 @@
+'use client';
+
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { signUpUser } from '@/api/auth';
 import {
   emailPattern,
@@ -42,7 +45,7 @@ const validateInput = (values: InputValueTypes) => {
 };
 
 const RegisterPage = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [inputValues, setInputValues] = useState<InputValueTypes>({
     email: '',
@@ -75,7 +78,7 @@ const RegisterPage = () => {
       await signUpUser(inputValues.email, inputValues.pw, inputValues.nickname);
 
       showAlert('success', '회원가입이 완료되었습니다.');
-      navigate('/');
+      router.push('/');
     } catch (error) {
       showAlert('error', '알 수 없는 에러가 발생하였습니다.');
     } finally {

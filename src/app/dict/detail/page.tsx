@@ -1,17 +1,20 @@
+'use client';
+
 import { Children, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { codeInfo } from '@/constants/dictionary';
 import { PlantType } from '@/@types/dictionary.type';
 import PageHeader from '@/components/pageHeader/PageHeader';
 import paths from '@/constants/routePath';
 import styles from './page.module.scss';
 
-import ADD_ICON from '@/assets/icons/add_popup.png';
-import PLANT3_ICON from '@/assets/icons/dict/plant3.png';
-import PLANT4_ICON from '@/assets/icons/dict/plant4.png';
-import WATER_ICON from '@/assets/icons/dict/water1.png';
-import WATERPOT_ICON from '@/assets/icons/dict/waterpot.png';
-import BUG_ICON from '@/assets/icons/dict/bug.png';
+import ADD_ICON from '/assets/icons/add_popup.png';
+import PLANT3_ICON from '/assets/icons/dict/plant3.png';
+import PLANT4_ICON from '/assets/icons/dict/plant4.png';
+import WATER_ICON from '/assets/icons/dict/water1.png';
+import WATERPOT_ICON from '/assets/icons/dict/waterpot.png';
+import BUG_ICON from '/assets/icons/dict/bug.png';
 import { showAlert } from '@/utils/dialog';
 
 const environmentContents: Array<{
@@ -33,8 +36,9 @@ const environmentContents: Array<{
 ];
 
 const DictDetailPage = () => {
-  const navaigate = useNavigate();
-  const plantData: PlantType | undefined = useLocation().state;
+  const router = useRouter();
+  // 임시
+  const plantData: PlantType | undefined = undefined;
 
   const plantInfoForm = [
     {
@@ -69,7 +73,7 @@ const DictDetailPage = () => {
   useEffect(() => {
     if (!plantData) {
       showAlert('error', '잘못된 접근입니다.');
-      navaigate(paths.dict);
+      router.push(paths.dict);
     }
   }, []);
 

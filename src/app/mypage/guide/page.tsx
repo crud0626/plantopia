@@ -1,24 +1,22 @@
+'use client';
+
 import { Children, useState } from 'react';
 import PageHeader from '@/components/pageHeader/PageHeader';
 import Footer from '@/components/footer/Footer';
 import styles from './page.module.scss';
 
-import CHROME_IMG from '@/assets/images/pwa_chrome.png';
-import IOS_IMG from '@/assets/images/pwa_ios.png';
-import ANDROID_IMG from '@/assets/images/pwa_android.png';
-
 const contents = {
   chrome: {
     title: 'Chrome',
-    image: CHROME_IMG,
+    image: '/assets/images/pwa_chrome.png',
   },
   ios: {
     title: 'IOS',
-    image: IOS_IMG,
+    image: '/assets/images/pwa_ios.png',
   },
   android: {
     title: 'Android',
-    image: ANDROID_IMG,
+    image: '/assets/images/pwa_android.png',
   },
 };
 

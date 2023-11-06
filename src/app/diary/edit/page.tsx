@@ -1,5 +1,8 @@
+'use client';
+
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks';
 import { getUserPlantList } from '@/api/userPlant';
 import { getUserDiary, updateDiary } from '@/api/userDiary';
@@ -14,8 +17,8 @@ import Progress from '@/components/progress/Progress';
 
 const DiaryEditPage = () => {
   const user = useAuth();
-  const navigate = useNavigate();
-  const { docId } = useParams();
+  const router = useRouter();
+  const docId = useSearchParams().get('docId');
   const [isLoading, setIsLoading] = useState(false);
   const [plantNames, setPlantNames] = useState<string[]>([]);
   const [oldContents, setOldContents] = useState<DiaryContentTypes | null>(
@@ -35,7 +38,7 @@ const DiaryEditPage = () => {
       };
 
       await updateDiary(updatedContents);
-      navigate(paths.diary);
+      router.push(paths.diary);
     } catch (error) {
       showAlert('error', '수정에 실패하였습니다.');
     }

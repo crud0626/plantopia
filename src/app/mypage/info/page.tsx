@@ -1,5 +1,7 @@
+'use client';
+
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { useAuth } from '@/hooks';
 import { nicknamePattern } from '@/constants/regex';
 import { deletionUser, updateUserInfo } from '@/api/auth';
@@ -12,7 +14,7 @@ import Progress from '@/components/progress/Progress';
 
 const MyInfo = () => {
   const user = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [userInfo, setUserInfo] = useState({
     nickname: user?.displayName || '',
@@ -75,7 +77,7 @@ const MyInfo = () => {
       await updateUserInfo(password, nickname.trim(), imgUrl);
 
       showAlert('success', '회원정보 수정에 성공했습니다.');
-      navigate(paths.mypage);
+      router.push(paths.mypage);
     } catch (error) {
       showAlert('error', '회원정보 수정에 실패했습니다.');
     } finally {
@@ -89,7 +91,7 @@ const MyInfo = () => {
 
       await deletionUser();
       showAlert('success', '이용해주셔서 감사합니다.');
-      navigate(paths.login);
+      router.push(paths.login);
     } catch (error) {
       showAlert('error', '에러가 발생했습니다. 잠시 후 다시 시도해주세요.');
     } finally {

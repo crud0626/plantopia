@@ -7,7 +7,6 @@ import { weatherContents } from '@/constants/weather';
 import { getGeolocation } from '@/utils/geolocation';
 
 import styles from './page.module.scss';
-import LOCATION from '@/assets/icons/location.png';
 
 const WeatherSection = () => {
   const [weatherInfo, setWeatherInfo] = useState<WeatherResponse | null>(null);
@@ -47,7 +46,7 @@ const WeatherSection = () => {
           <div className={styles.text_wrapper}>
             <div className={styles.location_wrapper}>
               <img
-                src={LOCATION}
+                src="/assets/icons/location.png"
                 className={styles.weather_icon}
                 alt="location"
               />

@@ -1,5 +1,5 @@
 import { Children } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation } from 'swiper/modules';
 import { CategoryNames, PlantType } from '@/@types/dictionary.type';
@@ -9,10 +9,10 @@ import styles from './cardSlide.module.scss';
 import 'swiper/scss';
 import 'swiper/scss/navigation';
 import 'swiper/scss/pagination';
-import PLANT1_ICON from '@/assets/icons/dict/plant1.png';
-import PLANT2_ICON from '@/assets/icons/dict/plant2.png';
-import WATER_ICON from '@/assets/icons/dict/water2.png';
-import MOON_ICON from '@/assets/icons/dict/moon.png';
+import PLANT1_ICON from '/assets/icons/dict/plant1.png';
+import PLANT2_ICON from '/assets/icons/dict/plant2.png';
+import WATER_ICON from '/assets/icons/dict/water2.png';
+import MOON_ICON from '/assets/icons/dict/moon.png';
 
 interface CardContentTypes {
   type: 'large' | 'small';
@@ -72,10 +72,7 @@ const CardSlide = ({ type, category, plants }: CardContentTypes) => {
         {Children.toArray(
           plants.map(plant => (
             <SwiperSlide className={styles.plant_wrapper}>
-              <Link
-                to={`${paths.dictDetail}?plantName=${plant.name}`}
-                state={plant}
-              >
+              <Link href={`${paths.dictDetail}?plantName=${plant.name}`}>
                 <img
                   className={isLargeCard ? styles.img_lg : styles.img_sm}
                   src={plant.imageUrl}

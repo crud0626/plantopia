@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { Timestamp } from 'firebase/firestore';
 import { uploadImg } from '@/api/storage';
 import { showAlert, showConfirm } from '@/utils/dialog';
@@ -9,9 +9,9 @@ import { valueof } from '@/@types';
 import paths from '@/constants/routePath';
 
 import styles from './myPlantForm.module.scss';
-import DEFAULT_IMG from '@/assets/images/default_plant.png';
-import EDIT_ICON from '@/assets/icons/edit.png';
-import SEARCH_ICON from '@/assets/icons/search.png';
+import DEFAULT_IMG from '/assets/images/default_plant.png';
+import EDIT_ICON from '/assets/icons/edit.png';
+import SEARCH_ICON from '/assets/icons/search.png';
 
 interface FormStateTypes
   extends Pick<
@@ -159,11 +159,7 @@ const MyPlantForm = ({
         </div>
         <div className={styles.input_box}>
           <p className={styles.input_title}>식물선택</p>
-          <Link
-            to={paths.dictSearch}
-            state={{ inputValue: '' }}
-            className={styles.input_wrapper}
-          >
+          <Link href={paths.dictSearch} className={styles.input_wrapper}>
             <input
               className={styles.my_plant_input}
               type="text"

@@ -1,10 +1,8 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import paths from '@/constants/routePath';
 import { useAuth } from '@/hooks';
 
 import styles from './header.module.scss';
-import MAIN_LOGO from '@/assets/images/main_logo.png';
-import CALENDAR from '@/assets/icons/calendar.png';
 
 interface HeaderProps {
   isMainPage?: boolean;
@@ -15,17 +13,25 @@ const Header = ({ isMainPage }: HeaderProps) => {
 
   return (
     <header className={`${styles.header} inner`}>
-      <Link to={paths.main} className={styles.main_logo}>
-        <img className={styles.logo_img} src={MAIN_LOGO} alt="main logo" />
+      <Link href={paths.main} className={styles.main_logo}>
+        <img
+          src="/assets/images/main_logo.png"
+          className={styles.logo_img}
+          alt="main logo"
+        />
         <h1>Plantopia</h1>
       </Link>
       {isMainPage && (
         <div className={styles.btns}>
-          <Link to={paths.calendar} className={styles.calendar_btn}>
-            <img className={styles.calendar} src={CALENDAR} alt="calendar" />
+          <Link href={paths.calendar} className={styles.calendar_btn}>
+            <img
+              src="/assets/icons/calendar.png"
+              className={styles.calendar}
+              alt="calendar"
+            />
           </Link>
           {user && (
-            <Link to={paths.mypage} className={styles.profile_btn}>
+            <Link href={paths.mypage} className={styles.profile_btn}>
               {user.photoURL && (
                 <img src={user.photoURL} className={styles.profile} />
               )}

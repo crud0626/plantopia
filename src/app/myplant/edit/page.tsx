@@ -1,5 +1,7 @@
+'use client';
+
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { getUserPlant, updateUserPlant } from '@/api/userPlant';
 import { showAlert } from '@/utils/dialog';
 import { UserPlant } from '@/@types/plant.type';
@@ -12,9 +14,10 @@ import { useAuth } from '@/hooks';
 
 const MyPlantEditPage = () => {
   const user = useAuth();
-  const navigate = useNavigate();
-  const { docId } = useParams();
-  const targetPlant: UserPlant | null = useLocation().state;
+  const router = useRouter();
+  const docId = useSearchParams().get('docId');
+  /* 임시 */
+  const targetPlant: UserPlant | null = null;
   const [isLoading, setIsLoading] = useState(true);
   const [userPlant, setUserPlant] = useState<UserPlant | null>(targetPlant);
 
@@ -35,7 +38,7 @@ const MyPlantEditPage = () => {
       });
 
       showAlert('success', '식물 정보를 수정하였습니다!');
-      navigate(paths.myplant);
+      router.push(paths.myplant);
     } catch (error) {
       showAlert('error', '식물 수정에 실패하였습니다.');
     } finally {
@@ -57,7 +60,7 @@ const MyPlantEditPage = () => {
         setUserPlant(plantInfo);
       } catch (error) {
         showAlert('error', '식물 정보를 가져올 수 없습니다.');
-        navigate(paths.myplant);
+        router.push(paths.myplant);
       } finally {
         setIsLoading(false);
       }

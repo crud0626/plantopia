@@ -1,5 +1,7 @@
+'use client';
+
 import { useState, Children } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useAuth } from '@/hooks';
 import { showAlert } from '@/utils/dialog';
 import { logout } from '@/api/auth';
@@ -52,7 +54,7 @@ const MyPage = () => {
               <strong>{user?.displayName}</strong>
               <p>{user?.email}</p>
             </div>
-            <Link to={paths.mypageInfo} className={styles.edit_info}>
+            <Link href={paths.mypageInfo} className={styles.edit_info}>
               내 정보 수정하기
             </Link>
           </div>
@@ -68,7 +70,7 @@ const MyPage = () => {
                       {title}
                     </a>
                   ) : (
-                    <Link to={url}>{title}</Link>
+                    <Link href={url}>{title}</Link>
                   )}
                 </li>
               )),

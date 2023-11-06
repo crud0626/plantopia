@@ -1,5 +1,7 @@
+'use client';
+
 import { useState, useEffect, Children } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
 import { koreanPattern } from '@/constants/regex';
 import { getPlantSearchResults } from '@/api/dictionary';
 import { showAlert } from '@/utils/dialog';
@@ -9,7 +11,7 @@ import styles from './page.module.scss';
 import Progress from '@/components/progress/Progress';
 import PageHeader from '@/components/pageHeader/PageHeader';
 
-import SEARCH_ICON from '@/assets/icons/search.png';
+import SEARCH_ICON from '/assets/icons/search.png';
 
 const EmptyResult = () => {
   return (
@@ -26,7 +28,8 @@ const EmptyResult = () => {
 };
 
 const DictSearchPage = () => {
-  const locationState: { inputValue: string } | null = useLocation().state;
+  /* 임시 */
+  const locationState: { inputValue: string } | null = { inputValue: 'aa' };
   const [searchValue, setSearchValue] = useState(
     locationState?.inputValue || '',
   );
@@ -89,10 +92,7 @@ const DictSearchPage = () => {
           {results.length ? (
             Children.toArray(
               results.map(plant => (
-                <Link
-                  to={`${paths.dictDetail}?plantName=${plant.name}`}
-                  state={plant}
-                >
+                <Link href={`${paths.dictDetail}?plantName=${plant.name}`}>
                   <div className={styles.plant_wrapper}>
                     <img src={plant.imageUrl} alt="plant" />
                     <div className={styles.name_wrapper}>

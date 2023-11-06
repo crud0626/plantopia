@@ -1,14 +1,14 @@
 'use client';
 
 import { differenceInDays, format, addDays } from 'date-fns';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { UserPlant } from '@/@types/plant.type';
 import { showConfirm } from '@/utils/dialog';
 import EmptyPlant from './EmptyPlant';
 import paths from '@/constants/routePath';
 
 import styles from './page.module.scss';
-import WATERING from '@/assets/icons/watering.png';
+import WATERING from '/public/assets/icons/watering.png';
 interface MainPlantProps {
   plant?: UserPlant;
   onWaterPlant: (plantId: string) => void;
@@ -48,7 +48,7 @@ const MainPlantSection = ({ plant, onWaterPlant }: MainPlantProps) => {
 
   return (
     <div className="inner">
-      <Link to={`${paths.myplant}/${plant.id}`} className={styles.main_plant}>
+      <Link href={`${paths.myplant}/${plant.id}`} className={styles.main_plant}>
         <div className={styles.inner_circle}>
           <img src={plant.imgUrl} alt="plant" />
         </div>

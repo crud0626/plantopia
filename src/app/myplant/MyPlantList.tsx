@@ -1,12 +1,15 @@
+'use client';
+
 import { useMemo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { UserPlant } from '@/@types/plant.type';
 import paths from '@/constants/routePath';
 
 import styles from './myPlantList.module.scss';
-import BOOKMARK_TRUE from '@/assets/icons/bookmark.png';
-import BOOKMARK_FALSE from '@/assets/icons/bookmark_empty.png';
-import EDIT_ICON from '@/assets/icons/edit_gray.png';
+import BOOKMARK_TRUE from '/assets/icons/bookmark.png';
+import BOOKMARK_FALSE from '/assets/icons/bookmark_empty.png';
+import EDIT_ICON from '/assets/icons/edit_gray.png';
 
 interface MainPagePlantListProps {
   userPlants: UserPlant[];
@@ -27,13 +30,11 @@ const MainPagePlantList = ({
   userPlants,
   changeMainPlant,
 }: MainPagePlantListProps) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const sortedPlants = useMemo(() => userPlants.sort(compare), [userPlants]);
 
   const handleEditData = (clickedPlant: UserPlant) => {
-    navigate(`${paths.myplantEdit}/${clickedPlant.id}`, {
-      state: clickedPlant,
-    });
+    router.push(`${paths.myplantEdit}/${clickedPlant.id}`);
   };
 
   return (

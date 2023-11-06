@@ -122,7 +122,7 @@ const MainPage = () => {
         </section>
       </main>
       <Footer />
-      {isLoading && <Progress />}
+      {/* {isLoading && <Progress />} */}
     </>
   );
 };
