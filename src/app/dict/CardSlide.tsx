@@ -9,10 +9,6 @@ import styles from './cardSlide.module.scss';
 import 'swiper/scss';
 import 'swiper/scss/navigation';
 import 'swiper/scss/pagination';
-import PLANT1_ICON from '/assets/icons/dict/plant1.png';
-import PLANT2_ICON from '/assets/icons/dict/plant2.png';
-import WATER_ICON from '/assets/icons/dict/water2.png';
-import MOON_ICON from '/assets/icons/dict/moon.png';
 
 interface CardContentTypes {
   type: 'large' | 'small';
@@ -34,18 +30,18 @@ const slideContents: {
   };
 } = {
   beginner: {
-    icon: PLANT1_ICON,
+    icon: '/assets/icons/dict/plant1.png',
     title: '식린이를 위한 추천 식물!',
   },
   growWell: {
-    icon: PLANT2_ICON,
+    icon: '/assets/icons/dict/plant2.png',
     title: '쑥쑥 자라는 식물만 모았어요.',
   },
   lessWater: {
-    icon: WATER_ICON,
+    icon: '/assets/icons/dict/water2.png',
     title: '물을 조금만 줘도 잘 자라요.',
   },
-  dark: { icon: MOON_ICON, title: '어두운 집에서도 OK!' },
+  dark: { icon: '/assets/icons/dict/moon.png', title: '어두운 집에서도 OK!' },
 };
 
 const CardSlide = ({ type, category, plants }: CardContentTypes) => {

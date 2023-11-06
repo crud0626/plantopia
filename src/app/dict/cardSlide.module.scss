@@ -146,40 +146,42 @@
 }
 
 /* Swiper 관련 속성 */
-:global div.swiper-button-prev {
-  @include swiper_button;
-  left: 0.5rem;
+.container {
+  :global div.swiper-button-prev {
+    @include swiper_button;
+    left: 0.5rem;
 
-  @media (max-width: 499px) {
-    display: none !important;
+    @media (max-width: 499px) {
+      display: none !important;
+    }
   }
-}
 
-:global div.swiper-button-next {
-  @include swiper_button;
-  right: 0.5rem;
+  :global div.swiper-button-next {
+    @include swiper_button;
+    right: 0.5rem;
 
-  @media (max-width: 499px) {
-    display: none !important;
+    @media (max-width: 499px) {
+      display: none !important;
+    }
   }
-}
 
-:global div.swiper-button-next::after,
-:global div.swiper-button-prev::after {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #c3c3c3;
-  background-color: #fff;
-  border: 1px solid #ecebeb;
-  box-shadow: 0.1rem 0.1rem 0.5rem rgba(1, 1, 1, 0.08);
-}
+  :global div.swiper-button-next::after,
+  :global div.swiper-button-prev::after {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #c3c3c3;
+    background-color: #fff;
+    border: 1px solid #ecebeb;
+    box-shadow: 0.1rem 0.1rem 0.5rem rgba(1, 1, 1, 0.08);
+  }
 
-:global span.swiper-pagination-bullet {
-  display: none;
+  :global span.swiper-pagination-bullet {
+    display: none;
+  }
 }

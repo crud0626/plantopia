@@ -22,7 +22,6 @@ import paths from '@/constants/routePath';
 import styles from './page.module.scss';
 import PageHeader from '@/components/pageHeader/PageHeader';
 import Progress from '@/components/progress/Progress';
-import EDIT_ICON from '/assets/icons/add_popup.png';
 
 const MyPlantDetailPage = () => {
   const user = useAuth();
@@ -101,11 +100,10 @@ const MyPlantDetailPage = () => {
               </p>
             </div>
             <Link
-              to={`${paths.myplantEdit}/${docId}`}
-              state={plantDetail}
+              href={`${paths.myplantEdit}/${docId}`}
               className={styles.edit_btn}
             >
-              <img src={EDIT_ICON} alt="edit" />
+              <img src="/assets/icons/add_popup.png" alt="edit" />
               <p>식물 정보 수정하기</p>
             </Link>
           </div>

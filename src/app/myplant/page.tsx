@@ -14,11 +14,6 @@ import Footer from '@/components/footer/Footer';
 import MainPagePlantList from './MyPlantList';
 import Progress from '@/components/progress/Progress';
 
-import PLUS_ICON from '/assets/icons/add_white.png';
-import EDIT_ICON from '/assets/icons/add_popup.png';
-import SAMPLE_PLANT from '/assets/images/default_plant.png';
-import BOOKMARK_TRUE_ICON from '/assets/icons/bookmark.png';
-
 const PLANTS_LIMIT = 10;
 
 const MyPlantMainPage = () => {
@@ -106,7 +101,7 @@ const MyPlantMainPage = () => {
                 />
               </span>
               <div className={styles.head}>
-                <img src={BOOKMARK_TRUE_ICON} alt="main plant" />{' '}
+                <img src="/assets/icons/bookmark.png" alt="main plant" />{' '}
                 <p className={styles.main_plant_title}>메인 식물</p>
               </div>
               <p className={styles.main_plant_name}>{mainPlant?.plantName}</p>
@@ -114,7 +109,11 @@ const MyPlantMainPage = () => {
                 {mainPlant?.nickname}
               </p>
               <p className={styles.plant_plus_btn} onClick={handleAddPlant}>
-                <img src={PLUS_ICON} className="plant_plus_icon" alt="add" />
+                <img
+                  src="/assets/icons/add_white.png"
+                  className="plant_plus_icon"
+                  alt="add"
+                />
                 식물 등록
               </p>
             </div>
@@ -122,11 +121,11 @@ const MyPlantMainPage = () => {
             <div className={styles.empty_wrapper}>
               <img
                 className={styles.main_plant_sample_img}
-                src={SAMPLE_PLANT}
+                src="/assets/images/default_plant.png"
                 alt="samplePlantImg"
               />
               <button className={styles.register_btn} onClick={handleAddPlant}>
-                <img src={EDIT_ICON} alt="edit" />
+                <img src="/assets/icons/add_popup.png" alt="edit" />
                 <p>내 식물 등록하기</p>
               </button>
             </div>

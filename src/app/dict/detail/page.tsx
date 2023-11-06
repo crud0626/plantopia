@@ -9,12 +9,6 @@ import PageHeader from '@/components/pageHeader/PageHeader';
 import paths from '@/constants/routePath';
 import styles from './page.module.scss';
 
-import ADD_ICON from '/assets/icons/add_popup.png';
-import PLANT3_ICON from '/assets/icons/dict/plant3.png';
-import PLANT4_ICON from '/assets/icons/dict/plant4.png';
-import WATER_ICON from '/assets/icons/dict/water1.png';
-import WATERPOT_ICON from '/assets/icons/dict/waterpot.png';
-import BUG_ICON from '/assets/icons/dict/bug.png';
 import { showAlert } from '@/utils/dialog';
 
 const environmentContents: Array<{
@@ -42,26 +36,30 @@ const DictDetailPage = () => {
 
   const plantInfoForm = [
     {
-      image: PLANT4_ICON,
+      image: '/assets/icons/dict/plant4.png',
       title: '종',
       content: plantData?.speciesInfo,
     },
     {
-      image: PLANT3_ICON,
+      image: '/assets/icons/dict/plant3.png',
       title: '분류',
       content: plantData?.classificationInfo,
     },
     {
-      image: WATER_ICON,
+      image: '/assets/icons/dict/water1.png',
       title: '습도',
       content: codeInfo[plantData?.humidityCode || 'HC'],
     },
     {
-      image: WATERPOT_ICON,
+      image: '/assets/icons/dict/waterpot.png',
       title: '관리 수준',
       content: codeInfo[plantData?.recommendCode || 'RC'],
     },
-    { image: BUG_ICON, title: '병해충 정보', content: plantData?.blightInfo },
+    {
+      image: '/assets/icons/dict/bug.png',
+      title: '병해충 정보',
+      content: plantData?.blightInfo,
+    },
   ];
 
   const registerState = {
@@ -89,8 +87,9 @@ const DictDetailPage = () => {
                 {plantData.scientificName}
               </h3>
               <h3 className={styles.korean_name}>{plantData.name}</h3>
-              <Link to={paths.myplantRegister} state={registerState}>
-                <img src={ADD_ICON} alt="plant add image" />내 식물로 등록
+              <Link href={paths.myplantRegister}>
+                <img src="/assets/icons/add_popup.png" alt="plant add image" />
+                내 식물로 등록
               </Link>
             </section>
             <div className={styles.info_container}>

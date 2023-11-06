@@ -9,9 +9,6 @@ import { valueof } from '@/@types';
 import paths from '@/constants/routePath';
 
 import styles from './myPlantForm.module.scss';
-import DEFAULT_IMG from '/assets/images/default_plant.png';
-import EDIT_ICON from '/assets/icons/edit.png';
-import SEARCH_ICON from '/assets/icons/search.png';
 
 interface FormStateTypes
   extends Pick<
@@ -139,13 +136,17 @@ const MyPlantForm = ({
             <span>
               <img
                 className={styles.main_img}
-                src={formValues.imgUrl || DEFAULT_IMG}
+                src={formValues.imgUrl || '/assets/images/default_plant.png'}
                 alt="plant"
               />
             </span>
             <div className={styles.edit_icon_wrapper}>
               <label htmlFor="photoInput" className={styles.photo_label}>
-                <img src={EDIT_ICON} className={styles.edit_icon} alt="edit" />
+                <img
+                  src="/assets/icons/edit.png"
+                  className={styles.edit_icon}
+                  alt="edit"
+                />
               </label>
               <input
                 className={styles.photo_input}
@@ -168,8 +169,8 @@ const MyPlantForm = ({
               readOnly
             />
             <img
+              src="/assets/icons/search.png"
               className={styles.input_glass}
-              src={SEARCH_ICON}
               alt="search"
             />
           </Link>

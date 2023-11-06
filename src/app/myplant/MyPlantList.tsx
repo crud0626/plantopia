@@ -7,9 +7,6 @@ import { UserPlant } from '@/@types/plant.type';
 import paths from '@/constants/routePath';
 
 import styles from './myPlantList.module.scss';
-import BOOKMARK_TRUE from '/assets/icons/bookmark.png';
-import BOOKMARK_FALSE from '/assets/icons/bookmark_empty.png';
-import EDIT_ICON from '/assets/icons/edit_gray.png';
 
 interface MainPagePlantListProps {
   userPlants: UserPlant[];
@@ -42,7 +39,7 @@ const MainPagePlantList = ({
       {sortedPlants.map(plant => (
         <Link
           key={plant.id}
-          to={`${paths.myplant}/${plant.id}`}
+          href={`${paths.myplant}/${plant.id}`}
           className={styles.list_box}
         >
           <div className={styles.main_data}>
@@ -64,7 +61,11 @@ const MainPagePlantList = ({
             >
               <img
                 className="main_tag_img"
-                src={plant.isMain ? BOOKMARK_TRUE : BOOKMARK_FALSE}
+                src={
+                  plant.isMain
+                    ? '/assets/icons/bookmark.png'
+                    : '/assets/icons/bookmark_empty.png'
+                }
                 alt="set mainplant"
               />
             </button>
@@ -76,7 +77,7 @@ const MainPagePlantList = ({
             >
               <img
                 className="edit_button_img"
-                src={EDIT_ICON}
+                src="/assets/icons/edit_gray.png"
                 alt="edit plant"
               />
             </button>

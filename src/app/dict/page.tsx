@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, Children, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks';
@@ -11,7 +13,6 @@ import Footer from '@/components/footer/Footer';
 import Progress from '@/components/progress/Progress';
 
 import styles from './page.module.scss';
-import SEARCH_ICON from '/assets/icons/search.png';
 
 type CardsDataTypes = {
   [key in CategoryNames]: PlantType[];
@@ -69,7 +70,7 @@ const DictPage = () => {
               />
               <button>
                 <img
-                  src={SEARCH_ICON}
+                  src="/assets/icons/search.png"
                   className={styles.search_img}
                   alt="search"
                 />
