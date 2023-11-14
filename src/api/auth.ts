@@ -44,8 +44,9 @@ export const updateUserInfo = async (
   nickname: string,
   imgUrl?: string | null,
 ) => {
-  const user = auth.currentUser;
-  if (!user?.email) return;
+  // signInWithEmailAndPassword메소드로 인해 auth.currentUser가 변경될 수 있어
+  // const user = auth.currentUser 형식 사용 불가
+  if (!auth.currentUser) return;
 
   const updatedUserInfo: Mutable<Partial<User>> = {
     displayName: nickname,
@@ -53,11 +54,11 @@ export const updateUserInfo = async (
 
   if (imgUrl) updatedUserInfo.photoURL = imgUrl;
 
-  if (!user.emailVerified) {
-    await signInWithEmailAndPassword(auth, user?.email, pw);
+  if (auth.currentUser.email && !auth.currentUser.emailVerified) {
+    await signInWithEmailAndPassword(auth, auth.currentUser.email, pw);
   }
 
-  return updateProfile(user, updatedUserInfo);
+  return updateProfile(auth.currentUser, updatedUserInfo);
 };
 
 export const deletionUser = () => {
