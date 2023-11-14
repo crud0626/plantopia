@@ -8,7 +8,7 @@ import styles from './loginPage.module.scss';
 import ForgotPw from './ForgotPw';
 
 const LoginPage = () => {
-  const [email, setEmail] = useState(import.meta.env.VITE_TEST_ID || '');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isChecked, setIsChecked] = useState(false);
   const [isOpenForgotModal, setIsOpenForgotModal] = useState(false);
@@ -19,9 +19,7 @@ const LoginPage = () => {
     name === 'email' ? setEmail(value) : setPassword(value);
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const handleSubmit = async (defaultValue?: { email: string; pw: string }) => {
     const targets = [
       {
         key: email,
@@ -35,15 +33,20 @@ const LoginPage = () => {
       },
     ];
 
-    for (const { key, message, regex } of targets) {
-      if (!regex.test(key)) {
-        showAlert('error', message);
-        return;
+    if (!defaultValue) {
+      for (const { key, message, regex } of targets) {
+        if (!regex.test(key)) {
+          showAlert('error', message);
+          return;
+        }
       }
     }
 
     try {
-      await loginWithEmail(email, password, isChecked);
+      defaultValue
+        ? await loginWithEmail(defaultValue.email, defaultValue.pw, false)
+        : await loginWithEmail(email, password, isChecked);
+
       navigate(paths.main);
     } catch (error) {
       showAlert('error', '이메일 또는 비밀번호가 일치하지 않습니다.');
@@ -73,7 +76,12 @@ const LoginPage = () => {
               <em>다양한 서비스를 이용하세요.</em>
             </div>
           </h2>
-          <form onSubmit={handleSubmit}>
+          <form
+            onSubmit={e => {
+              e.preventDefault();
+              handleSubmit();
+            }}
+          >
             <label htmlFor="inpEmail">이메일</label>
             <input
               type="text"
@@ -102,16 +110,30 @@ const LoginPage = () => {
               onChange={handleChange}
               placeholder="비밀번호를 입력해주세요."
             />
-            <div className={styles.auto_login}>
-              <input
-                id="check"
-                type="checkbox"
-                onChange={() => setIsChecked(prev => !prev)}
-                checked={isChecked}
-              />
-              <label htmlFor="check" draggable>
-                자동 로그인
-              </label>
+            <div className={styles.login_option}>
+              <button
+                type="button"
+                className={styles.guest_login_btn}
+                onClick={() =>
+                  handleSubmit({
+                    email: import.meta.env.VITE_TEST_ID,
+                    pw: import.meta.env.VITE_TEST_PW,
+                  })
+                }
+              >
+                게스트 로그인
+              </button>
+              <div className={styles.auto_login}>
+                <input
+                  id="check"
+                  type="checkbox"
+                  onChange={() => setIsChecked(prev => !prev)}
+                  checked={isChecked}
+                />
+                <label htmlFor="check" draggable>
+                  자동 로그인
+                </label>
+              </div>
             </div>
             <button
               type="submit"
