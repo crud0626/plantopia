@@ -145,7 +145,7 @@ const LoginPage = () => {
               로그인
             </button>
             <Link
-              to={paths.register}
+              href={paths.register}
               className={`${styles.round_btn} ${styles.register_btn}`}
             >
               가입하기
