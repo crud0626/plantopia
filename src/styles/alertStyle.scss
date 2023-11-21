@@ -21,13 +21,18 @@
     .react-confirm-alert-button-group {
       display: flex;
       justify-content: space-between;
-      width: 25rem;
+      width: 100%;
 
       > button {
-        width: 12.7rem;
+        flex: 1;
+        margin: 0;
         height: 4rem;
         border-radius: 1rem;
         font-size: 1.4rem;
+
+        + button {
+          margin-left: 10px;
+        }
 
         &.confirm {
           background-color: #1fb0ad;

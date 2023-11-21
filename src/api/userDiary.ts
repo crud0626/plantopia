@@ -7,6 +7,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  orderBy,
   query,
   updateDoc,
   where,
@@ -15,7 +16,11 @@ import { DiaryContentTypes, InitialDiaryContent } from '@/@types/diary.type';
 
 const getUserDiaryList = (userEmail: string) => {
   const ref = collection(db, 'diary');
-  const q = query(ref, where('userEmail', '==', userEmail));
+  const q = query(
+    ref,
+    where('userEmail', '==', userEmail),
+    orderBy('postedAt', 'desc'),
+  );
 
   return getDocs(q).then(snapshot =>
     snapshot.docs.map(doc => ({
