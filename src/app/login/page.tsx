@@ -46,16 +46,11 @@ const LoginPage = () => {
     }
 
     try {
-<<<<<<< HEAD:src/app/login/page.tsx
-      await loginWithEmail(email, password, isChecked);
-      router.push(paths.main);
-=======
       defaultValue
         ? await loginWithEmail(defaultValue.email, defaultValue.pw, false)
         : await loginWithEmail(email, password, isChecked);
 
-      navigate(paths.main);
->>>>>>> master:src/pages/loginPage/LoginPage.tsx
+      router.push(paths.main);
     } catch (error) {
       showAlert('error', '이메일 또는 비밀번호가 일치하지 않습니다.');
     }
