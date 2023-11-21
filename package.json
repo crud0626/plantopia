@@ -9,11 +9,14 @@
     "start": "next start"
   },
   "dependencies": {
+    "@auth/firebase-adapter": "^1.0.5",
     "axios": "^1.4.0",
     "date-fns": "^2.30.0",
     "firebase": "^10.2.0",
+    "firebase-admin": "^11.11.0",
     "nanoid": "^4.0.2",
     "next": "^14.0.1",
+    "next-auth": "^4.24.5",
     "react": "^18.2.0",
     "react-calendar": "^4.6.0",
     "react-confirm-alert": "^3.0.6",
