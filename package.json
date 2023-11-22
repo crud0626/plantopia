@@ -15,7 +15,7 @@
     "firebase": "^10.2.0",
     "firebase-admin": "^11.11.0",
     "nanoid": "^4.0.2",
-    "next": "^14.0.1",
+    "next": "^13.4.13",
     "next-auth": "^4.24.5",
     "react": "^18.2.0",
     "react-calendar": "^4.6.0",
