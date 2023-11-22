@@ -3,7 +3,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import { DiaryContentTypes } from '@/@types/diary.type';
-import styles from './diaryDetailPage.module.scss';
+import styles from './page.module.scss';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';

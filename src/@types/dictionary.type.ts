@@ -11,7 +11,7 @@ interface PlantType {
   lightCode: keyof typeof codeInfo;
   recommendCode: keyof typeof codeInfo;
   temperatureCode: keyof typeof codeInfo;
-  waterCode: keyof typeof codeInfo;
+  waterCode: 'WC' | 'WC01' | 'WC02' | 'WC03';
   speciesInfo: string;
   classificationInfo: string[];
 }

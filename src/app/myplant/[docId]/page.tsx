@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { differenceInMonths } from 'date-fns';
 import { useAuth } from '@/hooks';
 import { formatFullDate, secondsToDateStr } from '@/utils/date';
@@ -23,11 +23,12 @@ import styles from './page.module.scss';
 import PageHeader from '@/components/pageHeader/PageHeader';
 import Progress from '@/components/progress/Progress';
 
-const MyPlantDetailPage = () => {
+const MyPlantDetailPage = ({ params }: { params: { docId: string } }) => {
+  const { docId } = params;
   const user = useAuth();
   const router = useRouter();
-  const docId = useSearchParams().get('docId');
-  const [isLoading, setIsLoading] = useState(true);
+
+  const [isLoading, setIsLoading] = useState(false);
   const [plantDetail, setPlantDetail] = useState<UserPlant | null>(null);
   const [plantDictDetail, setPlantDictDetail] = useState<PlantType>();
 
@@ -63,8 +64,8 @@ const MyPlantDetailPage = () => {
 
         setPlantDetail(plantInfo);
 
-        const plantsInfo = await getPlantInfo(plantInfo.plantName);
-        setPlantDictDetail(plantsInfo[0]);
+        const [plantsInfo] = await getPlantInfo(plantInfo.plantName);
+        setPlantDictDetail(plantsInfo);
       } catch (error) {
         showAlert('error', '식물 정보를 가져오는 도중 에러가 발생했습니다.');
       } finally {
@@ -183,8 +184,7 @@ const MyPlantDetailPage = () => {
               </div>
             )}
             <Link
-              to={`${paths.dictDetail}?plantName=${plantDictDetail?.name}`}
-              state={plantDictDetail}
+              href={`${paths.dictDetail}?plantName=${plantDictDetail?.name}`}
               className={styles.more_info_btn}
             >
               식물 도감에서 이 식물 정보 더 알아보기!

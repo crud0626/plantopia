@@ -11,7 +11,7 @@ import styles from './page.module.scss';
 import ForgotPw from './ForgotPw';
 
 const LoginPage = () => {
-  const [email, setEmail] = useState(process.env.NEXT_PUBLIC_TEST_ID || '');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isChecked, setIsChecked] = useState(false);
   const [isOpenForgotModal, setIsOpenForgotModal] = useState(false);

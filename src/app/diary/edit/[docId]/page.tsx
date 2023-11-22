@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks';
 import { getUserPlantList } from '@/api/userPlant';
@@ -15,10 +14,10 @@ import PageHeader from '@/components/pageHeader/PageHeader';
 import DiaryForm from '@/components/diaryForm/DiaryForm';
 import Progress from '@/components/progress/Progress';
 
-const DiaryEditPage = () => {
+const DiaryEditPage = ({ params }: { params: { docId: string } }) => {
+  const { docId } = params;
   const user = useAuth();
   const router = useRouter();
-  const docId = useSearchParams().get('docId');
   const [isLoading, setIsLoading] = useState(false);
   const [plantNames, setPlantNames] = useState<string[]>([]);
   const [oldContents, setOldContents] = useState<DiaryContentTypes | null>(

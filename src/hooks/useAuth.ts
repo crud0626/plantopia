@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
 import { auth } from '@/firebaseApp';
 import { User } from 'firebase/auth';
 import paths from '@/constants/routePath';
+import { useRouter } from 'next/navigation';
 
 const useAuth = () => {
   const [user, setUser] = useState<User>();
-  // const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     auth.onAuthStateChanged(user => {
       if (!user) {
-        // navigate(paths.login);
+        router.push(paths.login);
         return;
       }
 

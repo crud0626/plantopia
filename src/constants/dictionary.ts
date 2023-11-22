@@ -61,6 +61,7 @@ const waterCodeMap = {
   WC03: 14,
   WC02: 11,
   WC01: 7,
+  WC: 7,
 };
 
 export { codeInfo, waterCodeMap, slideCategories };

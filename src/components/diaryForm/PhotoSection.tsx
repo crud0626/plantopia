@@ -5,6 +5,7 @@ import { InitialDiaryContent } from '@/@types/diary.type';
 import { showAlert } from '@/utils/dialog';
 
 import styles from './photoSection.module.scss';
+import 'swiper/css';
 
 interface SectionPhotoProps {
   imgUrls: string[];

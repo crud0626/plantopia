@@ -1,6 +1,7 @@
+'use client';
+
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { showConfirm } from '@/utils/dialog';
 import { DiaryContentTypes } from '@/@types/diary.type';
@@ -15,7 +16,6 @@ interface ListViewProps {
 }
 
 const ListView = ({ diaryData, handleDelete }: ListViewProps) => {
-  const router = useRouter();
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [selectedDiary, setSelectedDiary] = useState<DiaryContentTypes | null>(
     null,
@@ -73,14 +73,12 @@ const ListView = ({ diaryData, handleDelete }: ListViewProps) => {
               ></button>
               {isOpenModal && selectedDiary === diary && (
                 <div className={styles.more_modal}>
-                  <div
+                  <Link
+                    href={`${paths.diaryEdit}/${diary.id}`}
                     className={`${styles.btn} ${styles.modify}`}
-                    onClick={() =>
-                      router.push(`${paths.diaryEdit}/${diary.id}`)
-                    }
                   >
                     게시글 수정
-                  </div>
+                  </Link>
                   <div
                     className={`${styles.btn} ${styles.delete}`}
                     onClick={() => {

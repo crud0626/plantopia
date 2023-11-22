@@ -49,7 +49,7 @@ const PlantList = ({ plants, onClickItem }: PlantListProps) => {
 const MainPage = () => {
   const [focusPlant, setFocusPlant] = useState<UserPlant>();
   const [plantList, setPlantList] = useState<UserPlant[] | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const user = useAuth();
 
   const onWaterPlant = async () => {
@@ -122,7 +122,7 @@ const MainPage = () => {
         </section>
       </main>
       <Footer />
-      {/* {isLoading && <Progress />} */}
+      {isLoading && <Progress />}
     </>
   );
 };

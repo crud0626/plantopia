@@ -10,8 +10,7 @@ import paths from '@/constants/routePath';
 import styles from './page.module.scss';
 import Progress from '@/components/progress/Progress';
 import PageHeader from '@/components/pageHeader/PageHeader';
-
-import SEARCH_ICON from '/assets/icons/search.png';
+import { useSearchParams } from 'next/navigation';
 
 const EmptyResult = () => {
   return (
@@ -28,12 +27,9 @@ const EmptyResult = () => {
 };
 
 const DictSearchPage = () => {
-  /* 임시 */
-  const locationState: { inputValue: string } | null = { inputValue: 'aa' };
-  const [searchValue, setSearchValue] = useState(
-    locationState?.inputValue || '',
-  );
-  const [results, setResults] = useState<PlantType[]>([]); // results
+  const inputValue = useSearchParams().get('plantName');
+  const [searchValue, setSearchValue] = useState(inputValue || '');
+  const [results, setResults] = useState<PlantType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -61,10 +57,10 @@ const DictSearchPage = () => {
   };
 
   useEffect(() => {
-    if (locationState) {
-      getDouments(locationState.inputValue);
+    if (inputValue) {
+      getDouments(inputValue);
     }
-  }, [locationState]);
+  }, []);
 
   return (
     <>
@@ -80,7 +76,7 @@ const DictSearchPage = () => {
               />
               <button type="submit">
                 <img
-                  src={SEARCH_ICON}
+                  src="/assets/icons/search.png"
                   className={styles.search_img}
                   alt="search"
                 />

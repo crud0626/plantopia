@@ -32,7 +32,7 @@ const DictPage = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.push(paths.dictSearch);
+    router.push(`${paths.dictSearch}?plantName=${searchValue}`); // query붙이기
   };
 
   useEffect(() => {

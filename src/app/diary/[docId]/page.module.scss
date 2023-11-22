@@ -1,8 +1,3 @@
-/* Common Styles */
-@use 'swiper/css';
-@use 'swiper/css/navigation';
-@use 'swiper/css/pagination';
-
 /* DIARY-Detail 페이지 */
 .container {
   position: relative;
@@ -144,22 +139,24 @@
 }
 
 /* 이미지 슬라이드 SECTION */
-:global .swiper-slide {
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-}
-
-:global .swiper-pagination {
-  bottom: -2rem !important;
-
-  .swiper-pagination-bullet {
-    background-color: #c4c4c4;
+.container {
+  :global .swiper-slide {
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
   }
 
-  & .swiper-pagination-bullet-active {
-    background-color: #1fb0ad;
+  :global .swiper-pagination {
+    bottom: -2rem !important;
+
+    .swiper-pagination-bullet {
+      background-color: #c4c4c4;
+    }
+
+    & .swiper-pagination-bullet-active {
+      background-color: #1fb0ad;
+    }
   }
 }

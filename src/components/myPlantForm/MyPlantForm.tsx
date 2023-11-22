@@ -1,4 +1,6 @@
-import { useState } from 'react';
+'use client';
+
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Timestamp } from 'firebase/firestore';
 import { uploadImg } from '@/api/storage';
@@ -66,7 +68,7 @@ const initialFormValue: FormStateTypes = {
 
 const MyPlantForm = ({
   pageName,
-  plantInfo = {},
+  plantInfo,
   isLoading,
   onSubmit,
 }: MyPlantFormProps) => {
@@ -120,6 +122,13 @@ const MyPlantForm = ({
 
     onSubmit(formValues);
   };
+
+  useEffect(() => {
+    setFormValues(prev => ({
+      ...prev,
+      ...plantInfo,
+    }));
+  }, [plantInfo]);
 
   const lastWateredDay = formValues.wateredDays.at(-1);
 

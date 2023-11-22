@@ -1,5 +1,3 @@
-@use 'swiper/css';
-
 /* 포토슬라이드 공통 */
 @mixin photo-slide-wrap($width, $height) {
   width: $width;
@@ -165,6 +163,8 @@
   }
 }
 
-:global .swiper-slide {
-  overflow: visible;
+.container {
+  :global .swiper-slide {
+    overflow: visible;
+  }
 }

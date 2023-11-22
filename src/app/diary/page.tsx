@@ -44,7 +44,7 @@ const DiaryPage = () => {
   const [diaryData, setDiaryData] = useState<DiaryContentTypes[] | null>(null);
   const [hasPlantsUser, setHasPlantsUser] = useState(false);
   const [currentTab, setCurrentTab] = useState<DiaryViewTypes>('List');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleDelete = async (diaryId: string) => {
     if (!user?.email) return;
@@ -149,7 +149,7 @@ const DiaryPage = () => {
         </div>
       </main>
       <Footer />
-      {/* {isLoading && <Progress />} */}
+      {isLoading && <Progress />}
     </>
   );
 };

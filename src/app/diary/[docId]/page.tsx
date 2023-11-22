@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { deleteDiary, getUserDiary } from '@/api/userDiary';
 import { useAuth } from '@/hooks';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
@@ -14,10 +14,10 @@ import Progress from '@/components/progress/Progress';
 import DetailSlide from './DetailSlide';
 import styles from './page.module.scss';
 
-const DiaryDetailPage = () => {
+const DiaryDetailPage = ({ params }: { params: { docId: string } }) => {
+  const { docId } = params;
   const user = useAuth();
   const router = useRouter();
-  const docId = useSearchParams().get('docId');
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [diaryDetailData, setDiaryDetailData] =
@@ -52,15 +52,11 @@ const DiaryDetailPage = () => {
 
   useEffect(() => {
     (async () => {
-      if (!docId) {
-        router.push(paths.diary);
-        return;
-      }
-
       try {
         setIsLoading(true);
 
         const diaryData = await getUserDiary(docId);
+
         if (!diaryData) throw Error();
 
         setDiaryDetailData(diaryData);

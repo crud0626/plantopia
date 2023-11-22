@@ -3,6 +3,7 @@ import { showAlert } from '@/utils/dialog';
 import { InitialDiaryContent } from '@/@types/diary.type';
 
 import styles from './diaryForm.module.scss';
+import 'swiper/css';
 import BoardSection from './BoardSection';
 import PhotoSection from './PhotoSection';
 
