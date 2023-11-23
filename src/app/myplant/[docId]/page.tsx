@@ -115,8 +115,8 @@ const MyPlantDetailPage = ({ params }: { params: { docId: string } }) => {
                   ⏰ {plantDetail.nickname} 식물과 함께한지{' '}
                   <span>
                     {differenceInMonths(
-                      plantDetail.purchasedDay.seconds * 1000,
                       new Date(),
+                      plantDetail.purchasedDay.seconds * 1000,
                     )}
                     개월
                   </span>
