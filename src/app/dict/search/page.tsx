@@ -18,7 +18,7 @@ const EmptyResult = () => {
       <p>검색 결과가 없습니다.</p>
       <div className={styles.notice}>
         👷‍♂️ 식물도감에 없는 식물의 등록 기능을 준비중입니다.
-        <a href="https://forms.gle/g4AjkNKqVDP48Xnc7" target="_blank">
+        <a href={process.env.NEXT_PUBLIC_REQUEST_FORM_URL} target="_blank">
           내가 찾는 식물이 없다면, 식물 등록 요청하기
         </a>
       </div>

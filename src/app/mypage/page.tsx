@@ -17,7 +17,7 @@ const customerService = [
     title: '자주 묻는 질문',
     url: '/mypage/question',
   },
-  { title: '식물 추가 요청', url: 'https://forms.gle/g4AjkNKqVDP48Xnc7' },
+  { title: '식물 추가 요청', url: process.env.NEXT_PUBLIC_REQUEST_FORM_URL },
 ];
 
 const MyPage = () => {
