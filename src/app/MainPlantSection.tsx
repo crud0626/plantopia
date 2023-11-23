@@ -8,7 +8,7 @@ import EmptyPlant from './EmptyPlant';
 import paths from '@/constants/routePath';
 
 import styles from './page.module.scss';
-import WATERING from '/public/assets/icons/watering.png';
+
 interface MainPlantProps {
   plant?: UserPlant;
   onWaterPlant: (plantId: string) => void;
@@ -53,7 +53,7 @@ const MainPlantSection = ({ plant, onWaterPlant }: MainPlantProps) => {
           <img src={plant.imgUrl} alt="plant" />
         </div>
         <button className={styles.watering_btn} onClick={onClickWatering}>
-          <img src={WATERING} alt="watering" />
+          <img src="/assets/icons/watering.png" alt="watering" />
           <div className={styles.watering_label}>물주기</div>
         </button>
       </Link>
