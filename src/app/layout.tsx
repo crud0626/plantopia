@@ -1,13 +1,13 @@
-import type { Metadata, Viewport } from 'next';
+import type { Metadata } from 'next';
 import Toast from '@/components/toast/Toast';
 import './global.scss';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
-export const viewport: Viewport = {
+export const viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '	#008000',
+  themeColor: '#008000',
 };
 
 export const metadata: Metadata = {
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     images: [{ url: '/og_img.png' }],
   },
   appleWebApp: {
-    statusBarStyle: 'green',
+    statusBarStyle: 'black-translucent',
   },
 };
 
