@@ -65,12 +65,12 @@ const MyPage = () => {
             {Children.toArray(
               customerService.map(({ title, url }) => (
                 <li>
-                  {url.startsWith('https') ? (
-                    <a href={url} target="_blank">
+                  {url!.startsWith('https') ? (
+                    <a href={url!} target="_blank">
                       {title}
                     </a>
                   ) : (
-                    <Link href={url}>{title}</Link>
+                    <Link href={url!}>{title}</Link>
                   )}
                 </li>
               )),

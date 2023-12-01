@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import paths from '@/constants/routePath';
 import { useAuth } from '@/hooks';
