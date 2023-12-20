@@ -1,7 +1,9 @@
 @use '@/styles/sizes';
 
 .container {
-  position: fixed;
+  top: 0;
+  left: 0;
+  position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app';
+import { getApp, getApps, initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
@@ -13,9 +13,10 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_MEASUREMENT_ID,
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+const app = getApps.length > 0 ? getApp() : initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
+const auth = getAuth(app);
 const storage = getStorage(app);
 
 export { app, auth, db, storage };
